@@ -37,14 +37,13 @@
 
     <div id="home" class="section" style="display: block;">
         <div class="home-content" style="height: 100vh; position: relative;">
-            <img src="icon/logo.png" alt="Logo" style="width: 100px; height: 100px; cursor: grab; position: absolute;">
+            <img src="icon/logo.png" alt="Logo" style="logo">
             <div class="welcome-text">Welcome to my portfolio!</div>
             <div class="sub-text">I am a passionate 3D artist specializing in animation, with strong technical skills.</div>
             <div id="particles"></div>
             
         </div>
     </div>
-
 
     <div id="portfolio" class="video-container section" style="z-index: 2; position: relative; display: none; align-items: center; justify-content: center; height: 100vh;">
         <div class="video-title">Film VFX Reel</div>
@@ -98,20 +97,50 @@
         </button>
     </div>
 
+
+    <div id="character-grid" class="section" style="display: block;">
+        <div class="grid-container">
+            <div class="grid-item" onclick="loadSelected('dragonsito')" data-model="dragonsito">
+                <img src="images/character1.jpg"   alt="Character 1">
+                <div class="title" >Character 1</div>
+            </div>
+            <div class="grid-item" data-model="character2">
+                <img src="images/character2.jpg" alt="Character 2">
+                <div class="title">Character 2</div>
+            </div>
+            <div class="grid-item" data-model="character3">
+                <img src="images/character3.jpg" alt="Character 3">
+                <div class="title">Character 3</div>
+            </div>
+            <div class="grid-item" data-model="character4">
+                <img src="images/character4.jpg" alt="Character 4">
+                <div class="title">Character 4</div>
+            </div>
+            <div class="grid-item" data-model="character5">
+                <img src="images/character5.jpg" alt="Character 5">
+                <div class="title">Character 5</div>
+            </div>
+            <div class="grid-item" data-model="character6">
+                <img src="images/character6.jpg" alt="Character 6">
+                <div class="title">Character 6</div>
+            </div>
+        </div>
+    </div>
+
     <div id="viewport" class="section" style="display: none;">
         <canvas id="three-canvas"></canvas>
+
+
         <div id="loading-indicator" style="display: none;">
             Loading 3D content...
         </div>
-        <div class="buttons" id="bottom-buttons">
+        <div class="buttons" id="bottom-buttons" style="display: none;">
             <a href="#" class="button">Button 1</a>
             <a href="#" class="button">Button 2</a>
             <a href="#" class="button">Button 3</a>
         </div>
     </div>
 
-
-     <!-- This is THREE 3D import -->
     <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
     <script type="importmap">
         {
@@ -121,7 +150,6 @@
             }
         }
     </script>
-    <!-- <script type="module" src="js/viewport.js"></script> -->
 
     <script src="js/main.js"></script>
 

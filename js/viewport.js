@@ -9,7 +9,7 @@ import { FXAAShader } from 'https://unpkg.com/three@0.152.2/examples/jsm/shaders
 import { TextureLoader } from 'three';
 import { RGBELoader } from 'https://unpkg.com/three@0.152.2/examples/jsm/loaders/RGBELoader.js';
 
-function initializeViewport() {
+export function initializeViewport(modelName) {
 
   // Renderer
   const canvas = document.querySelector('#three-canvas');
@@ -77,41 +77,66 @@ function initializeViewport() {
   floorMesh.receiveShadow = true;
   scene.add(floorMesh);
 
+  // 
+  // modelName = 'dragonsito';
+  //
+   
   const textureLoader = new THREE.TextureLoader();
-  const diffuseTexture = textureLoader.load('models/dragonsitoTextures/defaultMat_BaseColor.jpg');
-  const normalTexture = textureLoader.load('models/dragonsitoTextures/defaultMat_Normal.jpg');
-  const roughnessTexture = textureLoader.load('models/dragonsitoTextures/defaultMat_Roughness.jpg');
+  const diffuseTexture = textureLoader.load(`models/${modelName}Textures/diffuse.jpg`);
+  const normalTexture = textureLoader.load(`models/${modelName}Textures/normal.jpg`);
+  const roughnessTexture = textureLoader.load(`models/${modelName}Textures/roughness.jpg`);
   // Load other textures as needed
   const material = new THREE.MeshStandardMaterial({
     map: diffuseTexture,
     normalMap: normalTexture,
+    roughnessMap: roughnessTexture,
     roughness: 0.9,
     metalness: 0
   });
 
-
-  // Load Model
+  // Load Model based on modelName
   const loader = new OBJLoader();
+
+  let currentModel = null; // Declare outside the function to keep track
+  if (currentModel) {
+    scene.remove(currentModel);
+    currentModel.geometry.dispose();
+    currentModel.material.dispose();
+    currentModel = null;
+  }
+
   loader.load(
-    'models/dragonsito.obj', // Replace with your actual model path
-    function (object) {
-      object.scale.set(1, 1, 1);
-      object.traverse(function (child) {
-        if (child.isMesh) {
-          child.material = material;
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-      scene.add(object);
-      console.log('Model loaded successfully');
-    },
-    function (xhr) {
-      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    },
-    function (error) {
-      console.error('An error happened while loading the model', error);
-    }
+      `models/${modelName}.obj`,
+      function (object) {
+        currentModel = object;
+
+          if (currentModel) {
+              scene.remove(currentModel);
+              
+          }
+          currentModel = object;
+
+          object.scale.set(1, 1, 1);
+          object.traverse(function (child) {
+              if (child.isMesh) {
+                  child.material = material;
+                  child.castShadow = true;
+                  child.receiveShadow = true;
+              }
+          });
+          scene.add(object);
+          console.log(`${modelName} loaded successfully`);
+          loadingIndicator.style.display = 'none';
+
+      },
+      function (xhr) {
+          console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      },
+      function (error) {
+          console.error(`An error happened while loading ${modelName}`, error);
+          loadingIndicator.style.display = 'none';
+
+      }
   );
 
   /// Post-processing
@@ -161,4 +186,4 @@ function initializeViewport() {
 
 console.log('viewport.js loaded successfully');
 
-initializeViewport();
+window.initializeViewport = initializeViewport;

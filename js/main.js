@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const stardust1 = document.getElementById('stardust1');
     const stardust2 = document.getElementById('stardust2');
@@ -33,18 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Move side videos to the center with animation
             backgroundVideos.forEach(video => {
-video.style.transform = 'translateY(-50%) scale(1.1)';
-video.style.transition = 'transform 0.5s ease, top 0.5s ease, left 0.5s ease, right 0.5s ease, margin-left 0.5s ease';
-video.style.top = '50%';
-if (video.classList.contains('left')) {
-video.style.left = '50%';
-video.style.right = 'auto';
-} else if (video.classList.contains('right')) {
-video.style.right = '50%';
-video.style.left = 'auto';
-}
-video.style.marginLeft = '-10%';
-});
+                video.style.transform = 'translateY(-50%) scale(1.1)';
+                video.style.transition = 'transform 0.5s ease, top 0.5s ease, left 0.5s ease, right 0.5s ease, margin-left 0.5s ease';
+                video.style.top = '50%';
+                if (video.classList.contains('left')) {
+                video.style.left = '50%';
+                video.style.right = 'auto';
+                } else if (video.classList.contains('right')) {
+                video.style.right = '50%';
+                video.style.left = 'auto';
+                }
+                video.style.marginLeft = '-10%';
+                });
         } else {
             videoPlayer.style.transform = 'scale(1)';
             videoPlayer.style.transition = 'transform 0.5s ease';
@@ -53,18 +54,18 @@ video.style.marginLeft = '-10%';
 
             // Return side videos to original position with animation
             backgroundVideos.forEach(video => {
-if (video.classList.contains('left')) {
-video.style.transform = 'translateY(-50%) scale(1)';
-video.style.transition = 'transform 0.5s ease, left 0.5s ease, margin-left 0.5s ease';
-video.style.left = '2%';
-video.style.marginLeft = '0';
-} else if (video.classList.contains('right')) {
-video.style.transform = 'translateY(-50%) scale(1)';
-video.style.transition = 'transform 0.5s ease, right 0.5s ease, margin-left 0.5s ease';
-video.style.right = '2%';
-video.style.left = 'auto';
-video.style.marginLeft = '0';
-}
+                if (video.classList.contains('left')) {
+                video.style.transform = 'translateY(-50%) scale(1)';
+                video.style.transition = 'transform 0.5s ease, left 0.5s ease, margin-left 0.5s ease';
+                video.style.left = '2%';
+                video.style.marginLeft = '0';
+                } else if (video.classList.contains('right')) {
+                video.style.transform = 'translateY(-50%) scale(1)';
+                video.style.transition = 'transform 0.5s ease, right 0.5s ease, margin-left 0.5s ease';
+                video.style.right = '2%';
+                video.style.left = 'auto';
+                video.style.marginLeft = '0';
+                }
             });
         }
         isExpanded = !isExpanded;
@@ -239,6 +240,14 @@ video.style.marginLeft = '0';
             videoPlayer.currentTime = newFrame / fps;
         }
     });
+    const gridItems = document.querySelectorAll('.grid-item');
+    gridItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const modelName = item.getAttribute('data-model');
+            showSection('viewport', modelName);
+        });
+    });
+
 });
 
 function swapVideo(clickedVideo, position) {
@@ -294,57 +303,71 @@ function swapVideo(clickedVideo, position) {
 }
 
 
-// // Function to show different sections
-// function showSection(sectionId) {
-//     const sections = document.querySelectorAll('.section');
-//     sections.forEach(section => section.style.display = 'none');
-//     document.getElementById(sectionId).style.display = sectionId === 'home' ? 'block' : 'flex';
-
-//     if (sectionId === 'viewport') {
-//         // Check if the 3D content is already initialized
-//         if (!window.isThreeInitialized) {
-//             // Show loading indicator
-//             document.getElementById('loading-indicator').style.display = 'block';
-
-//             // Load Three.js and initialize the 3D content
-//             loadThreeJS(() => {
-//                 initializeThreeJS();
-//                 // Hide loading indicator
-//                 document.getElementById('loading-indicator').style.display = 'none';
-//             });
-//         }
-//     }
-// }
-
 let isThreeInitialized = false;
 
-function showSection(sectionId) {
+function showSection(sectionId, modelName = null) {
+    console.log(`showSection called with sectionId: ${sectionId}, modelName: ${modelName}`);
+
     const sections = document.querySelectorAll('.section');
     sections.forEach(section => section.style.display = 'none');
     const targetSection = document.getElementById(sectionId);
-    document.getElementById(sectionId).style.display = sectionId === 'home' ? 'block' : 'flex';
 
-    if (sectionId === 'viewport') {
-        if (!isThreeInitialized) {
-            document.getElementById('loading-indicator').style.display = 'block';
-            loadViewportJS(() => {
-                document.getElementById('loading-indicator').style.display = 'none';
-            });
-        }
-    }
-}
-
-function loadViewportJS(callback) {
-    if (isThreeInitialized) {
-        callback();
+    if (targetSection) {
+        targetSection.style.display = sectionId === 'home' ? 'block' : 'flex';
+    } else {
+        console.error(`Section with ID '${sectionId}' not found.`);
         return;
     }
 
+    if (sectionId === 'viewport') {
+            document.getElementById('character-grid').style.display = 'flex';
+            document.getElementById('loading-indicator').style.display = 'none';
+            document.getElementById('bottom-buttons').style.display = 'none';
+
+    //     if (!isThreeInitialized) {
+    //         document.getElementById('character-grid').style.display = 'none';
+    //         document.getElementById('loading-indicator').style.display = 'block';
+
+    //         loadViewportJS(modelName, () => {
+    //             document.getElementById('loading-indicator').style.display = 'none';
+    //             document.getElementById('character-grid').style.display = 'none';
+    
+    //         });
+    //     } 
+    //     else {
+    //         initializeViewport(modelName);
+    //     }
+    }
+}
+
+function loadSelected(modelName) {
+    if (!isThreeInitialized) {
+
+        loadViewportJS(modelName, () => {
+            document.getElementById('loading-indicator').style.display = 'none';
+            document.getElementById('character-grid').style.display = 'none';
+            document.getElementById('bottom-buttons').style.display = 'block';
+
+        });
+        console.error(`Hola el '${modelName}' llamado.`);
+    } else {
+        initializeViewport(modelName);
+    }
+}
+
+function loadViewportJS(modelName, callback) {
+    if (isThreeInitialized) {
+        initializeViewport(modelName);
+        callback();
+        return;
+    }
+    
     const script = document.createElement('script');
-    script.src = 'js/viewport.js'; // Path to your viewport.js file
-    script.type = 'module'; // Tell the browser this is a module
+    script.src = 'js/viewport.js'; // Ensure this path is correct
+    script.type = 'module';
     script.onload = () => {
         isThreeInitialized = true;
+        initializeViewport(modelName);
         callback();
     };
     script.onerror = () => {
@@ -628,4 +651,5 @@ document.addEventListener('DOMContentLoaded', () => {
     logo.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${rotation}deg)`;
 
     animateLogo();
+    
 });
