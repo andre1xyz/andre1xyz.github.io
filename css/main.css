@@ -1,0 +1,377 @@
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    background: #011F26;
+    color: #A5A692;
+    overflow: hidden;
+    position: relative;
+}
+
+.stardust {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.stardust:nth-child(1) {
+    width: 80%;
+    height: 80%;
+    transform: translateZ(-4px) scale(1.4);
+}
+
+.stardust:nth-child(2) {
+    width: 120%;
+    height: 120%;
+    transform: translateZ(-3px) scale(1.3);
+}
+
+.stardust:nth-child(3) {
+    width: 100%;
+    height: 100%;
+    transform: translateZ(-2px) scale(1.2);
+}
+
+.stardust:nth-child(4) {
+    width: 150%;
+    height: 150%;
+    transform: translateZ(-1px) scale(1.1);
+}
+
+.stardust:nth-child(5) {
+    width: 200%;
+    height: 200%;
+    transform: translateZ(0) scale(1);
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem;
+    background-color: rgba(0, 31, 38, 0.6);
+    text-align: center;
+}
+
+nav a {
+    color: #A5A692;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #F2A71B;
+}
+
+.video-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.video-player {
+    width: 50%;
+    max-width: 750px;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 0 20px 5px #A5A692;
+    border-radius: 20px;
+    position: relative;
+    z-index: 2;
+    transition: width 0.3s ease, opacity 0.5s ease, box-shadow 0.5s ease;
+}
+
+.background-video {
+    position: absolute;
+    width: 20%;
+    aspect-ratio: 16 / 9;
+    opacity: 0.3;
+    border-radius: 10px;
+    z-index: 1;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.background-video.left {
+    left: 2%;
+}
+
+.background-video.right {
+    right: 2%;
+}
+
+.custom-controls {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 15px;
+    width: 95%;
+}
+
+.control-button {
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    color: #A5A692;
+    transition: box-shadow 0.3s;
+    border-radius: 10px;
+}
+
+.control-button:hover {
+    box-shadow: 0 0 10px #A5A692;
+}
+
+.time-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #A5A692;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.time-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #ffffff;
+    border-radius: 50%;
+    position: relative;
+}
+
+.frame-display {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #011F26;
+    color: #A5A692;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.total-frames {
+    color: #A5A692;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.buttons {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    color: #A5A692;
+    text-decoration: none;
+    border-radius: 10px;
+    background-color: #011F26;
+    transition: box-shadow 0.3s;
+}
+
+.button:hover {
+    box-shadow: 0 0 10px #A5A692;
+}
+
+.control-button img {
+    width: 20px;
+    height: 20px;
+}
+
+#volume-slider {
+    display: block;
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100px;
+    background: #025E73;
+}
+
+#volume-slider::after {
+    content: attr(value) '%';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #011F26;
+    color: #A5A692;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.video-title {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #A5A692;
+    font-size: 24px;
+    text-align: center;
+    z-index: 2;
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.expansion-button {
+    background-color: #01151a;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    padding: 10px;
+    color: #A5A692;
+    transition: box-shadow 0.3s;
+    margin-top: 10px;
+}
+
+.expansion-button img {
+    width: 40px;
+    height: 40px;
+}
+
+.expansion-button:hover {
+    box-shadow: 0 0 10px #A5A692;
+}
+
+/* Remove old span styles */
+/* #home .home-content span {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+} */
+
+/* ... [Your existing CSS styles] ... */
+
+/* Ensure home-content is relative */
+#home .home-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Adjust logo styling */
+#home .home-content img {
+    position: absolute;
+    cursor: grab;
+    width: 100px;
+    height: 100px;
+}
+
+/* CSS for the particles */
+#particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow interactions with elements behind */
+}
+
+.particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: #A5A692;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+
+/* Explosion animation */
+@keyframes explode {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(8);
+    }
+}
+
+.particle.explode {
+    animation: explode 0.5s forwards;
+}
+
+/* Welcome text styling */
+.welcome-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: #A5A692;
+    pointer-events: none; /* Allow interactions with elements behind */
+}
+/* Style for the sub-text */
+.sub-text {
+    position: absolute;
+    top: 55%; /* Adjust this value to position the text */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem; /* Smaller than the main welcome text */
+    color: #A5A692;
+    font-family: 'Lato', italic;
+    pointer-events: none;
+}
+/* Small particles emitted during explosion */
+.small-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #afb18e; /* Bright color for visibility */
+    border-radius: 50%;
+    opacity: 1;
+    pointer-events: none;
+}
+
+@keyframes particle-move {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy));
+    }
+}
+
+@media (max-width: 600px) {
+    .welcome-text {
+        font-size: 2rem;
+    }
+    .sub-text {
+        font-size: 1.5rem;
+    }
+}
