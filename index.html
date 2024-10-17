@@ -98,11 +98,18 @@
         </button>
     </div>
 
-    <div id="viewport">
-		<canvas id="three-canvas"></canvas>
+    <div id="viewport" class="section" style="display: none;">
+        <canvas id="three-canvas"></canvas>
+        <div id="loading-indicator" style="display: none;">
+            Loading 3D content...
+        </div>
+        <div class="buttons" id="bottom-buttons">
+            <a href="#" class="button">Button 1</a>
+            <a href="#" class="button">Button 2</a>
+            <a href="#" class="button">Button 3</a>
+        </div>
     </div>
 
-    <script type="module" src="js/viewport.js"></script>
 
      <!-- This is THREE 3D import -->
     <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
@@ -114,7 +121,8 @@
             }
         }
     </script>
-    
+    <!-- <script type="module" src="js/viewport.js"></script> -->
+
     <script src="js/main.js"></script>
 
 </body>

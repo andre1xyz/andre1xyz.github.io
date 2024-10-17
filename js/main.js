@@ -294,12 +294,65 @@ function swapVideo(clickedVideo, position) {
 }
 
 
-// Function to show different sections
+// // Function to show different sections
+// function showSection(sectionId) {
+//     const sections = document.querySelectorAll('.section');
+//     sections.forEach(section => section.style.display = 'none');
+//     document.getElementById(sectionId).style.display = sectionId === 'home' ? 'block' : 'flex';
+
+//     if (sectionId === 'viewport') {
+//         // Check if the 3D content is already initialized
+//         if (!window.isThreeInitialized) {
+//             // Show loading indicator
+//             document.getElementById('loading-indicator').style.display = 'block';
+
+//             // Load Three.js and initialize the 3D content
+//             loadThreeJS(() => {
+//                 initializeThreeJS();
+//                 // Hide loading indicator
+//                 document.getElementById('loading-indicator').style.display = 'none';
+//             });
+//         }
+//     }
+// }
+
+let isThreeInitialized = false;
+
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
     sections.forEach(section => section.style.display = 'none');
+    const targetSection = document.getElementById(sectionId);
     document.getElementById(sectionId).style.display = sectionId === 'home' ? 'block' : 'flex';
+
+    if (sectionId === 'viewport') {
+        if (!isThreeInitialized) {
+            document.getElementById('loading-indicator').style.display = 'block';
+            loadViewportJS(() => {
+                document.getElementById('loading-indicator').style.display = 'none';
+            });
+        }
+    }
 }
+
+function loadViewportJS(callback) {
+    if (isThreeInitialized) {
+        callback();
+        return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'js/viewport.js'; // Path to your viewport.js file
+    script.type = 'module'; // Tell the browser this is a module
+    script.onload = () => {
+        isThreeInitialized = true;
+        callback();
+    };
+    script.onerror = () => {
+        console.error('Failed to load viewport.js');
+    };
+    document.head.appendChild(script);
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const logo = document.querySelector('#home .home-content img');
