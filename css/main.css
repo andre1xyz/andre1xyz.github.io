@@ -267,14 +267,6 @@ nav a:hover {
     box-shadow: 0 0 10px #A5A692;
 }
 
-/* Remove old span styles */
-/* #home .home-content span {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-} */
-
-/* ... [Your existing CSS styles] ... */
 
 /* Ensure home-content is relative */
 #home .home-content {
@@ -308,17 +300,6 @@ nav a:hover {
     opacity: 0.7;
 }
 
-/* Explosion animation */
-@keyframes explode {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(8);
-    }
-}
 
 .particle.explode {
     animation: explode 0.5s forwards;
@@ -356,6 +337,34 @@ nav a:hover {
     pointer-events: none;
 }
 
+#viewport {
+    width: 95vw;
+    height: 95vh;
+    border-radius: 15px; /* Rounded corners */
+    overflow: hidden;
+    position: relative;
+}
+#three-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+canvas {
+    display: block;
+}
+
+/* Explosion animation */
+@keyframes explode {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(8);
+    }
+}
+
 @keyframes particle-move {
     0% {
         opacity: 1;
@@ -375,3 +384,4 @@ nav a:hover {
         font-size: 1.5rem;
     }
 }
+
