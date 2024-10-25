@@ -653,6 +653,9 @@ canvas {
     max-width: 80%;
     margin:0.5% 0 0.5% 0;
 }
+.education{
+    width: 50%;
+}
 .experience-details h3 {
 
     color: #dfab4c;
@@ -669,12 +672,13 @@ canvas {
 }
 /* Contact Information */
 .contact-info {
-    padding-right: 20px;
-    padding-left: 20px;
-    position: sticky;
-    top: 80px; /* Adjust based on nav height */
+    padding-right: 1%;
+    padding-left: 1%;
+    top: 5%; /* Adjust based on nav height */
     background-color: #00232b80;
     border-radius: 10px;
+    width: 20%;
+    height: 100%;
 }
 
 .contact-info h2 {
@@ -779,17 +783,25 @@ canvas {
     flex: 1;
 }
 
-.experience-grid,
+.experience-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5%;
+}
+.experience-company{
+
+    margin-bottom: 5%;
+}
 .education-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 10px;
 }
 
 .experience-field,
 .education-field {
     font-size: 1rem;
-    margin: 5px 0;
+    margin: 0px 0;
 }
 
 .experience-details h3,
