@@ -6,6 +6,7 @@
     <title>Andreu Pellisa</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="css/main.css">
 
@@ -19,19 +20,132 @@
     
     <nav style="z-index: 100;">
         <a href="#" onclick="showSection('home')"><img src="https://img.icons8.com/ios-filled/50/A5A692/home.png" alt="Home" style="width: 20px; height: 20px;"></a>
+        <a href="#" onclick="showSection('showreel')">Showreel</a>
         <a href="#" onclick="showSection('portfolio')">Portfolio</a>
-        <a href="#" onclick="showSection('about')">About</a>
+        <a href="#" onclick="showSection('resume')">Resume</a>
         <a href="#" onclick="showSection('viewport')">3D</a>
-        <a href="#" onclick="showSection('contact')">Contact</a>
     </nav>
 
     
-    <div id="contact" class="section" style="display: none; height: 100vh; align-items: center; justify-content: center;">
-        <p style="font-size: 2rem;">Email: contact@andreupellisa.com</p>
+    <!-- Resume Section -->
+    <div id="resume" class="section" style="display: none;">
+        <div class="resume-container">
+            <!-- Contact Information -->
+            <aside class="contact-info">
+                <h2>Contact</h2>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p><strong>Based in:</strong> London, UK</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-flag"></i>
+                        <p><strong>Nationality:</strong> Spanish - UK partner visa</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p><strong>Email:</strong> <a href="mailto:andreu.pc.1997@gmail.com">andreu.pc.1997@gmail.com</a></p>
+                    </div>
+                </div>
+            </aside>
+            
+
+            <!-- Experience -->
+            <div class="resume-section experience">
+                <h2>Experience</h2>
+                <div class="experience-item">
+                    <img src="images/mpcvfx_logo.jpg" alt="MPC">
+                    <div class="experience-details">
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Company:</strong> MPC</div>
+                            <div class="experience-field"><strong>Project:</strong> Snow White</div>
+                            <div class="experience-field"><strong>Role:</strong> Senior 3D Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Jun 2023 - Present</div>
+                            <div class="experience-field"><strong>Location:</strong> London, UK</div>
+                        </div>
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Project:</strong> Snow White</div>
+                            <div class="experience-field"><strong>Role:</strong> Mid 3D Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Jun 2022 - Jun 2023</div>
+                            <div class="experience-field"><strong>Location:</strong> London, UK</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <img src="images/stellar_creative_lab_logo.jpg" alt="Stellar Creative Lab">
+                    <div class="experience-details">
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Company:</strong> Stellar Creative Lab</div>
+                            <div class="experience-field"><strong>Project:</strong> What if...? Season 2</div>
+                            <div class="experience-field"><strong>Role:</strong> 3D Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Mar 2022 - Apr 2022</div>
+                            <div class="experience-field"><strong>Location:</strong> Barcelona, Spain</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <img src="images/abylight_sl_logo.jpg" alt="Abylight Studios">
+                    <div class="experience-details">
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Company:</strong> Abylight Studios</div>
+                            <div class="experience-field"><strong>Project:</strong> One Military Camp</div>
+                            <div class="experience-field"><strong>Role:</strong> 3D Animator / Rigger</div>
+                            <div class="experience-field"><strong>Dates:</strong> Aug 2021 - Mar 2022</div>
+                            <div class="experience-field"><strong>Location:</strong> Barcelona, Spain</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <img src="images/roche_logo.jpg" alt="Roche">
+                    <div class="experience-details">
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Company:</strong> Roche</div>
+                            <div class="experience-field"><strong>Role:</strong> Multimedia Intern</div>
+                            <div class="experience-field"><strong>Dates:</strong> Sep 2018 - Jun 2019</div>
+                            <div class="experience-field"><strong>Location:</strong> N/A</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for more experience items -->
+            </div>
+
+            <!-- Education -->
+            <div class="resume-section education">
+                <h2>Education</h2>
+                <div class="education-item">
+                    <div class="education-grid">
+                        <div class="education-field"><strong>Degree:</strong> Master's Degree</div>
+                        <div class="education-field"><strong>Field:</strong> 3D Character Animation</div>
+                        <div class="education-field"><strong>Institution:</strong> FX Barcelona Film School</div>
+                        <div class="education-field"><strong>Dates:</strong> 2019 - 2022</div>
+                        <div class="education-field"><strong>Location:</strong> Barcelona, Spain</div>
+                    </div>
+                </div>
+                <div class="education-item">
+                    <div class="education-grid">
+                        <div class="education-field"><strong>Degree:</strong> Bachelor's Degree</div>
+                        <div class="education-field"><strong>Field:</strong> Multimedia</div>
+                        <div class="education-field"><strong>Institution:</strong> Centre de la imatge i la Tecnologia Multimèdia | CITM (UPC)</div>
+                        <div class="education-field"><strong>Dates:</strong> 2015 - 2019</div>
+                        <div class="education-field"><strong>Location:</strong> Terrassa, Spain</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="about" class="section" style="display: none; height: 100vh; align-items: center; justify-content: center;">
-        <p style="font-size: 2rem;">This is a short random text about me.</p>
+    <!-- Portfolio Section -->
+    <div id="portfolio" class="section" style="display: none; flex-direction: column;">
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="feature-film">Feature Film</button>
+            <button class="category-tab" data-category="videogames">Videogames</button>
+            <button class="category-tab" data-category="tv-show">TV Show</button>
+        </div>
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+            <!-- Project items will be injected here -->
+        </div>
     </div>
 
 
@@ -45,7 +159,7 @@
         </div>
     </div>
 
-    <div id="portfolio" class="video-container section" style="z-index: 2; position: relative; display: none; align-items: center; justify-content: center; height: 100vh;">
+    <div id="showreel" class="video-container section" style="z-index: 2; position: relative; display: none; align-items: center; justify-content: center; height: 100vh;">
         <div class="video-title">Film VFX Reel</div>
         
         <video class="background-video left" autoplay muted onclick="swapVideo(this, 'left')">
@@ -100,15 +214,15 @@
 
     <div id="character-grid" class="section" style="display: block;">
         <div class="grid-container">
-            <div class="grid-item" onclick="loadSelected('dragonsito')" data-model="dragonsito">
-                <img src="images/character1.jpg"   alt="Character 1">
-                <div class="title" >Character 1</div>
+            <div class="grid-item" onclick="loadSelected('orc')" data-model="orc">
+                <img src="images/orc.png"   alt="Orc">
+                <div class="title" >Orc</div>
             </div>
-            <div class="grid-item" data-model="character2">
-                <img src="images/character2.jpg" alt="Character 2">
-                <div class="title">Character 2</div>
+            <div class="grid-item" onclick="loadSelected('wolverine')" data-model="character2">
+                <img src="images/Wolverine.png" alt="Wolverine">
+                <div class="title">Wolverine</div>
             </div>
-            <div class="grid-item" data-model="character3">
+            <!-- <div class="grid-item" data-model="character3">
                 <img src="images/character3.jpg" alt="Character 3">
                 <div class="title">Character 3</div>
             </div>
@@ -123,7 +237,7 @@
             <div class="grid-item" data-model="character6">
                 <img src="images/character6.jpg" alt="Character 6">
                 <div class="title">Character 6</div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -141,6 +255,24 @@
         </div>
     </div>
 
+
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <img id="modal-image" src="" alt="Project Image">
+                <div class="modal-description">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-description"></p>
+                    <!-- Add more details if needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
     <script type="importmap">
         {
@@ -152,6 +284,8 @@
     </script>
 
     <script src="js/main.js"></script>
+
+
 
 </body>
 </html>

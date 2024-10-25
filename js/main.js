@@ -653,3 +653,118 @@ document.addEventListener('DOMContentLoaded', () => {
     animateLogo();
     
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const projectsGrid = document.querySelector('.projects-grid');
+
+    function loadProjects(category) {
+        // Clear the grid
+        projectsGrid.innerHTML = '';
+
+        // Get the projects for the selected category
+        const selectedProjects = projects[category];
+
+        // Generate HTML for each project
+        selectedProjects.forEach(project => {
+            const projectItem = document.createElement('div');
+            projectItem.classList.add('project-item');
+
+            // Optional: Add click event to open project details
+            projectItem.addEventListener('click', () => {
+                showProjectDetails(project);
+            });
+
+            projectItem.innerHTML = `
+                <img src="${project.image}" alt="${project.title}">
+                <div class="title">${project.title}</div>
+            `;
+
+            projectsGrid.appendChild(projectItem);
+        });
+    }
+
+    // Add click event listeners to tabs
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove 'active' class from all tabs
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            // Add 'active' class to the clicked tab
+            tab.classList.add('active');
+
+            // Load the selected category projects
+            const category = tab.getAttribute('data-category');
+            loadProjects(category);
+        });
+    });
+
+    // Load the default category (Feature Film) on page load
+    loadProjects('feature-film');
+});
+
+
+
+// Function to display project details (optional)
+function showProjectDetails(project) {
+    const modal = document.getElementById('project-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalImage = document.getElementById('modal-image');
+    const modalDescription = document.getElementById('modal-description');
+    const closeButton = document.querySelector('.close-button');
+
+    modalTitle.textContent = project.title;
+    modalImage.src = project.image;
+    modalDescription.textContent = project.description || 'No description available.';
+
+    modal.style.display = 'block';
+
+    closeButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside of content
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+const projects = {
+    'feature-film': [
+        {
+            title: 'Snow White - 2024',
+            image: 'images/SnowWhite_Poster.jpg',
+            description: 'A brief description of the project.',
+            // Add more details if needed
+        },
+        // {
+        //     title: 'Feature Film Project 2',
+        //     image: 'images/feature-film2.jpg',
+        // },
+        // Add more projects
+    ],
+    'videogames': [
+        {
+            title: 'One Military Camp - 2022',
+            image: 'images/OneMilitaryCamp_VT.png',
+        },
+        // {
+        //     title: 'Videogame Project 2',
+        //     image: 'images/videogame2.jpg',
+        // },
+        // Add more projects
+    ],
+    'tv-show': [
+        {
+            title: 'What if...? Season 2 - 2022',
+            image: 'images/What_If...__season_2_poster.jpeg',
+        },
+        // {
+        //     title: 'TV Show Project 2',
+        //     image: 'images/tv-show2.jpg',
+        // },
+        // Add more projects
+    ],
+};

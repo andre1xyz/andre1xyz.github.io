@@ -1,6 +1,32 @@
 * {
     box-sizing: border-box;
 }
+
+/* For WebKit Browsers */
+body::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #011F26;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #A5A692;
+    border-radius: 6px;
+    border: 3px solid #011F26;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #F2A71B;
+}
+
+/* For Firefox */
+body {
+    scrollbar-width: thin;
+    scrollbar-color: #A5A692 #011F26;
+}
+
 body {
     margin: 0;
     font-family: 'Lato', sans-serif;
@@ -364,8 +390,8 @@ nav a:hover {
 }
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2%;
     width: 100%;
     max-width: 60%;
     margin: 0 auto;
@@ -401,7 +427,7 @@ nav a:hover {
 
 .grid-item .title {
     text-align: center;
-    padding: 10px;
+    padding: 5%;
     color: #A5A692;
     font-size: 1.2rem;
     background-color: rgba(0, 31, 38, 0.8);
@@ -465,6 +491,338 @@ canvas {
     display: block;
 }
 
+/* Portfolio Section Styling */
+#portfolio {
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 100px; /* Adjust as needed */
+}
+
+/* Category Tabs */
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.category-tab {
+    background-color: #025E73;
+    color: #A5A692;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1rem;
+}
+
+.category-tab.active,
+.category-tab:hover {
+    background-color: #A5A692;
+    color: #011F26;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+    width: 25%;
+    max-width: 1200px;
+}
+
+.project-item {
+    background-color: #025E73;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+.project-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.project-item .title {
+    text-align: center;
+    padding: 10px;
+    color: #A5A692;
+    font-size: 1.2rem;
+    background-color: rgba(0, 31, 38, 0.8);
+}
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Darker background */
+}
+
+/* Center the modal content */
+.modal-content {
+    background-color: #002c36;
+    margin: auto;
+    padding: 20px;
+    /* border: 1px solid #33332a; */
+    width: 60%;             /* Smaller width */
+    max-width: 800px;
+    border-radius: 10px;
+    position: relative;
+    color: #dcddc1;
+    top: 50%;
+    transform: translateY(-50%); /* Vertically center */
+    max-height: 90vh;       /* Prevent overflow */
+    overflow: hidden;       /* Hide overflow */
+}
+
+/* Flex layout for modal body */
+.modal-body {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 100%;
+}
+
+/* Style for the project image */
+#modal-image {
+    width: 50%;
+    height: auto;
+    border-radius: 10px;
+    margin-right: 20px;
+    flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
+/* Style for the description column */
+.modal-description {
+    width: 50%;
+    overflow: auto; /* Enable scroll if content overflows */
+}
+
+/* Adjust heading and paragraph */
+.modal-description h2 {
+    margin-top: 0;
+}
+
+.close-button {
+    color: #A5A692;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #F2A71B;
+}
+
+/* Resume Section Styling */
+#resume {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5%; /* Add or adjust this value */
+    padding-bottom: 2%;
+    background-color: #011F26;
+    color: #A5A692;
+    overflow-y: scroll;
+    width: 100%;
+    height: auto;
+}
+.resume-container {
+    display: flex;
+    width: 80%;
+    box-sizing: border-box;
+    gap: 40px; /* Space between sidebar and main content */
+}
+.resume-section {
+    width: 100%;
+    max-width: 80%;
+    margin:0.5% 0 0.5% 0;
+}
+.experience-details h3 {
+
+    color: #dfab4c;
+
+}
+.resume-section h2 {
+    margin-top: 0; /* Remove any top margin */
+
+    font-size: 2rem;
+    color: #dfab4c;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #A5A692;
+    padding-bottom: 10px;
+}
+/* Contact Information */
+.contact-info {
+    padding-right: 20px;
+    padding-left: 20px;
+    position: sticky;
+    top: 80px; /* Adjust based on nav height */
+    background-color: #00232b80;
+    border-radius: 10px;
+}
+
+.contact-info h2 {
+    font-size: 1.8rem;
+    color: #F2A71B;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #A5A692;
+    padding-bottom: 10px;
+}
+.contact-info p,
+.education-item p,
+.experience-details p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.contact-info a {
+    color: #A5A692;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    color: #F2A71B;
+    text-decoration: underline;
+}
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+}
+.contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.contact-item i {
+    color: #F2A71B;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.contact-item p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.contact-item a {
+    color: #A5A692;
+    text-decoration: none;
+}
+
+.contact-item a:hover {
+    color: #F2A71B;
+}
+/* Resume Content */
+.resume-content {
+    flex: 1;
+    max-height: calc(100vh - 100px); /* Adjust based on nav and padding */
+    overflow-y: auto;
+    padding-left: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.resume-section h2 {
+    font-size: 2rem;
+    color: #F2A71B;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #A5A692;
+    padding-bottom: 10px;
+}
+
+/* Experience and Education Items */
+.experience-item,
+.education-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    background-color: rgba(2, 94, 115, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.experience-item:hover,
+.education-item:hover {
+    background-color: rgba(242, 167, 27, 0.1);
+}
+
+.experience-item img,
+.education-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.experience-details,
+.education-details {
+    flex: 1;
+}
+
+.experience-grid,
+.education-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.experience-field,
+.education-field {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.experience-details h3,
+.education-details h3 {
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+    color: #A5A692;
+}
+
+/* Custom Scrollbar for Resume Content */
+.resume-content::-webkit-scrollbar {
+    width: 12px;
+}
+
+.resume-content::-webkit-scrollbar-track {
+    background: #011F26;
+}
+
+.resume-content::-webkit-scrollbar-thumb {
+    background-color: #A5A692;
+    border-radius: 6px;
+    border: 3px solid #011F26;
+}
+
+.resume-content::-webkit-scrollbar-thumb:hover {
+    background-color: #F2A71B;
+}
+
+/* Firefox Scrollbar */
+.resume-content {
+    scrollbar-width: thin;
+    scrollbar-color: #A5A692 #011F26;
+}
 /* Explosion animation */
 @keyframes explode {
     0% {
@@ -488,23 +846,6 @@ canvas {
     }
 }
 
-@media (max-width: 600px) {
-    .welcome-text {
-        font-size: 2rem;
-    }
-    .sub-text {
-        font-size: 1.5rem;
-    }
-    #bottom-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #bottom-buttons .button {
-        margin: 5px 0;
-    }
-    
-}
 
 /* Mobile Styles */
 @media (max-width: 768px) {
@@ -672,5 +1013,50 @@ canvas {
         width: 2px;
         height: 2px;
     }
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .modal-content {
+        width: 80%;
+    }
 
+    .modal-body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #modal-image, .modal-description {
+        width: 100%;
+    }
+
+    #modal-image {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    #resume {
+        padding: 20px;
+    }
+
+    .resume-section {
+        width: 100%;
+    }
+
+    .experience-item,
+    .education-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .experience-item img {
+        margin-bottom: 10px;
+    }
+
+    .resume-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .experience-details h3,
+    .education-item h3 {
+        font-size: 1.2rem;
+    }
 }
