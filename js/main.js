@@ -734,7 +734,7 @@ function showProjectDetails(project) {
 const projects = {
     'feature-film': [
         {
-            title: 'Snow White - 2024',
+            title: 'Snow White - 2025',
             image: 'images/SnowWhite_Poster.jpg',
             description: 'A brief description of the project.',
             // Add more details if needed

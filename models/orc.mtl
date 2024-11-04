@@ -1,0 +1,93 @@
+# Blender 4.2.3 LTS MTL File: 'ORC_Rig_017.blend'
+# www.blender.org
+
+newmtl Cloth_MAT
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Cloth_MAT_BaseColor.1001.tif
+map_Ns E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Cloth_MAT_Roughness.1001.tif
+map_refl E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Cloth_MAT_Metallic.1001.tif
+map_d E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Cloth_MAT_Alpha.1001.tif
+map_Bump -bm 1.000000 E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Cloth_MAT_Normal.1001.tif
+
+newmtl Leather_MAT
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Leather_MAT_BaseColor.1001.tif
+map_refl E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Leather_MAT_Metallic.1001.tif
+map_d E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Leather_MAT_Alpha.1001.tif
+map_Bump -bm 1.000000 E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Leather_MAT_Normal.1001.tif
+
+newmtl MetalDagger_MAT
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd E:/Andre1/MegaSync/Orc/ORC_Textures/4k/MetalDagger_MAT_BaseColor.1001.tif
+map_Ns E:/Andre1/MegaSync/Orc/ORC_Textures/4k/MetalDagger_MAT_Roughness.1001.tif
+map_refl E:/Andre1/MegaSync/Orc/ORC_Textures/4k/MetalDagger_MAT_Metallic.1001.tif
+map_d E:/Andre1/MegaSync/Orc/ORC_Textures/4k/MetalDagger_MAT_Alpha.1001.tif
+map_Bump -bm 1.000000 E:/Andre1/MegaSync/Orc/ORC_Textures/4k/MetalDagger_MAT_Normal.1001.tif
+
+newmtl Orc_MAT
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Orc_MAT_BaseColor.<UDIM>.tif
+map_Ns E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Orc_MAT_Roughness.<UDIM>.tif
+map_Bump -bm 1.000000 E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Orc_MAT_Normal.<UDIM>.tif
+
+newmtl Straps_MAT
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 2
+map_Kd E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Straps_MAT_BaseColor.<UDIM>.tif
+map_Ns E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Straps_MAT_Roughness.1001.tif
+map_refl E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Straps_MAT_Metallic.<UDIM>.tif
+map_d E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Straps_MAT_Alpha.1001.tif
+map_Bump -bm 1.000000 E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Straps_MAT_Normal.<UDIM>.tif
+
+newmtl Tiny_Iris_1.3_(Real_Gold)
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Tiny_Sclera_1.3_(Real_Gold)
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Wood_MAT
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Wood_MAT_BaseColor.1001.tif
+map_Ns E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Wood_MAT_Roughness.1001.tif
+map_refl E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Wood_MAT_Metallic.1001.tif
+map_Bump -bm 1.000000 E:/Andre1/MegaSync/Orc/ORC_Textures/4k/Wood_MAT_Normal.1001.tif
