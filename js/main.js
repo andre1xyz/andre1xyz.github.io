@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const stardust1 = document.getElementById('stardust1');
     const stardust2 = document.getElementById('stardust2');
@@ -247,6 +246,102 @@ document.addEventListener('DOMContentLoaded', () => {
             showSection('viewport', modelName);
         });
     });
+
+    const loadViewportButton = document.getElementById('load-viewport-button');
+    const loadViewportContainer = document.getElementById('load-viewport-container');
+    const unityContainer = document.getElementById('unity-container');
+    let unityInstance = null;
+    let isUnityLoaded = false;
+
+    loadViewportButton.addEventListener('click', () => {
+        if (!isUnityLoaded) {
+            loadUnityInstance();
+            isUnityLoaded = true;
+            loadViewportContainer.style.display = 'none';
+        }
+    });
+
+    function loadUnityInstance() {
+        const canvas = document.querySelector("#unity-canvas");
+        const buildUrl = "Build";
+        const loaderUrl = buildUrl + "/Viewport_Build.loader.js";
+        const config = {
+            arguments: [],
+            dataUrl: buildUrl + "/Viewport_Build.data",
+            frameworkUrl: buildUrl + "/Viewport_Build.framework.js",
+            codeUrl: buildUrl + "/Viewport_Build.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "andre1xyz",
+            productName: "Viewport",
+            productVersion: "0.1.0",
+            showBanner: unityShowBanner,
+        };
+
+        const loadingBar = document.querySelector("#unity-loading-bar");
+        loadingBar.style.display = "block";
+
+        const script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+            }).then((instance) => {
+                unityInstance = instance;
+                loadingBar.style.display = "none";
+                document.querySelector("#unity-fullscreen-button").onclick = () => {
+                    unityInstance.SetFullscreen(1);
+                };
+            }).catch((message) => {
+                alert(message);
+            });
+        };
+
+        document.body.appendChild(script);
+    }
+
+    function unloadUnityInstance() {
+        if (unityInstance) {
+            unityInstance.Quit().then(() => {
+                unityInstance = null;
+                isUnityLoaded = false;
+            });
+        }
+    }
+
+    function show3DSection() {
+        loadViewportContainer.style.display = 'flex'; // Show the button again
+    }
+
+    // Example of handling section changes
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (event) => {
+            const targetSection = event.target.getAttribute('data-target');
+            if (targetSection === '3D') {
+                show3DSection();
+            } else {
+                unloadUnityInstance();
+            }
+        });
+    });
+
+    function unityShowBanner(msg, type) {
+        const warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+            warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        const div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+            if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+            setTimeout(function() {
+                warningBanner.removeChild(div);
+                updateBannerVisibility();
+            }, 5000);
+        }
+        updateBannerVisibility();
+    }
 
 });
 
