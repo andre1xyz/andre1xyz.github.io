@@ -1,3 +1,15 @@
+// Moved 'videos' to global scope
+const videos = {
+    cartoon: {
+        src: 'videos/cartoon.mp4',
+        title: 'Cartoon'
+    },
+    vfx: {
+        src: 'videos/vfx.mp4',
+        title: 'VFX'
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const stardust1 = document.getElementById('stardust1');
     const stardust2 = document.getElementById('stardust2');
@@ -8,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const expandIcon = document.getElementById('expand-icon');
     const videoPlayer = document.getElementById('video-player');
     const backgroundVideos = document.querySelectorAll('.background-video');
+    const videoTitle = document.getElementById('video-title');
 
     document.addEventListener('mousemove', (e) => {
         const { clientX, clientY } = e;
@@ -347,8 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function swapVideo(clickedVideo, position) {
     const mainVideo = document.getElementById('video-player');
-    const mainVideoSource = mainVideo.querySelector('source').src;
-    const clickedVideoSource = clickedVideo.querySelector('source').src;
+    const videoTitle = document.getElementById('video-title');
+    const mainVideoSource = mainVideo.querySelector('source');
+    const clickedVideoSource = clickedVideo.querySelector('source');
 
     // Set up movement transition effect
     mainVideo.style.transition = 'transform 0.5s ease, opacity 0.5s ease, box-shadow 0.5s ease';
@@ -384,8 +398,23 @@ function swapVideo(clickedVideo, position) {
 
     setTimeout(() => {
         // Swap the video sources
-        mainVideo.querySelector('source').src = clickedVideoSource;
-        clickedVideo.querySelector('source').src = mainVideoSource;
+        const tempSrc = mainVideoSource.getAttribute('src');
+        mainVideoSource.setAttribute('src', clickedVideoSource.getAttribute('src'));
+        clickedVideoSource.setAttribute('src', tempSrc);
+
+        // Swap data-type attributes
+        const mainVideoType = mainVideo.getAttribute('data-type');
+        const clickedVideoType = clickedVideo.getAttribute('data-type');
+        mainVideo.setAttribute('data-type', clickedVideoType);
+        clickedVideo.setAttribute('data-type', mainVideoType);
+
+        // Update the video title based on the main video's new data-type
+        const newMainVideoType = mainVideo.getAttribute('data-type');
+        if (videos[newMainVideoType]) {
+            videoTitle.textContent = videos[newMainVideoType].title;
+        } else {
+            videoTitle.textContent = 'Unknown Title';
+        }
 
         // Reset transformations
         mainVideo.style.transform = 'translateX(0) translateY(0) scale(1)';
@@ -394,6 +423,9 @@ function swapVideo(clickedVideo, position) {
         // Load the new sources
         mainVideo.load();
         clickedVideo.load();
+
+        // Optionally, play the main video
+        mainVideo.play();
     }, 500);
 }
 
@@ -418,7 +450,13 @@ function showSection(sectionId, modelName = null) {
             document.getElementById('character-grid').style.display = 'flex';
             document.getElementById('loading-indicator').style.display = 'none';
             document.getElementById('bottom-buttons').style.display = 'none';
-
+            const characterGrid = document.getElementById('character-grid');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const bottomButtons = document.getElementById('bottom-buttons');
+    
+            if (characterGrid) characterGrid.style.display = 'flex';
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+            if (bottomButtons) bottomButtons.style.display = 'none';
     //     if (!isThreeInitialized) {
     //         document.getElementById('character-grid').style.display = 'none';
     //         document.getElementById('loading-indicator').style.display = 'block';
