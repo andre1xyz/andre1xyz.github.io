@@ -361,8 +361,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function swapVideo(clickedVideo, position) {
     const mainVideo = document.getElementById('video-player');
     const videoTitle = document.getElementById('video-title');
+    const rightVideoTitle = document.getElementById('right-video-title'); // Add this line
     const mainVideoSource = mainVideo.querySelector('source');
     const clickedVideoSource = clickedVideo.querySelector('source');
+
 
     // Set up movement transition effect
     mainVideo.style.transition = 'transform 0.5s ease, opacity 0.5s ease, box-shadow 0.5s ease';
@@ -416,6 +418,13 @@ function swapVideo(clickedVideo, position) {
             videoTitle.textContent = 'Unknown Title';
         }
 
+        // Update the right video title based on the clicked video's new data-type
+        const newClickedVideoType = clickedVideo.getAttribute('data-type');
+        if (videos[newClickedVideoType]) {
+            rightVideoTitle.textContent = videos[newClickedVideoType].title;
+        } else {
+            rightVideoTitle.textContent = 'Unknown Title';
+        }
         // Reset transformations
         mainVideo.style.transform = 'translateX(0) translateY(0) scale(1)';
         clickedVideo.style.transform = 'translateX(0) translateY(-50%) scale(1)';
@@ -428,8 +437,6 @@ function swapVideo(clickedVideo, position) {
         mainVideo.play();
     }, 500);
 }
-
-
 let isThreeInitialized = false;
 
 function showSection(sectionId, modelName = null) {
@@ -869,8 +876,9 @@ const projects = {
         {
             title: 'Snow White - 2025',
             image: 'images/SnowWhite_Poster.jpg',
-            description: 'A brief description of the project.',
-            // Add more details if needed
+            description: 'I have been working on the Snow White project for 2 years and 6 months as a Senior Animator at MPC London.' +
+                        'My responsibilities included animating animals and humanoid characters using both mocap and keyframe techniques. I developed personal tools to enhance our animation workflow and improve efficiency.' +
+                        'Throughout the project, I focused on creating realistic character performances by studying real-life references and incorporating natural movements to deliver an immersive cinematic experience.',
         },
         // {
         //     title: 'Feature Film Project 2',
@@ -882,6 +890,9 @@ const projects = {
         {
             title: 'One Military Camp - 2022',
             image: 'images/OneMilitaryCamp_VT.png',
+            description: 'I have been working on One Military Camp project for 1 year as the main Animator / Rigger at Abylight studios in Barcelona.' +
+            'My responsibilities included animating humanoid characters using keyframe techniques. I developed personal tools to enhance our animation and rigging workflow and improve efficiency.' +
+            'Throughout the project, I focused on creating looping character and props animations and adapting multiple characters to the rig to use it in a dynamic way.',
         },
         // {
         //     title: 'Videogame Project 2',
@@ -893,6 +904,9 @@ const projects = {
         {
             title: 'What if...? Season 2 - 2022',
             image: 'images/What_If...__season_2_poster.jpeg',
+            description: 'I have been working on the What If show for a month as a Animator at Stellar Creative Lab.' +
+            'My responsibilities included animating humanoid characters using keyframe techniques.' +
+            'In this project I had the opportunity to learn a more cartoony style of animation.',
         },
         // {
         //     title: 'TV Show Project 2',
@@ -901,3 +915,4 @@ const projects = {
         // Add more projects
     ],
 };
+

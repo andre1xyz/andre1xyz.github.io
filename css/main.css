@@ -1132,3 +1132,21 @@ canvas {
     font-size: 0.9rem;
     text-align: center;
 }
+
+#right-video-title {
+    position: absolute;
+    top: 120px; /* Same as main video title */
+    right: 12%; /* Adjust this value to align with the right video */
+    transform: translateX(50%); /* Center relative to the right video */
+    color: #A5A692;
+    font-size: 24px;
+    text-align: center;
+    z-index: 2;
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+.modal-description p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
