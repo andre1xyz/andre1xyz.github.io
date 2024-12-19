@@ -167,8 +167,8 @@
     </div>
 
     <div id="showreel" class="video-container section" style="z-index: 2; position: relative; display: none; align-items: center; justify-content: center; height: 100vh;">
-        <div class="video-title" id="video-title">Cartoon</div>
-        <div class="video-title" id="right-video-title">VFX</div>
+        <div class="video-title" id="video-title">VFX</div>
+        <div class="video-title" id="right-video-title">CARTOON</div>
         
         <!-- Uncomment if you have a left background video -->
         <!-- <video class="background-video left" autoplay muted data-type="vfx" onclick="swapVideo(this, 'left')">
@@ -176,13 +176,13 @@
             Your browser does not support the video tag.
         </video> -->
         
-        <video class="background-video right" autoplay muted data-type="vfx" onclick="swapVideo(this, 'right')">
-            <source src="videos/vfx.mp4" type="video/mp4">
+        <video class="background-video right" autoplay muted data-type="cartoon" onclick="swapVideo(this, 'right')">
+            <source src="videos/cartoon.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <video class="video-player" id="video-player" data-type="cartoon">
-            <source src="videos/cartoon.mp4" type="video/mp4">
+        <video class="video-player" id="video-player" data-type="vfx">
+            <source src="videos/vfx.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <div class="custom-controls" id="custom-controls">
