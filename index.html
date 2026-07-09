@@ -19,12 +19,10 @@
     <div class="stardust" id="stardust5"></div>
     
     <nav style="z-index: 100;">
-        <a href="#" onclick="showSection('home')"><img src="https://img.icons8.com/ios-filled/50/A5A692/home.png" alt="Home" style="width: 20px; height: 20px;"></a>
-        <a href="#" onclick="showSection('showreel')">Showreel</a>
-        <a href="#" onclick="showSection('portfolio')">Portfolio</a>
-        <a href="#" onclick="showSection('resume')">Resume</a>
-        <!-- <a href="#" onclick="showSection('viewport')">3D</a>
-        <a href="#" onclick="showSection('scripts')">Scripting</a> -->
+        <a href="#" class="nav-link active" data-section="home" onclick="showSection('home'); return false;"><img src="https://img.icons8.com/ios-filled/50/A5A692/home.png" alt="Home" style="width: 20px; height: 20px;"></a>
+        <a href="#" class="nav-link" data-section="showreel" onclick="showSection('showreel'); return false;">Showreel</a>
+        <a href="#" class="nav-link" data-section="portfolio" onclick="showSection('portfolio'); return false;">Portfolio</a>
+        <a href="#" class="nav-link" data-section="resume" onclick="showSection('resume'); return false;">Resume</a>
     </nav>
 
     
@@ -37,11 +35,11 @@
                 <div class="contact-grid">
                     <div class="contact-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <p><strong>Based in:</strong> London, UK</p>
+                        <p><strong>Based in:</strong> Barcelona, Spain</p>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-flag"></i>
-                        <p><strong>Nationality:</strong> Spanish - UK partner visa</p>
+                        <p><strong>Nationality:</strong> Spanish</p>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
@@ -55,16 +53,61 @@
             <div class="resume-section experience">
                 <h2>Experience</h2>
                 <div class="experience-item">
-                    <img src="images/mpcvfx_logo.jpg" alt="MPC">
+                    <div class="experience-logo">
+                        <img src="images/asymmetric_studios_logo.png" alt="Asymmetric Studios" loading="lazy" onerror="handleLogoError(this)">
+                        <i class="fas fa-building experience-logo-fallback" aria-hidden="true"></i>
+                    </div>
                     <div class="experience-details">
-                        
+                        <div class="experience-company"><h3>Asymmetric Studios</h3></div>
+                        <div class="experience-project"><h4>Prostokvashino, Prostokvashino in Winter, The Tale of Tsar Saltan, Little Brownie Kuzya 2, Manyunya, Pinocchio and the Water of Life</h4></div>
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Role:</strong> Lead Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Feb 2025 - Present</div>
+                            <div class="experience-field"><strong>Location:</strong> Barcelona, Spain</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-logo">
+                        <img src="images/mag_pictures_logo.png" alt="MAG Pictures" loading="lazy" onerror="handleLogoError(this)">
+                        <i class="fas fa-film experience-logo-fallback" aria-hidden="true"></i>
+                    </div>
+                    <div class="experience-details">
+                        <div class="experience-company"><h3>MAG Pictures</h3></div>
+                        <div class="experience-project"><h4>Cooperative animation studio</h4></div>
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Role:</strong> Co-Founder / Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Jul 2025 - Present</div>
+                            <div class="experience-field"><strong>Location:</strong> Barcelona, Spain</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-logo">
+                        <img src="images/untold_studios_logo.png" alt="Untold Studios" loading="lazy" onerror="handleLogoError(this)">
+                        <i class="fas fa-building experience-logo-fallback" aria-hidden="true"></i>
+                    </div>
+                    <div class="experience-details">
+                        <div class="experience-company"><h3>Untold Studios</h3></div>
+                        <div class="experience-project"><h4>NerdWallet — "Genius Beluga" (Super Bowl LIX)</h4></div>
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Role:</strong> Freelance Senior 3D Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Jan 2025 - Feb 2025</div>
+                            <div class="experience-field"><strong>Location:</strong> London, UK</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-logo">
+                        <img src="images/mpcvfx_logo.jpg" alt="MPC" loading="lazy" onerror="handleLogoError(this)">
+                        <i class="fas fa-building experience-logo-fallback" aria-hidden="true"></i>
+                    </div>
+                    <div class="experience-details">
                         <div class="experience-company"><h3>MPC</h3></div>
-
                         <div class="experience-project"><h4>Snow White</h4></div>
-
-                        <div class="experience-grid">    
-                            <div class="experience-field"><strong>Role:</strong> Senior 3D Animator</div>
-                            <div class="experience-field"><strong>Dates:</strong> Jun 2023 - Present</div>
+                        <div class="experience-grid">
+                            <div class="experience-field"><strong>Role:</strong> Key (Senior) Artist - 3D Animator</div>
+                            <div class="experience-field"><strong>Dates:</strong> Jun 2023 - Jan 2025</div>
                             <div class="experience-field"><strong>Location:</strong> London, UK</div>
                         </div>
                         <div class="experience-grid">
@@ -75,7 +118,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
-                    <img src="images/stellar_creative_lab_logo.jpg" alt="Stellar Creative Lab">
+                    <img src="images/stellar_creative_lab_logo.jpg" alt="Stellar Creative Lab" loading="lazy">
                     <div class="experience-details">
                         <div class="experience-company"><h3>Stellar Creative Lab</h3> </div>
                         
@@ -89,7 +132,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
-                    <img src="images/abylight_sl_logo.jpg" alt="Abylight Studios">
+                    <img src="images/abylight_sl_logo.jpg" alt="Abylight Studios" loading="lazy">
                     <div class="experience-details">
                         <div class="experience-company"><h3> Abylight Studios</h3></div>
                         <div class="experience-project"><h4>One Military Camp</h4></div>
@@ -102,7 +145,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
-                    <img src="images/roche_logo.jpg" alt="Roche">
+                    <img src="images/roche_logo.jpg" alt="Roche" loading="lazy">
                     <div class="experience-details">
                         <div class="experience-company"><h3>Roche</h3> </div>
 
@@ -143,13 +186,18 @@
 
     <!-- Portfolio Section -->
     <div id="portfolio" class="section" style="display: none; flex-direction: column;">
-        <!-- Category Tabs -->
-        <div class="category-tabs">
-            <button class="category-tab active" data-category="feature-film">Feature Film</button>
-            <button class="category-tab" data-category="videogames">Videogames</button>
-            <button class="category-tab" data-category="tv-show">TV Show</button>
+        <div class="portfolio-header">
+            <div class="category-tabs">
+                <button class="category-tab active" data-category="feature-film">Feature Film</button>
+                <button class="category-tab" data-category="videogames">Videogames</button>
+                <button class="category-tab" data-category="tv-show">TV Show</button>
+                <button class="category-tab" data-category="commercial">Commercial</button>
+            </div>
+            <a href="https://www.imdb.com/name/nm17135577/" class="imdb-badge" target="_blank" rel="noopener noreferrer" aria-label="View IMDb profile">
+                <i class="fa-brands fa-imdb"></i>
+                <span>IMDb Profile</span>
+            </a>
         </div>
-        <!-- Projects Grid -->
         <div class="projects-grid">
             <!-- Project items will be injected here -->
         </div>
@@ -166,132 +214,79 @@
         </div>
     </div>
 
-    <div id="showreel" class="video-container section" style="z-index: 2; position: relative; display: none; align-items: center; justify-content: center; height: 100vh;">
-        <div class="video-title" id="video-title">VFX</div>
-        <div class="video-title" id="right-video-title">CARTOON</div>
-        
-        <!-- Uncomment if you have a left background video -->
-        <!-- <video class="background-video left" autoplay muted data-type="vfx" onclick="swapVideo(this, 'left')">
-            <source src="videos/vfx.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video> -->
-        
-        <video class="background-video right" autoplay muted data-type="cartoon" onclick="swapVideo(this, 'right')">
-            <source src="videos/cartoon.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-
-        <video class="video-player" id="video-player" data-type="vfx">
-            <source src="videos/vfx.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="custom-controls" id="custom-controls">
-            <button class="control-button" id="play-pause">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/play.png" id="play-icon" alt="Play">
-            </button>
-            <button class="control-button" id="mute">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/speaker.png" id="mute-icon" alt="Volume">
-                <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="1">
-            </button>
-            <div class="slider-container">
-                <span class="frame-display" id="frame-display">0</span>
-                <input type="range" id="time-slider" class="time-slider" value="0" min="0" step="1">
-                <button class="control-button" id="frame-backward">◀</button>
-                <button class="control-button" id="frame-forward">▶</button>
-            </div>
-            <span class="total-frames" id="total-frames">0</span>
-            <button class="control-button" id="fullscreen-button">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/full-screen.png" alt="Fullscreen">
-            </button>
-            <div class="fps-container" style="display: flex; align-items: center; gap: 10px; margin-left: 15px;">
-                <label for="fps-select" style="color: #A5A692; font-size: 14px;">FPS:</label>
-                <select id="fps-select" class="fps-dropdown" style="padding: 5px; border-radius: 10px; border: none; background: #025E73; color: #ffffff; font-size: 14px;">
-                <option value="25">25</option>
-                <option value="30">30</option>
-                <option value="24">24</option>
-                <option value="12">12</option>
-                <option value="custom">Custom</option>
-            </select>
-                <input type="number" id="custom-fps" class="custom-fps-input" style="width: 50px; padding: 5px; border-radius: 10px; border: none; background: #A5A692; color: #011F26; display: none;" min="1" value="30">
-            </div>
-        </div>
-        <button class="expansion-button" id="expand-button">
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/expand-arrow.png" id="expand-icon" alt="Expand">
-        </button>
-    </div>
-
-
-    <!-- <div id="character-grid" class="section" style="display: block;">
-        <div class="grid-container">
-            <div class="grid-item" onclick="loadSelected('orc')" data-model="orc">
-                <img src="images/orc.png"   alt="Orc">
-                <div class="title" >Orc</div>
-            </div>
-            <div class="grid-item" onclick="loadSelected('wolverine')" data-model="character2">
-                <img src="images/wolverine.png" alt="Wolverine">
-                <div class="title">Wolverine</div>
-            </div>
-            <div class="grid-item" data-model="character3">
-                <img src="images/character3.jpg" alt="Character 3">
-                <div class="title">Character 3</div>
-            </div>
-            <div class="grid-item" data-model="character4">
-                <img src="images/character4.jpg" alt="Character 4">
-                <div class="title">Character 4</div>
-            </div>
-            <div class="grid-item" data-model="character5">
-                <img src="images/character5.jpg" alt="Character 5">
-                <div class="title">Character 5</div>
-            </div>
-            <div class="grid-item" data-model="character6">
-                <img src="images/character6.jpg" alt="Character 6">
-                <div class="title">Character 6</div>
-            </div> 
-        </div>
-    </div> -->
-<!-- 
-    <div id="viewport" class="section" style="display: none;">
-        <div id="unity-container" class="unity-desktop">
-            <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
-            <div id="unity-loading-bar">
-                <div id="unity-logo"></div>
-                <div id="unity-progress-bar-empty">
-                    <div id="unity-progress-bar-full"></div>
+    <div id="showreel" class="section showreel-section" style="display: none;">
+        <div class="showreel-layout">
+            <div class="showreel-header">
+                <h2 class="showreel-heading">Showreel</h2>
+                <div class="reel-switcher" role="tablist" aria-label="Showreel category">
+                    <button type="button" class="reel-tab active" data-type="vfx" role="tab" aria-selected="true">VFX</button>
+                    <button type="button" class="reel-tab" data-type="cartoon" role="tab" aria-selected="false">Cartoon</button>
                 </div>
             </div>
-            <div id="unity-warning"></div>
-            <div id="unity-footer">
-                <div id="unity-logo-title-footer"></div>
-                <div id="unity-fullscreen-button"></div>
-                <div id="unity-build-title"></div>
+
+            <div class="showreel-body">
+                <div class="player-shell" id="player-shell">
+                    <video class="video-player" id="video-player" data-type="vfx" playsinline preload="metadata" disablepictureinpicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" x-webkit-airplay="deny">
+                        <source src="videos/vfx.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+                    <button type="button" class="player-center-play" id="center-play" aria-label="Play video">
+                        <i class="fas fa-play" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="player-overlay" id="player-overlay">
+                        <div class="player-progress">
+                            <input type="range" id="time-slider" class="time-slider" value="0" min="0" max="100" step="0.01">
+                            <div class="player-time">
+                                <span id="current-time">0:00</span>
+                                <span id="duration-time">0:00</span>
+                            </div>
+                        </div>
+
+                        <div class="player-toolbar">
+                            <div class="player-toolbar-left">
+                                <button type="button" class="player-btn" id="play-pause" aria-label="Play or pause">
+                                    <i class="fas fa-play" id="play-icon" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
+                            <div class="player-toolbar-right">
+                                <div class="volume-group">
+                                    <button type="button" class="player-btn" id="mute" aria-label="Mute or unmute">
+                                        <i class="fas fa-volume-up" id="mute-icon" aria-hidden="true"></i>
+                                    </button>
+                                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+                                </div>
+                                <button type="button" class="player-btn" id="fullscreen-button" aria-label="Fullscreen">
+                                    <i class="fas fa-expand" id="fullscreen-icon" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="year-switcher" id="year-switcher" aria-label="Showreel year"></aside>
             </div>
         </div>
-        <div id="load-viewport-container">
-            <button id="load-viewport-button">Load Viewport</button>
-            <p id="resource-warning">It's high resource demanding</p>
-        </div>
     </div>
- -->
+
 
     <!-- Project Details Modal -->
     <div id="project-modal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <div class="modal-body">
-                <img id="modal-image" src="" alt="Project Image">
+                <div id="modal-media" class="modal-media"></div>
                 <div class="modal-description">
                     <h2 id="modal-title"></h2>
-                    <p id="modal-description"></p>
-                    <!-- Add more details if needed -->
+                    <div id="modal-description"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="js/main.js"></script>
-    <!-- <script src="js/viewport.js"></script> -->
-
-
 
 </body>
 </html>

@@ -1,14 +1,30 @@
-// Moved 'videos' to global scope
-const videos = {
-    cartoon: {
-        src: 'videos/cartoon.mp4',
-        title: 'Cartoon'
-    },
+// Showreel library — add new years here when you upload reels
+const showreelLibrary = {
     vfx: {
-        src: 'videos/vfx.mp4',
-        title: 'VFX'
+        2026: 'videos/vfx_2026.mp4',
+        2025: 'videos/vfx.mp4'
+    },
+    cartoon: {
+        2026: 'videos/cartoon_2026.mp4',
+        2025: 'videos/cartoon.mp4'
     }
 };
+
+
+function getShowreelYears(type) {
+    return Object.keys(showreelLibrary[type] || {})
+        .map(Number)
+        .sort((a, b) => b - a);
+}
+
+function getLatestShowreelYear(type) {
+    const years = getShowreelYears(type);
+    return years[0] ?? null;
+}
+
+function getShowreelSrc(type, year) {
+    return showreelLibrary[type]?.[year] ?? null;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const stardust1 = document.getElementById('stardust1');
@@ -16,504 +32,499 @@ document.addEventListener('DOMContentLoaded', () => {
     const stardust3 = document.getElementById('stardust3');
     const stardust4 = document.getElementById('stardust4');
     const stardust5 = document.getElementById('stardust5');
-    const expandButton = document.getElementById('expand-button');
-    const expandIcon = document.getElementById('expand-icon');
+    const playerShell = document.getElementById('player-shell');
     const videoPlayer = document.getElementById('video-player');
-    const backgroundVideos = document.querySelectorAll('.background-video');
-    const videoTitle = document.getElementById('video-title');
-
-    document.addEventListener('mousemove', (e) => {
-        const { clientX, clientY } = e;
-        const xOffset = (clientX / window.innerWidth - 0.5) * 2;
-        const yOffset = (clientY / window.innerHeight - 0.5) * 2;
-
-        stardust1.style.transform = `translate3d(${xOffset * -10}px, ${yOffset * -10}px, 0) scale(1.4)`;
-        stardust2.style.transform = `translate3d(${xOffset * -20}px, ${yOffset * -20}px, 0) scale(1.3)`;
-        stardust3.style.transform = `translate3d(${xOffset * -30}px, ${yOffset * -30}px, 0) scale(1.2)`;
-        stardust4.style.transform = `translate3d(${xOffset * -40}px, ${yOffset * -40}px, 0) scale(1.1)`;
-        stardust5.style.transform = `translate3d(${xOffset * -50}px, ${yOffset * -50}px, 0) scale(1)`;
-    });
-
-    let isExpanded = false;
-    expandButton.addEventListener('click', () => {
-        if (!isExpanded) {
-            videoPlayer.style.transform = 'scale(1.75)';
-            videoPlayer.style.transition = 'transform 0.5s ease';
-            expandButton.style.position = 'absolute';
-            expandButton.style.bottom = '80px';
-            expandButton.style.right = '30px';
-            expandIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/collapse-arrow.png';
-
-            // Move side videos to the center with animation
-            backgroundVideos.forEach(video => {
-                video.style.transform = 'translateY(-50%) scale(1.1)';
-                video.style.transition = 'transform 0.5s ease, top 0.5s ease, left 0.5s ease, right 0.5s ease, margin-left 0.5s ease';
-                video.style.top = '50%';
-                if (video.classList.contains('left')) {
-                video.style.left = '50%';
-                video.style.right = 'auto';
-                } else if (video.classList.contains('right')) {
-                video.style.right = '50%';
-                video.style.left = 'auto';
-                }
-                video.style.marginLeft = '-10%';
-                });
-        } else {
-            videoPlayer.style.transform = 'scale(1)';
-            videoPlayer.style.transition = 'transform 0.5s ease';
-            expandButton.style.position = 'static';
-            expandIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/expand-arrow.png';
-
-            // Return side videos to original position with animation
-            backgroundVideos.forEach(video => {
-                if (video.classList.contains('left')) {
-                video.style.transform = 'translateY(-50%) scale(1)';
-                video.style.transition = 'transform 0.5s ease, left 0.5s ease, margin-left 0.5s ease';
-                video.style.left = '2%';
-                video.style.marginLeft = '0';
-                } else if (video.classList.contains('right')) {
-                video.style.transform = 'translateY(-50%) scale(1)';
-                video.style.transition = 'transform 0.5s ease, right 0.5s ease, margin-left 0.5s ease';
-                video.style.right = '2%';
-                video.style.left = 'auto';
-                video.style.marginLeft = '0';
-                }
-            });
-        }
-        isExpanded = !isExpanded;
-    });
-
+    const centerPlay = document.getElementById('center-play');
     const playPauseButton = document.getElementById('play-pause');
     const playIcon = document.getElementById('play-icon');
     const volumeSlider = document.getElementById('volume-slider');
     const muteButton = document.getElementById('mute');
     const muteIcon = document.getElementById('mute-icon');
     const timeSlider = document.getElementById('time-slider');
-    const frameDisplay = document.getElementById('frame-display');
-    const totalFramesDisplay = document.getElementById('total-frames');
-    const fpsSelect = document.getElementById('fps-select');
-    const customFpsInput = document.getElementById('custom-fps');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationTimeEl = document.getElementById('duration-time');
     const fullscreenButton = document.getElementById('fullscreen-button');
-    const frameForwardButton = document.getElementById('frame-forward');
-    const frameBackwardButton = document.getElementById('frame-backward');
+    const fullscreenIcon = document.getElementById('fullscreen-icon');
+    const reelTabs = document.querySelectorAll('.reel-tab');
+    const yearSwitcher = document.getElementById('year-switcher');
 
-    // Hide default controls and show custom controls
-    videoPlayer.controls = false;
+    if (videoPlayer && playerShell) {
+        initShowreelPlayer({
+            playerShell,
+            videoPlayer,
+            centerPlay,
+            playPauseButton,
+            playIcon,
+            volumeSlider,
+            muteButton,
+            muteIcon,
+            timeSlider,
+            currentTimeEl,
+            durationTimeEl,
+            fullscreenButton,
+            fullscreenIcon,
+            reelTabs,
+            yearSwitcher
+        });
+    }
+    initStardustParallax(stardust1, stardust2, stardust3, stardust4, stardust5);
+});
 
-    playPauseButton.addEventListener('click', () => {
-        if (videoPlayer.paused) {
-            videoPlayer.play();
-            playIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/pause.png';
+function initStardustParallax(...layers) {
+    const stardustLayers = layers.filter(Boolean);
+    if (!stardustLayers.length) {
+        return;
+    }
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+
+    function parallaxEnabled() {
+        return !motionQuery.matches && !mobileQuery.matches;
+    }
+
+    function applyParallax(clientX, clientY) {
+        const xOffset = (clientX / window.innerWidth - 0.5) * 2;
+        const yOffset = (clientY / window.innerHeight - 0.5) * 2;
+        const scales = [1.4, 1.3, 1.2, 1.1, 1];
+        const strengths = [10, 20, 30, 40, 50];
+
+        stardustLayers.forEach((layer, index) => {
+            layer.style.transform = `translate3d(${xOffset * -strengths[index]}px, ${yOffset * -strengths[index]}px, 0) scale(${scales[index]})`;
+        });
+    }
+
+    function resetParallax() {
+        stardustLayers.forEach((layer) => {
+            layer.style.removeProperty('transform');
+        });
+    }
+
+    function syncParallaxState() {
+        if (!parallaxEnabled()) {
+            resetParallax();
+        } else {
+            applyParallax(window.innerWidth / 2, window.innerHeight / 2);
+        }
+    }
+
+    syncParallaxState();
+
+    let lastClientX = null;
+    let lastClientY = null;
+
+    document.addEventListener('mousemove', (e) => {
+        if (!parallaxEnabled()) {
+            return;
+        }
+
+        // Ignore the first mouse event on load (browser reports cursor position and shifts layout).
+        if (lastClientX === null) {
+            lastClientX = e.clientX;
+            lastClientY = e.clientY;
+            applyParallax(window.innerWidth / 2, window.innerHeight / 2);
+            return;
+        }
+
+        if (e.clientX === lastClientX && e.clientY === lastClientY) {
+            return;
+        }
+
+        lastClientX = e.clientX;
+        lastClientY = e.clientY;
+        applyParallax(e.clientX, e.clientY);
+    });
+
+    const handleMotionPreferenceChange = () => {
+        lastClientX = null;
+        lastClientY = null;
+        syncParallaxState();
+    };
+
+    motionQuery.addEventListener('change', handleMotionPreferenceChange);
+    mobileQuery.addEventListener('change', handleMotionPreferenceChange);
+    window.addEventListener('resize', () => {
+        if (!parallaxEnabled()) {
+            resetParallax();
+            return;
+        }
+        applyParallax(lastClientX ?? window.innerWidth / 2, lastClientY ?? window.innerHeight / 2);
+    });
+}
+
+function formatVideoTime(seconds) {
+    if (!Number.isFinite(seconds) || seconds < 0) {
+        return '0:00';
+    }
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+}
+
+function initShowreelPlayer(els) {
+    const {
+        playerShell,
+        videoPlayer,
+        centerPlay,
+        playPauseButton,
+        playIcon,
+        volumeSlider,
+        muteButton,
+        muteIcon,
+        timeSlider,
+        currentTimeEl,
+        durationTimeEl,
+        fullscreenButton,
+        fullscreenIcon,
+        reelTabs,
+        yearSwitcher
+    } = els;
+
+    const centerPlayIcon = centerPlay.querySelector('i');
+    const source = videoPlayer.querySelector('source');
+    let controlsHideTimer = null;
+    let isScrubbing = false;
+    let wasPlayingBeforeScrub = false;
+
+    let currentType = videoPlayer.dataset.type || 'vfx';
+    let currentYear = getLatestShowreelYear(currentType);
+    let yearFallbackUsed = false;
+
+    function renderYearSwitcher() {
+        if (!yearSwitcher) {
+            return;
+        }
+
+        const years = getShowreelYears(currentType);
+        yearSwitcher.innerHTML = '';
+
+        years.forEach((year) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'year-tab';
+            button.dataset.year = String(year);
+            button.textContent = String(year);
+            button.setAttribute('aria-pressed', year === currentYear ? 'true' : 'false');
+            if (year === currentYear) {
+                button.classList.add('active');
+            }
+            button.addEventListener('click', () => switchYear(year));
+            yearSwitcher.appendChild(button);
+        });
+    }
+
+    function setActiveReelTab(type) {
+        reelTabs.forEach((tab) => {
+            const active = tab.dataset.type === type;
+            tab.classList.toggle('active', active);
+            tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+    }
+
+    function loadCurrentReel({ resume = false } = {}) {
+        const src = getShowreelSrc(currentType, currentYear);
+        if (!src || !source) {
+            return;
+        }
+
+        source.src = src;
+        videoPlayer.dataset.type = currentType;
+        videoPlayer.dataset.year = String(currentYear);
+        videoPlayer.load();
+        updatePlayState();
+        renderYearSwitcher();
+
+        if (resume) {
+            videoPlayer.play().catch(() => {});
+        }
+    }
+
+    function updatePlayState() {
+        const playing = !videoPlayer.paused && !videoPlayer.ended;
+        playerShell.classList.toggle('is-playing', playing);
+        playerShell.classList.toggle('is-paused', !playing);
+        const iconClass = playing ? 'fas fa-pause' : 'fas fa-play';
+        playIcon.className = iconClass;
+        centerPlayIcon.className = iconClass;
+        playPauseButton.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+        centerPlay.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+    }
+
+    function updateMuteIcon() {
+        if (videoPlayer.muted || videoPlayer.volume === 0) {
+            muteIcon.className = 'fas fa-volume-mute';
+        } else if (videoPlayer.volume < 0.5) {
+            muteIcon.className = 'fas fa-volume-down';
+        } else {
+            muteIcon.className = 'fas fa-volume-up';
+        }
+    }
+
+    function updateTimeDisplay() {
+        currentTimeEl.textContent = formatVideoTime(videoPlayer.currentTime);
+        durationTimeEl.textContent = formatVideoTime(videoPlayer.duration);
+
+        if (Number.isFinite(videoPlayer.duration) && videoPlayer.duration > 0) {
+            timeSlider.max = String(videoPlayer.duration);
+        }
+
+        if (!isScrubbing) {
+            timeSlider.value = String(videoPlayer.currentTime);
+        }
+    }
+
+    function togglePlay() {
+        if (videoPlayer.paused || videoPlayer.ended) {
+            videoPlayer.play().catch(() => {});
         } else {
             videoPlayer.pause();
-            playIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/play.png';
         }
-    });
+    }
 
-    volumeSlider.addEventListener('input', () => {
-        videoPlayer.volume = volumeSlider.value;
-        if (volumeSlider.value > 0) {
-            videoPlayer.muted = false;
-            muteIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/speaker.png';
+    function revealControls() {
+        playerShell.classList.add('show-controls');
+        clearTimeout(controlsHideTimer);
+        if (!videoPlayer.paused) {
+            controlsHideTimer = setTimeout(() => {
+                playerShell.classList.remove('show-controls');
+            }, 2800);
         }
-        volumeSlider.setAttribute('value', Math.round(volumeSlider.value * 100));
-    });
+    }
 
-    muteButton.addEventListener('click', () => {
-        if (videoPlayer.muted) {
-            videoPlayer.muted = false;
-            muteIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/speaker.png';
-        } else {
-            videoPlayer.muted = true;
-            muteIcon.src = 'https://img.icons8.com/ios-filled/50/ffffff/mute.png';
+    function switchYear(year) {
+        if (year === currentYear) {
+            return;
         }
-    });
 
-    muteButton.addEventListener('mouseover', () => {
-        volumeSlider.style.display = 'block';
-    });
+        const wasPlaying = !videoPlayer.paused;
+        currentYear = year;
+        loadCurrentReel({ resume: wasPlaying });
+    }
 
-    volumeSlider.addEventListener('mouseover', () => {
-        volumeSlider.style.display = 'block';
-    });
-
-    muteButton.addEventListener('mouseleave', () => {
-        setTimeout(() => {
-            if (!volumeSlider.matches(':hover')) {
-                volumeSlider.style.display = 'none';
-            }
-        }, 200);
-    });
-
-    volumeSlider.addEventListener('mouseleave', () => {
-        setTimeout(() => {
-            if (!muteButton.matches(':hover')) {
-                volumeSlider.style.display = 'none';
-            }
-        }, 200);
-    });
-
-    videoPlayer.addEventListener('loadedmetadata', () => {
-        let fps = parseInt(fpsSelect.value);
-        if (fpsSelect.value === 'custom') {
-            fps = parseInt(customFpsInput.value);
+    function switchReel(type) {
+        if (!showreelLibrary[type] || currentType === type) {
+            return;
         }
-        const totalFrames = Math.ceil(videoPlayer.duration * fps);
-        timeSlider.max = totalFrames - 1;
-        totalFramesDisplay.textContent = totalFrames;
-    });
 
-    videoPlayer.addEventListener('timeupdate', () => {
-        let fps = parseInt(fpsSelect.value);
-        if (fpsSelect.value === 'custom') {
-            fps = parseInt(customFpsInput.value);
+        const wasPlaying = !videoPlayer.paused;
+        currentType = type;
+
+        const years = getShowreelYears(type);
+        if (!years.includes(currentYear)) {
+            currentYear = years[0];
         }
-        const currentFrame = Math.floor(videoPlayer.currentTime * fps);
-        timeSlider.value = currentFrame;
-        frameDisplay.textContent = currentFrame;
-        const sliderThumbOffset = (currentFrame / timeSlider.max) * (timeSlider.offsetWidth - 15);
-        frameDisplay.style.left = `${sliderThumbOffset + 7.5}px`;
-    });
 
-    timeSlider.addEventListener('input', () => {
-        let fps = parseInt(fpsSelect.value);
-        if (fpsSelect.value === 'custom') {
-            fps = parseInt(customFpsInput.value);
-        }
-        const newTime = parseFloat(timeSlider.value) / fps;
-        videoPlayer.currentTime = newTime;
-        frameDisplay.textContent = Math.floor(newTime * fps);
-    });
-
-    fpsSelect.addEventListener('change', () => {
-        if (fpsSelect.value === 'custom') {
-            customFpsInput.style.display = 'inline';
-        } else {
-            customFpsInput.style.display = 'none';
-            customFpsInput.value = fpsSelect.value;
-        }
-        updateSliderMax();
-    });
-
-    customFpsInput.addEventListener('input', () => {
-        updateSliderMax();
-    });
-
-    function updateSliderMax() {
-        let fps = parseInt(fpsSelect.value);
-        if (fpsSelect.value === 'custom') {
-            fps = parseInt(customFpsInput.value);
-        }
-        const totalFrames = Math.ceil(videoPlayer.duration * fps);
-        timeSlider.max = totalFrames;
-        totalFramesDisplay.textContent = totalFrames;
+        setActiveReelTab(type);
+        loadCurrentReel({ resume: wasPlaying });
     }
 
     function toggleFullscreen() {
         if (document.fullscreenElement) {
             document.exitFullscreen();
-        } else {
-            if (videoPlayer.requestFullscreen) {
-                videoPlayer.requestFullscreen();
-            } else if (videoPlayer.webkitRequestFullscreen) { /* Safari */
-                videoPlayer.webkitRequestFullscreen();
-            } else if (videoPlayer.msRequestFullscreen) { /* IE11 */
-                videoPlayer.msRequestFullscreen();
-            }
+            return;
+        }
+
+        if (playerShell.requestFullscreen) {
+            playerShell.requestFullscreen();
+        } else if (playerShell.webkitRequestFullscreen) {
+            playerShell.webkitRequestFullscreen();
+        } else if (playerShell.msRequestFullscreen) {
+            playerShell.msRequestFullscreen();
         }
     }
 
-    // Event listener for fullscreen button
-    fullscreenButton.addEventListener('click', toggleFullscreen);
+    function updateFullscreenIcon() {
+        const isFullscreen = Boolean(document.fullscreenElement);
+        fullscreenIcon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+        fullscreenButton.setAttribute('aria-label', isFullscreen ? 'Exit fullscreen' : 'Fullscreen');
+    }
 
-    // Event listener for double-clicking the video to toggle fullscreen
+    function beginScrub() {
+        if (isScrubbing) {
+            return;
+        }
+
+        isScrubbing = true;
+        wasPlayingBeforeScrub = !videoPlayer.paused;
+        if (wasPlayingBeforeScrub) {
+            videoPlayer.pause();
+        }
+        playerShell.classList.add('show-controls');
+        clearTimeout(controlsHideTimer);
+    }
+
+    function scrubTo(value) {
+        const duration = videoPlayer.duration;
+        if (!Number.isFinite(duration) || duration <= 0) {
+            return;
+        }
+
+        const nextTime = Math.min(duration, Math.max(0, parseFloat(value)));
+        videoPlayer.currentTime = nextTime;
+        currentTimeEl.textContent = formatVideoTime(nextTime);
+    }
+
+    function endScrub() {
+        if (!isScrubbing) {
+            return;
+        }
+
+        isScrubbing = false;
+        if (wasPlayingBeforeScrub) {
+            videoPlayer.play().catch(() => {});
+        }
+        wasPlayingBeforeScrub = false;
+        updateTimeDisplay();
+    }
+
+    videoPlayer.controls = false;
+    videoPlayer.disableRemotePlayback = true;
+    playerShell.classList.add('is-paused');
+
+    setActiveReelTab(currentType);
+    loadCurrentReel();
+
+    playPauseButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePlay();
+    });
+    centerPlay.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePlay();
+    });
+
+    volumeSlider.addEventListener('input', () => {
+        videoPlayer.volume = parseFloat(volumeSlider.value);
+        if (videoPlayer.volume > 0) {
+            videoPlayer.muted = false;
+        }
+        updateMuteIcon();
+    });
+
+    muteButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        videoPlayer.muted = !videoPlayer.muted;
+        if (!videoPlayer.muted && videoPlayer.volume === 0) {
+            videoPlayer.volume = 0.5;
+            volumeSlider.value = 0.5;
+        }
+        updateMuteIcon();
+    });
+
+    // 'input' fires continuously while dragging/clicking (mouse, touch, or keyboard),
+    // 'change' fires once when the interaction ends — this covers every input method
+    // without needing to juggle separate mouse/pointer/touch listeners.
+    timeSlider.addEventListener('input', () => {
+        beginScrub();
+        scrubTo(timeSlider.value);
+    });
+    timeSlider.addEventListener('change', () => {
+        scrubTo(timeSlider.value);
+        endScrub();
+    });
+    timeSlider.addEventListener('click', (e) => e.stopPropagation());
+
+    const playerOverlay = document.getElementById('player-overlay');
+    if (playerOverlay) {
+        playerOverlay.addEventListener('click', (e) => e.stopPropagation());
+    }
+
+    fullscreenButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFullscreen();
+    });
     videoPlayer.addEventListener('dblclick', toggleFullscreen);
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
 
-    frameForwardButton.addEventListener('click', () => {
-        let fps = parseInt(fpsSelect.value);
-        if (fpsSelect.value === 'custom') {
-            fps = parseInt(customFpsInput.value);
-        }
-        const newFrame = parseInt(timeSlider.value) + 1;
-        if (newFrame <= timeSlider.max) {
-            timeSlider.value = newFrame;
-            videoPlayer.currentTime = newFrame / fps;
-        }
+    reelTabs.forEach((tab) => {
+        tab.addEventListener('click', () => switchReel(tab.dataset.type));
     });
 
-    frameBackwardButton.addEventListener('click', () => {
-        let fps = parseInt(fpsSelect.value);
-        if (fpsSelect.value === 'custom') {
-            fps = parseInt(customFpsInput.value);
-        }
-        const newFrame = parseInt(timeSlider.value) - 1;
-        if (newFrame >= 0) {
-            timeSlider.value = newFrame;
-            videoPlayer.currentTime = newFrame / fps;
-        }
+    videoPlayer.addEventListener('loadedmetadata', () => {
+        yearFallbackUsed = false;
+        updateTimeDisplay();
     });
-    const gridItems = document.querySelectorAll('.grid-item');
-    gridItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const modelName = item.getAttribute('data-model');
-            showSection('viewport', modelName);
-        });
+    videoPlayer.addEventListener('durationchange', updateTimeDisplay);
+    videoPlayer.addEventListener('error', () => {
+        if (yearFallbackUsed) {
+            return;
+        }
+
+        const years = getShowreelYears(currentType);
+        const fallbackYear = years.find((year) => year < currentYear);
+        if (!fallbackYear) {
+            return;
+        }
+
+        yearFallbackUsed = true;
+        currentYear = fallbackYear;
+        loadCurrentReel();
     });
-
-    const loadViewportButton = document.getElementById('load-viewport-button');
-    const loadViewportContainer = document.getElementById('load-viewport-container');
-    const unityContainer = document.getElementById('unity-container');
-    let unityInstance = null;
-    let isUnityLoaded = false;
-
-    loadViewportButton.addEventListener('click', () => {
-        if (!isUnityLoaded) {
-            loadUnityInstance();
-            isUnityLoaded = true;
-            loadViewportContainer.style.display = 'none';
-        }
+    videoPlayer.addEventListener('timeupdate', updateTimeDisplay);
+    videoPlayer.addEventListener('play', () => {
+        updatePlayState();
+        revealControls();
     });
-
-    function loadUnityInstance() {
-        const canvas = document.querySelector("#unity-canvas");
-        const buildUrl = "Build";
-        const loaderUrl = buildUrl + "/Viewport_Build.loader.js";
-        const config = {
-            arguments: [],
-            dataUrl: buildUrl + "/Viewport_Build.data",
-            frameworkUrl: buildUrl + "/Viewport_Build.framework.js",
-            codeUrl: buildUrl + "/Viewport_Build.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "andre1xyz",
-            productName: "Viewport",
-            productVersion: "0.1.0",
-            showBanner: unityShowBanner,
-        };
-
-        const loadingBar = document.querySelector("#unity-loading-bar");
-        loadingBar.style.display = "block";
-
-        const script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-            createUnityInstance(canvas, config, (progress) => {
-                document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-            }).then((instance) => {
-                unityInstance = instance;
-                loadingBar.style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                    unityInstance.SetFullscreen(1);
-                };
-            }).catch((message) => {
-                alert(message);
-            });
-        };
-
-        document.body.appendChild(script);
-    }
-
-    function unloadUnityInstance() {
-        if (unityInstance) {
-            unityInstance.Quit().then(() => {
-                unityInstance = null;
-                isUnityLoaded = false;
-            });
-        }
-    }
-
-    function show3DSection() {
-        loadViewportContainer.style.display = 'flex'; // Show the button again
-    }
-
-    // Example of handling section changes
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (event) => {
-            const targetSection = event.target.getAttribute('data-target');
-            if (targetSection === '3D') {
-                show3DSection();
-            } else {
-                unloadUnityInstance();
-            }
-        });
+    videoPlayer.addEventListener('pause', () => {
+        updatePlayState();
+        playerShell.classList.add('show-controls');
+        clearTimeout(controlsHideTimer);
     });
+    videoPlayer.addEventListener('ended', updatePlayState);
 
-    function unityShowBanner(msg, type) {
-        const warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-            warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        const div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-            if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-            setTimeout(function() {
-                warningBanner.removeChild(div);
-                updateBannerVisibility();
-            }, 5000);
-        }
-        updateBannerVisibility();
-    }
+    playerShell.addEventListener('mousemove', revealControls);
+    playerShell.addEventListener('touchstart', revealControls, { passive: true });
 
-});
-
-function swapVideo(clickedVideo, position) {
-    const mainVideo = document.getElementById('video-player');
-    const videoTitle = document.getElementById('video-title');
-    const rightVideoTitle = document.getElementById('right-video-title'); // Add this line
-    const mainVideoSource = mainVideo.querySelector('source');
-    const clickedVideoSource = clickedVideo.querySelector('source');
-
-
-    // Set up movement transition effect
-    mainVideo.style.transition = 'transform 0.5s ease, opacity 0.5s ease, box-shadow 0.5s ease';
-    clickedVideo.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
-
-    // Apply horizontal and upward movement effect with scaling, opacity animation, and box-shadow glow
-    if (position === 'left') {
-        mainVideo.style.transform = 'translateX(-97%) translateY(9%) scale(0.51)';
-        mainVideo.style.opacity = '0.5';
-        mainVideo.style.boxShadow = '0 0 0px 0px #A5A692'; // Reduce glow during transition
-        clickedVideo.style.transform = 'translateX(190%) translateY(-67%) scale(1.95)';
-        clickedVideo.style.boxShadow = '0 0 10px 2px #A5A692'; // Increase glow during transition
-        clickedVideo.style.opacity = '1';
-    } else {
-        mainVideo.style.transform = 'translateX(97%) translateY(9%) scale(0.51)';
-        mainVideo.style.opacity = '0.5';
-        mainVideo.style.boxShadow = '0 0 0px 0px #A5A692'; // Reduce glow during transition
-        clickedVideo.style.transform = 'translateX(-190%) translateY(-67%) scale(1.95)';
-        clickedVideo.style.boxShadow = '0 0 10px 2px #A5A692'; // Increase glow during transition
-        clickedVideo.style.opacity = '1';
-    }
-
-    // Maintain position after swap
-    setTimeout(() => {
-        mainVideo.style.transform = 'translateX(0) translateY(0) scale(1)';
-        mainVideo.style.opacity = '1';
-        mainVideo.style.boxShadow = '0 0 20px 5px #A5A692'; // Restore original glow
-        clickedVideo.style.transform = 'translateX(0) translateY(0) scale(1)';
-        clickedVideo.style.opacity = '0.3';
-        mainVideo.style.transition = 'transform 0.01s linear, opacity 0.001s linear, box-shadow 0s linear';  // Faster return transition
-        clickedVideo.style.transition = 'transform 0.01s linear, opacity 0.001s linear';  // Faster return transition
-    }, 500);
-
-    setTimeout(() => {
-        // Swap the video sources
-        const tempSrc = mainVideoSource.getAttribute('src');
-        mainVideoSource.setAttribute('src', clickedVideoSource.getAttribute('src'));
-        clickedVideoSource.setAttribute('src', tempSrc);
-
-        // Swap data-type attributes
-        const mainVideoType = mainVideo.getAttribute('data-type');
-        const clickedVideoType = clickedVideo.getAttribute('data-type');
-        mainVideo.setAttribute('data-type', clickedVideoType);
-        clickedVideo.setAttribute('data-type', mainVideoType);
-
-        // Update the video title based on the main video's new data-type
-        const newMainVideoType = mainVideo.getAttribute('data-type');
-        if (videos[newMainVideoType]) {
-            videoTitle.textContent = videos[newMainVideoType].title;
-        } else {
-            videoTitle.textContent = 'Unknown Title';
-        }
-
-        // Update the right video title based on the clicked video's new data-type
-        const newClickedVideoType = clickedVideo.getAttribute('data-type');
-        if (videos[newClickedVideoType]) {
-            rightVideoTitle.textContent = videos[newClickedVideoType].title;
-        } else {
-            rightVideoTitle.textContent = 'Unknown Title';
-        }
-        // Reset transformations
-        mainVideo.style.transform = 'translateX(0) translateY(0) scale(1)';
-        clickedVideo.style.transform = 'translateX(0) translateY(-50%) scale(1)';
-
-        // Load the new sources
-        mainVideo.load();
-        clickedVideo.load();
-
-        // Optionally, play the main video
-        mainVideo.play();
-    }, 500);
+    updateMuteIcon();
+    updatePlayState();
+    updateTimeDisplay();
 }
-let isThreeInitialized = false;
 
-function showSection(sectionId, modelName = null) {
-    console.log(`showSection called with sectionId: ${sectionId}, modelName: ${modelName}`);
+window.switchReel = function switchReel(type) {
+    const videoPlayer = document.getElementById('video-player');
+    if (!videoPlayer) {
+        return;
+    }
+    const tab = document.querySelector(`.reel-tab[data-type="${type}"]`);
+    if (tab) {
+        tab.click();
+    }
+};
+
+let activeSectionId = 'home';
+
+function updateNavActive(sectionId) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const linkSection = link.getAttribute('data-section');
+        link.classList.toggle('active', linkSection === sectionId);
+    });
+}
+
+function showSection(sectionId) {
+    if (sectionId === activeSectionId) {
+        return;
+    }
 
     const sections = document.querySelectorAll('.section');
-    sections.forEach(section => section.style.display = 'none');
     const targetSection = document.getElementById(sectionId);
 
-    if (targetSection) {
-        targetSection.style.display = sectionId === 'home' ? 'block' : 'flex';
-    } else {
+    if (!targetSection) {
         console.error(`Section with ID '${sectionId}' not found.`);
         return;
     }
 
-    if (sectionId === 'viewport') {
-            document.getElementById('character-grid').style.display = 'flex';
-            document.getElementById('loading-indicator').style.display = 'none';
-            document.getElementById('bottom-buttons').style.display = 'none';
-            const characterGrid = document.getElementById('character-grid');
-            const loadingIndicator = document.getElementById('loading-indicator');
-            const bottomButtons = document.getElementById('bottom-buttons');
-    
-            if (characterGrid) characterGrid.style.display = 'flex';
-            if (loadingIndicator) loadingIndicator.style.display = 'none';
-            if (bottomButtons) bottomButtons.style.display = 'none';
-    //     if (!isThreeInitialized) {
-    //         document.getElementById('character-grid').style.display = 'none';
-    //         document.getElementById('loading-indicator').style.display = 'block';
+    sections.forEach(section => {
+        section.classList.remove('section-visible');
+        section.style.display = 'none';
+    });
 
-    //         loadViewportJS(modelName, () => {
-    //             document.getElementById('loading-indicator').style.display = 'none';
-    //             document.getElementById('character-grid').style.display = 'none';
-    
-    //         });
-    //     } 
-    //     else {
-    //         initializeViewport(modelName);
-    //     }
-    }
-}
+    targetSection.style.display = sectionId === 'home' ? 'block' : 'flex';
+    requestAnimationFrame(() => {
+        targetSection.classList.add('section-visible');
+    });
 
-function loadSelected(modelName) {
-    if (!isThreeInitialized) {
-
-        loadViewportJS(modelName, () => {
-            document.getElementById('loading-indicator').style.display = 'none';
-            document.getElementById('character-grid').style.display = 'none';
-            document.getElementById('bottom-buttons').style.display = 'block';
-
-        });
-        console.error(`Hola el '${modelName}' llamado.`);
-    } else {
-        initializeViewport(modelName);
-    }
-}
-
-function loadViewportJS(modelName, callback) {
-    if (isThreeInitialized) {
-        initializeViewport(modelName);
-        callback();
-        return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = 'js/viewport.js'; // Ensure this path is correct
-    script.type = 'module';
-    script.onload = () => {
-        isThreeInitialized = true;
-        initializeViewport(modelName);
-        callback();
-    };
-    script.onerror = () => {
-        console.error('Failed to load viewport.js');
-    };
-    document.head.appendChild(script);
+    activeSectionId = sectionId;
+    updateNavActive(sectionId);
 }
 
 
@@ -796,123 +807,223 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    const homeSection = document.getElementById('home');
+    if (homeSection) {
+        homeSection.classList.add('section-visible');
+    }
+    updateNavActive('home');
+
     const categoryTabs = document.querySelectorAll('.category-tab');
     const projectsGrid = document.querySelector('.projects-grid');
 
+    function getProjectThumbnailHTML(project) {
+        if (project.image) {
+            const iconClass = project.icon || 'fas fa-film';
+            return `
+                <div class="project-thumb">
+                    <img src="${project.image}" alt="${project.title}" loading="lazy" onerror="handleProjectImageError(this, '${iconClass}')">
+                </div>
+            `;
+        }
+
+        const iconClass = project.icon || 'fas fa-film';
+        return `
+            <div class="project-thumb">
+                <div class="project-icon-fallback" aria-hidden="true">
+                    <i class="${iconClass}"></i>
+                </div>
+            </div>
+        `;
+    }
+
     function loadProjects(category) {
-        // Clear the grid
         projectsGrid.innerHTML = '';
 
-        // Get the projects for the selected category
-        const selectedProjects = projects[category];
+        const selectedProjects = projects[category] || [];
 
-        // Generate HTML for each project
         selectedProjects.forEach(project => {
             const projectItem = document.createElement('div');
             projectItem.classList.add('project-item');
 
-            // Optional: Add click event to open project details
             projectItem.addEventListener('click', () => {
                 showProjectDetails(project);
             });
 
             projectItem.innerHTML = `
-                <img src="${project.image}" alt="${project.title}">
-                <div class="title">${project.title}</div>
+                ${getProjectThumbnailHTML(project)}
+                <div class="title">
+                    ${project.title}
+                    ${project.inProgress ? '<span class="project-badge">In Progress</span>' : ''}
+                </div>
             `;
 
             projectsGrid.appendChild(projectItem);
         });
     }
 
-    // Add click event listeners to tabs
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove 'active' class from all tabs
             categoryTabs.forEach(t => t.classList.remove('active'));
-            // Add 'active' class to the clicked tab
             tab.classList.add('active');
 
-            // Load the selected category projects
             const category = tab.getAttribute('data-category');
             loadProjects(category);
         });
     });
 
-    // Load the default category (Feature Film) on page load
     loadProjects('feature-film');
 });
 
+function handleLogoError(img) {
+    img.style.display = 'none';
+    const fallback = img.parentElement.querySelector('.experience-logo-fallback');
+    if (fallback) {
+        fallback.style.display = 'flex';
+    }
+}
 
+function handleProjectImageError(img, iconClass) {
+    const thumb = img.closest('.project-thumb');
+    const fallback = document.createElement('div');
+    fallback.className = 'project-icon-fallback';
+    fallback.setAttribute('aria-hidden', 'true');
+    fallback.innerHTML = `<i class="${iconClass}"></i>`;
 
-// Function to display project details (optional)
+    if (thumb) {
+        thumb.innerHTML = '';
+        thumb.appendChild(fallback);
+    } else {
+        img.replaceWith(fallback);
+    }
+}
+
+function setModalMedia(project) {
+    const modalMedia = document.getElementById('modal-media');
+    modalMedia.innerHTML = '';
+
+    if (project.image) {
+        const img = document.createElement('img');
+        img.id = 'modal-image';
+        img.alt = project.title;
+        img.loading = 'lazy';
+        img.src = project.image;
+        img.onerror = () => {
+            modalMedia.innerHTML = `
+                <div class="modal-icon-fallback" aria-hidden="true">
+                    <i class="${project.icon || 'fas fa-film'}"></i>
+                </div>
+            `;
+        };
+        modalMedia.appendChild(img);
+        return;
+    }
+
+    modalMedia.innerHTML = `
+        <div class="modal-icon-fallback" aria-hidden="true">
+            <i class="${project.icon || 'fas fa-film'}"></i>
+        </div>
+    `;
+}
+
+let modalListenersBound = false;
+
 function showProjectDetails(project) {
     const modal = document.getElementById('project-modal');
     const modalTitle = document.getElementById('modal-title');
-    const modalImage = document.getElementById('modal-image');
     const modalDescription = document.getElementById('modal-description');
     const closeButton = document.querySelector('.close-button');
 
     modalTitle.textContent = project.title;
-    modalImage.src = project.image;
-    modalDescription.textContent = project.description || 'No description available.';
+    setModalMedia(project);
+
+    if (project.descriptionHtml) {
+        modalDescription.innerHTML = project.descriptionHtml;
+    } else {
+        modalDescription.textContent = project.description || 'No description available.';
+    }
 
     modal.style.display = 'block';
 
-    closeButton.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    // Close modal when clicking outside of content
-    window.addEventListener('click', (event) => {
-        if (event.target == modal) {
+    if (!modalListenersBound) {
+        closeButton.addEventListener('click', () => {
             modal.style.display = 'none';
-        }
-    });
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        modalListenersBound = true;
+    }
 }
 
 const projects = {
     'feature-film': [
         {
+            title: 'Prostokvashino - 2026',
+            icon: 'fas fa-film',
+            image: 'images/Prostokvashino_Poster.jpg',
+            descriptionHtml: 'Lead Animator at Asymmetric Studios on this live-action/animated family feature. Led character animation for the CG animal cast in a modern adaptation of the classic Soviet cartoon. <a href="https://www.imdb.com/title/tt32019321/" target="_blank" rel="noopener noreferrer">View on IMDb</a>.',
+        },
+        {
+            title: 'Prostokvashino in Winter',
+            icon: 'fas fa-snowflake',
+            inProgress: true,
+            description: 'In progress. Lead Animator at Asymmetric Studios on the winter chapter of the Prostokvashino universe.',
+        },
+        {
+            title: 'The Tale of Tsar Saltan - 2026',
+            icon: 'fas fa-crown',
+            image: 'images/TsarSaltan_Poster.jpg',
+            descriptionHtml: 'Lead Animator at Asymmetric Studios on this Russian fantasy feature. Oversaw character animation for a large-scale production blending live action with visual effects. <a href="https://www.imdb.com/title/tt29952017/" target="_blank" rel="noopener noreferrer">View on IMDb</a>.',
+        },
+        {
+            title: 'Little Brownie Kuzya 2 - 2026',
+            icon: 'fas fa-hat-wizard',
+            image: 'images/LittleBrownieKuzya2_Poster.jpg',
+            descriptionHtml: 'Lead Animator at Asymmetric Studios on this Russian family fantasy sequel. <a href="https://www.imdb.com/title/tt32045419/" target="_blank" rel="noopener noreferrer">View on IMDb</a>.',
+        },
+        {
+            title: 'Pinocchio and the Water of Life - 2026',
+            icon: 'fas fa-tree',
+            image: 'images/PinocchioWaterOfLife_Poster.jpg',
+            descriptionHtml: 'Lead Animator at Asymmetric Studios on this animated fantasy feature directed by Viktor Lakisov. <a href="https://www.imdb.com/title/tt6986324/" target="_blank" rel="noopener noreferrer">View on IMDb</a>.',
+        },
+        {
             title: 'Snow White - 2025',
             image: 'images/SnowWhite_Poster.jpg',
-            description: 'I have been working on the Snow White project for 2 years and 6 months as a Senior Animator at MPC London.' +
-                        'My responsibilities included animating animals and humanoid characters using both mocap and keyframe techniques. I developed personal tools to enhance our animation workflow and improve efficiency.' +
-                        'Throughout the project, I focused on creating realistic character performances by studying real-life references and incorporating natural movements to deliver an immersive cinematic experience.',
+            descriptionHtml: 'Worked on Snow White for over two years as a Senior Animator at MPC London. Animated animals and humanoid characters using mocap and keyframe techniques, and built personal tools to improve the animation workflow. Focused on realistic performances grounded in real-life reference. <a href="https://www.imdb.com/title/tt6208148/" target="_blank" rel="noopener noreferrer">View on IMDb</a>.',
         },
-        // {
-        //     title: 'Feature Film Project 2',
-        //     image: 'images/feature-film2.jpg',
-        // },
-        // Add more projects
     ],
     'videogames': [
         {
             title: 'One Military Camp - 2022',
             image: 'images/OneMilitaryCamp_VT.png',
-            description: 'I have been working on One Military Camp project for 1 year as the main Animator / Rigger at Abylight studios in Barcelona.' +
-            'My responsibilities included animating humanoid characters using keyframe techniques. I developed personal tools to enhance our animation and rigging workflow and improve efficiency.' +
-            'Throughout the project, I focused on creating looping character and props animations and adapting multiple characters to the rig to use it in a dynamic way.',
+            description: 'Main Animator / Rigger at Abylight Studios in Barcelona for one year. Created keyframe humanoid animation, looping character and prop cycles, and adapted multiple characters to a shared rig.',
         },
-        // {
-        //     title: 'Videogame Project 2',
-        //     image: 'images/videogame2.jpg',
-        // },
-        // Add more projects
     ],
     'tv-show': [
         {
+            title: 'Manyunya - 2021',
+            icon: 'fas fa-tv',
+            image: 'images/Manyunya_Poster.jpg',
+            descriptionHtml: 'Animator at Asymmetric Studios on this Russian comedy-adventure series based on the novels by Narine Abgaryan. <a href="https://www.imdb.com/title/tt27949758/" target="_blank" rel="noopener noreferrer">View on IMDb</a>.',
+        },
+        {
             title: 'What if...? Season 2 - 2022',
             image: 'images/What_If...__season_2_poster.jpeg',
-            description: 'I have been working on the What If show for a month as a Animator at Stellar Creative Lab.' +
-            'My responsibilities included animating humanoid characters using keyframe techniques.' +
-            'In this project I had the opportunity to learn a more cartoony style of animation.',
+            description: 'Animator at Stellar Creative Lab for a month on Marvel\'s What If...? Season 2. Keyframe humanoid animation in a more cartoony style.',
         },
-        // {
-        //     title: 'TV Show Project 2',
-        //     image: 'images/tv-show2.jpg',
-        // },
-        // Add more projects
+    ],
+    'commercial': [
+        {
+            title: 'NerdWallet - "Genius Beluga" (Super Bowl LIX, 2025)',
+            icon: 'fas fa-whale',
+            image: 'images/NerdWallet_GeniusBeluga.png',
+            descriptionHtml: 'Freelance Senior 3D Animator on NerdWallet\'s first Super Bowl commercial. CG animation on the beluga whale mascot (agency Deutsch, dir. Tom Kuntz, voiced by Kieran Culkin). <a href="https://www.youtube.com/watch?v=JcZ5uXIjqE4" target="_blank" rel="noopener noreferrer">Watch the ad</a>.',
+        },
     ],
 };
 
