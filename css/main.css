@@ -750,6 +750,7 @@ nav a:hover {
     font-size: 3rem;
     color: #A5A692;
     pointer-events: none; /* Allow interactions with elements behind */
+    text-shadow: 0 2px 16px rgba(1, 31, 38, 0.85), 0 0 40px rgba(1, 31, 38, 0.5);
 }
 /* Style for the sub-text */
 .sub-text {
@@ -761,6 +762,7 @@ nav a:hover {
     color: #A5A692;
     font-family: 'Lato', italic;
     pointer-events: none;
+    text-shadow: 0 2px 12px rgba(1, 31, 38, 0.85), 0 0 30px rgba(1, 31, 38, 0.45);
 }
 /* Small particles emitted during explosion */
 .small-particle {

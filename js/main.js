@@ -622,7 +622,7 @@ function initHomeVideoGrid() {
 function renderHomeVideoGrid(grid) {
     grid.innerHTML = '';
 
-    const tileSizePattern = ['tile-lg', 'tile-sm', 'tile-md', 'tile-sm', 'tile-sm', 'tile-md'];
+    const tileSizePattern = ['tile-sm', 'tile-sm', 'tile-sm', 'tile-md', 'tile-sm', 'tile-lg', 'tile-sm', 'tile-sm'];
     const tileVideos = [];
 
     homeShowcaseVideos.forEach((item, index) => {
