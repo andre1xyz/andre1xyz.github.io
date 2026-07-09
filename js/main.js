@@ -797,7 +797,7 @@ function* homeDiscPlacementCandidates(width, height, placedRects, cx, cy, aspect
     yield { x: cx, y: cy, dist: 0 };
 
     const step = Math.max(2, Math.min(width, height) * 0.08);
-    const maxRadius = Math.max(viewportWidth, viewportHeight);
+    const maxRadius = Math.min(viewportWidth, viewportHeight) * 0.58;
     const boundX = maxRadius * aspect;
     const boundY = maxRadius;
     const gridPoints = [];
@@ -887,19 +887,7 @@ function sortHomeDiscEntries(baseEntries) {
     }));
 }
 
-// Tight disc pack: lg center → md → sm. Fixed tier sizes, no overlap, uniform
-// scale to fill viewport. Tiles keep their tier proportions — never stretched
-// into each other.
-function layoutHomeVideoDisc(grid, baseEntries) {
-    const viewportWidth = grid.clientWidth;
-    const viewportHeight = grid.clientHeight;
-    if (!viewportWidth || !viewportHeight || !baseEntries.length) {
-        return;
-    }
-
-    grid.style.minWidth = '';
-    grid.style.minHeight = '';
-
+function buildHomeDiscPack(baseEntries, viewportWidth, viewportHeight) {
     const baseHeight = getHomeDiscBaseHeight(viewportWidth, viewportHeight);
     const packCenterX = viewportWidth / 2;
     const packCenterY = viewportHeight / 2;
@@ -927,7 +915,7 @@ function layoutHomeVideoDisc(grid, baseEntries) {
     });
 
     if (!placements.length) {
-        return;
+        return null;
     }
 
     let minLeft = Infinity;
@@ -975,12 +963,68 @@ function layoutHomeVideoDisc(grid, baseEntries) {
         );
     }
 
+    return {
+        virtualW: viewportWidth,
+        virtualH: viewportHeight,
+        packAspect: viewportWidth / viewportHeight,
+        packGap,
+        scaledPlacements,
+    };
+}
+
+function applyHomeDiscTileStyles(scaledPlacements) {
     scaledPlacements.forEach(({ entry, rect }) => {
         entry.tile.style.left = `${Math.round(rect.left)}px`;
         entry.tile.style.top = `${Math.round(rect.top)}px`;
         entry.tile.style.width = `${Math.round(rect.width)}px`;
         entry.tile.style.height = `${Math.round(rect.height)}px`;
     });
+}
+
+function fitHomeDiscStage(stage, grid, cache) {
+    const gridWidth = grid.clientWidth;
+    const gridHeight = grid.clientHeight;
+    if (!gridWidth || !gridHeight || !cache) {
+        return;
+    }
+
+    const scale = Math.min(
+        gridWidth / cache.virtualW,
+        gridHeight / cache.virtualH
+    ) * 0.99;
+    const offsetX = (gridWidth - cache.virtualW * scale) / 2;
+    const offsetY = (gridHeight - cache.virtualH * scale) / 2;
+
+    stage.style.width = `${cache.virtualW}px`;
+    stage.style.height = `${cache.virtualH}px`;
+    stage.style.left = `${offsetX}px`;
+    stage.style.top = `${offsetY}px`;
+    stage.style.transform = `scale(${scale})`;
+}
+
+// Full pack on first load / big aspect change. Resize only scales the stage
+// wrapper (one transform) until resize settles, then optional repack.
+function layoutHomeVideoDisc(grid, stage, baseEntries, { repack = false } = {}) {
+    const viewportWidth = grid.clientWidth;
+    const viewportHeight = grid.clientHeight;
+    if (!viewportWidth || !viewportHeight || !baseEntries.length) {
+        return;
+    }
+
+    const needsRepack = repack
+        || !grid.__homeDiscCache
+        || !grid.__homeDiscCache.scaledPlacements.length;
+
+    if (needsRepack) {
+        const cache = buildHomeDiscPack(baseEntries, viewportWidth, viewportHeight);
+        if (!cache) {
+            return;
+        }
+        grid.__homeDiscCache = cache;
+        applyHomeDiscTileStyles(cache.scaledPlacements);
+    }
+
+    fitHomeDiscStage(stage, grid, grid.__homeDiscCache);
 }
 
 function createHomeVideoTile(item, index) {
@@ -1025,21 +1069,57 @@ function createHomeVideoTile(item, index) {
     return { tile, video, size };
 }
 
-function bindHomeGridResize(grid, syncLayout) {
+function bindHomeGridResize(grid, stage, baseEntries) {
     if (grid.dataset.resizeBound === 'true') {
         return;
     }
 
     grid.dataset.resizeBound = 'true';
-    let resizeTimer = null;
+
+    let resizeRaf = 0;
+    let resizeEndTimer = null;
+
+    const syncLayoutFast = () => {
+        layoutHomeVideoDisc(grid, stage, baseEntries, { repack: false });
+    };
+
+    const syncLayoutFull = () => {
+        const width = grid.clientWidth;
+        const height = grid.clientHeight;
+        const aspect = width / height;
+        const cachedAspect = grid.__homeDiscCache?.packAspect ?? aspect;
+        const aspectDelta = Math.abs(aspect - cachedAspect);
+        const sizeDelta = grid.__homeDiscCache
+            ? Math.max(
+                Math.abs(width - grid.__homeDiscCache.virtualW) / grid.__homeDiscCache.virtualW,
+                Math.abs(height - grid.__homeDiscCache.virtualH) / grid.__homeDiscCache.virtualH
+            )
+            : 1;
+
+        const shouldRepack = aspectDelta > 0.14 || sizeDelta > 0.28;
+        layoutHomeVideoDisc(grid, stage, baseEntries, { repack: shouldRepack });
+    };
+
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(syncLayout, 150);
+        if (resizeRaf) {
+            cancelAnimationFrame(resizeRaf);
+        }
+        resizeRaf = requestAnimationFrame(() => {
+            syncLayoutFast();
+            resizeRaf = 0;
+        });
+
+        clearTimeout(resizeEndTimer);
+        resizeEndTimer = window.setTimeout(syncLayoutFull, 280);
     });
 }
 
 function renderHomeVideoGrid(grid) {
     grid.innerHTML = '';
+
+    const stage = document.createElement('div');
+    stage.className = 'home-video-grid-stage';
+    grid.appendChild(stage);
 
     const tileVideos = [];
     let observer = null;
@@ -1075,15 +1155,17 @@ function renderHomeVideoGrid(grid) {
 
     const baseEntries = homeShowcaseVideos.map((item, index) => {
         const entry = createHomeVideoTile(item, index);
-        grid.appendChild(entry.tile);
+        stage.appendChild(entry.tile);
         watchVideo(entry.video, index);
         return entry;
     });
 
-    const syncLayout = () => layoutHomeVideoDisc(grid, baseEntries);
+    const syncLayout = () => {
+        layoutHomeVideoDisc(grid, stage, baseEntries, { repack: true });
+    };
 
     requestAnimationFrame(syncLayout);
-    bindHomeGridResize(grid, syncLayout);
+    bindHomeGridResize(grid, stage, baseEntries);
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {

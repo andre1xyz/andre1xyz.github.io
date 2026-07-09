@@ -462,6 +462,14 @@ nav a:hover {
     overflow: hidden;
 }
 
+.home-video-grid-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    will-change: transform;
+}
+
 .home-video-tint {
     position: absolute;
     inset: 0;
