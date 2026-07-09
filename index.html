@@ -206,11 +206,71 @@
 
     <div id="home" class="section" style="display: block;">
         <div class="home-content" style="height: 100vh; position: relative;">
+            <div class="home-video-grid" id="home-video-grid" aria-hidden="true"></div>
+            <div class="home-video-tint"></div>
             <img src="icon/logo.png" alt="Logo" style="logo">
             <div class="welcome-text">Welcome to my portfolio!</div>
             <div class="sub-text">I am a passionate 3D artist specializing in animation, with strong technical skills.</div>
             <div id="particles"></div>
             
+        </div>
+    </div>
+
+    <!-- Homepage Video Lightbox -->
+    <div class="video-lightbox" id="video-lightbox" aria-hidden="true">
+        <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+        <div class="lightbox-content">
+            <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous video">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next video">
+                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
+
+            <div class="player-shell lightbox-player-shell" id="lightbox-player-shell">
+                <video class="video-player" id="lightbox-video" playsinline preload="metadata" disablepictureinpicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" x-webkit-airplay="deny">
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+                <button type="button" class="player-center-play" id="lightbox-center-play" aria-label="Play video">
+                    <i class="fas fa-play" aria-hidden="true"></i>
+                </button>
+
+                <div class="player-overlay" id="lightbox-player-overlay">
+                    <div class="player-progress">
+                        <input type="range" id="lightbox-time-slider" class="time-slider" value="0" min="0" max="100" step="0.01">
+                        <div class="player-time">
+                            <span id="lightbox-current-time">0:00</span>
+                            <span id="lightbox-duration-time">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="player-toolbar">
+                        <div class="player-toolbar-left">
+                            <button type="button" class="player-btn" id="lightbox-play-pause" aria-label="Play or pause">
+                                <i class="fas fa-play" id="lightbox-play-icon" aria-hidden="true"></i>
+                            </button>
+                            <span class="lightbox-title" id="lightbox-title"></span>
+                        </div>
+
+                        <div class="player-toolbar-right">
+                            <div class="volume-group">
+                                <button type="button" class="player-btn" id="lightbox-mute" aria-label="Mute or unmute">
+                                    <i class="fas fa-volume-up" id="lightbox-mute-icon" aria-hidden="true"></i>
+                                </button>
+                                <input type="range" id="lightbox-volume-slider" class="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+                            </div>
+                            <button type="button" class="player-btn" id="lightbox-fullscreen-button" aria-label="Fullscreen">
+                                <i class="fas fa-expand" id="lightbox-fullscreen-icon" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
