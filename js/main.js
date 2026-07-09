@@ -41,24 +41,122 @@ function titleFromVideoFilename(filename) {
         .trim();
 }
 
+function inferHomePreviewSrc(src) {
+    const match = src.match(/^videos\/home\/(favorite|mid|low)\/([^/]+)$/);
+    if (!match) {
+        return null;
+    }
+    return `videos/home/${match[1]}/preview/${match[2]}`;
+}
+
 function normalizeHomeVideoEntry(entry) {
+    const validSizes = new Set(['lg', 'md', 'sm']);
+
     if (typeof entry === 'string') {
         const filename = entry.split('/').pop();
+        const src = entry.startsWith('videos/') ? entry : `videos/home/${entry}`;
         return {
-            src: entry.startsWith('videos/') ? entry : `videos/home/${entry}`,
+            src,
+            previewSrc: inferHomePreviewSrc(src),
             title: titleFromVideoFilename(filename),
+            size: 'sm',
         };
     }
 
     if (entry && entry.src) {
         const filename = entry.src.split('/').pop();
+        const size = validSizes.has(entry.size) ? entry.size : 'sm';
         return {
             src: entry.src,
+            previewSrc: entry.previewSrc || inferHomePreviewSrc(entry.src),
             title: entry.title || titleFromVideoFilename(filename),
+            size,
         };
     }
 
     return null;
+}
+
+function attachHomeTileVideo(video) {
+    if (video.dataset.attached === 'true') {
+        return;
+    }
+
+    const previewSrc = video.dataset.previewSrc;
+    const fullSrc = video.dataset.fullSrc;
+    if (!previewSrc && !fullSrc) {
+        return;
+    }
+
+    video.dataset.attached = 'true';
+
+    const setSource = (url) => {
+        if (!url || video.src === url) {
+            return;
+        }
+        video.src = url;
+        video.load();
+    };
+
+    if (previewSrc) {
+        setSource(previewSrc);
+        video.addEventListener('error', function onPreviewError() {
+            video.removeEventListener('error', onPreviewError);
+            if (fullSrc && video.src !== fullSrc) {
+                setSource(fullSrc);
+            }
+        });
+        return;
+    }
+
+    setSource(fullSrc);
+}
+
+const HOME_TILE_LOAD_LIMIT = 4;
+let homeTileLoadsActive = 0;
+const homeTileLoadQueue = [];
+
+function drainHomeTileLoadQueue() {
+    while (homeTileLoadsActive < HOME_TILE_LOAD_LIMIT && homeTileLoadQueue.length) {
+        const job = homeTileLoadQueue.shift();
+        if (!job.video.isConnected) {
+            continue;
+        }
+
+        homeTileLoadsActive += 1;
+        attachHomeTileVideo(job.video);
+
+        const release = () => {
+            homeTileLoadsActive = Math.max(0, homeTileLoadsActive - 1);
+            if (job.play) {
+                job.video.play().catch(() => {});
+            }
+            drainHomeTileLoadQueue();
+        };
+
+        if (job.video.readyState >= 2) {
+            release();
+        } else {
+            job.video.addEventListener('loadeddata', release, { once: true });
+            job.video.addEventListener('error', release, { once: true });
+        }
+    }
+}
+
+function queueHomeTileVideo(video, play = true) {
+    if (video.dataset.attached === 'true') {
+        if (play) {
+            video.play().catch(() => {});
+        }
+        return;
+    }
+
+    if (homeTileLoadQueue.some((job) => job.video === video)) {
+        return;
+    }
+
+    homeTileLoadQueue.push({ video, play });
+    drainHomeTileLoadQueue();
 }
 
 function parseHomeDirectoryListing(html) {
@@ -80,6 +178,8 @@ async function loadHomeShowcaseVideos() {
             const data = await response.json();
             const list = Array.isArray(data) ? data : data.videos;
             if (Array.isArray(list)) {
+                // Order comes straight from videos.json — no shuffling, so the
+                // layout is stable and controllable across reloads.
                 return list.map(normalizeHomeVideoEntry).filter(Boolean);
             }
         }
@@ -619,69 +719,371 @@ function initHomeVideoGrid() {
     });
 }
 
+const HOME_DISC_TIER = {
+    lg: { scaleMin: 1.08, scaleMax: 1.22, heightMul: 1.0 },
+    md: { scaleMin: 0.76, scaleMax: 0.86, heightMul: 0.78 },
+    sm: { scaleMin: 0.5, scaleMax: 0.6, heightMul: 0.55 },
+};
+
+function homeDiscDeterministicSeed(index, salt = 0) {
+    return (((index + 1) * 2654435761 + salt * 1597334677) >>> 0) % 1000 / 1000;
+}
+
+function getHomeDiscBaseHeight(viewportWidth, viewportHeight) {
+    return Math.max(52, Math.min(viewportWidth / 12, viewportHeight / 6.5));
+}
+
+function homeDiscScalePlacements(placements, packCenterX, packCenterY, clusterCenterX, clusterCenterY, fitScale) {
+    return placements.map(({ entry, rect }) => {
+        const tileCenterX = (rect.left + rect.right) / 2;
+        const tileCenterY = (rect.top + rect.bottom) / 2;
+        const finalCenterX = packCenterX + (tileCenterX - clusterCenterX) * fitScale;
+        const finalCenterY = packCenterY + (tileCenterY - clusterCenterY) * fitScale;
+        const scaledW = rect.width * fitScale;
+        const scaledH = rect.height * fitScale;
+
+        return {
+            entry,
+            rect: homeDiscRectFromCenter(finalCenterX, finalCenterY, scaledW, scaledH),
+        };
+    });
+}
+
+function homeDiscHasOverlap(rects, gap) {
+    for (let i = 0; i < rects.length; i += 1) {
+        for (let j = i + 1; j < rects.length; j += 1) {
+            if (homeDiscRectsOverlap(rects[i], rects[j], gap)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function getHomeDiscTileSize(index, size, baseHeight) {
+    const tier = HOME_DISC_TIER[size] || HOME_DISC_TIER.sm;
+    const scale = tier.scaleMin + homeDiscDeterministicSeed(index, 1) * (tier.scaleMax - tier.scaleMin);
+    const aspect = 2.0 + homeDiscDeterministicSeed(index, 2) * 0.65;
+    const height = baseHeight * tier.heightMul * scale;
+    const width = height * aspect;
+    return { w: width, h: height };
+}
+
+function homeDiscRectFromCenter(cx, cy, width, height) {
+    return {
+        left: cx - width / 2,
+        top: cy - height / 2,
+        right: cx + width / 2,
+        bottom: cy + height / 2,
+        width,
+        height,
+    };
+}
+
+function homeDiscRectsOverlap(a, b, gap) {
+    return !(
+        a.right + gap <= b.left
+        || b.right + gap <= a.left
+        || a.bottom + gap <= b.top
+        || b.bottom + gap <= a.top
+    );
+}
+
+function homeDiscEllipseDist(x, y, cx, cy, aspect) {
+    return Math.hypot((x - cx) / aspect, y - cy);
+}
+
+function* homeDiscPlacementCandidates(width, height, placedRects, cx, cy, aspect, viewportWidth, viewportHeight) {
+    yield { x: cx, y: cy, dist: 0 };
+
+    const step = Math.max(2, Math.min(width, height) * 0.08);
+    const maxRadius = Math.max(viewportWidth, viewportHeight);
+    const boundX = maxRadius * aspect;
+    const boundY = maxRadius;
+    const gridPoints = [];
+
+    for (let y = -boundY; y <= boundY; y += step) {
+        for (let x = -boundX; x <= boundX; x += step) {
+            const dist = Math.hypot(x / aspect, y);
+            if (dist <= maxRadius) {
+                gridPoints.push({
+                    x: cx + x,
+                    y: cy + y,
+                    dist,
+                });
+            }
+        }
+    }
+
+    gridPoints.sort((a, b) => a.dist - b.dist);
+
+    const snapPoints = [];
+    placedRects.forEach((rect) => {
+        [
+            { x: rect.right + width / 2, y: rect.top + rect.height / 2 },
+            { x: rect.left - width / 2, y: rect.top + rect.height / 2 },
+            { x: rect.left + rect.width / 2, y: rect.top - height / 2 },
+            { x: rect.left + rect.width / 2, y: rect.bottom + height / 2 },
+            { x: rect.right + width / 2, y: rect.top },
+            { x: rect.right + width / 2, y: rect.bottom },
+            { x: rect.left - width / 2, y: rect.top },
+            { x: rect.left - width / 2, y: rect.bottom },
+            { x: rect.left, y: rect.top - height / 2 },
+            { x: rect.right, y: rect.top - height / 2 },
+            { x: rect.left, y: rect.bottom + height / 2 },
+            { x: rect.right, y: rect.bottom + height / 2 },
+        ].forEach((anchor) => {
+            snapPoints.push({
+                x: anchor.x,
+                y: anchor.y,
+                dist: homeDiscEllipseDist(anchor.x, anchor.y, cx, cy, aspect),
+            });
+        });
+    });
+
+    snapPoints.sort((a, b) => a.dist - b.dist);
+
+    for (const point of snapPoints) {
+        yield point;
+    }
+    for (const point of gridPoints) {
+        yield point;
+    }
+}
+
+function findHomeDiscTilePosition(width, height, placedRects, cx, cy, gap, viewportWidth, viewportHeight) {
+    const aspect = viewportWidth / viewportHeight;
+
+    for (const point of homeDiscPlacementCandidates(
+        width,
+        height,
+        placedRects,
+        cx,
+        cy,
+        aspect,
+        viewportWidth,
+        viewportHeight
+    )) {
+        const candidate = homeDiscRectFromCenter(point.x, point.y, width, height);
+        const collides = placedRects.some((rect) => homeDiscRectsOverlap(candidate, rect, gap));
+        if (!collides) {
+            return candidate;
+        }
+    }
+
+    return null;
+}
+
+function sortHomeDiscEntries(baseEntries) {
+    const tiers = { lg: [], md: [], sm: [] };
+    baseEntries.forEach((entry) => {
+        const bucket = tiers[entry.size] || tiers.sm;
+        bucket.push(entry);
+    });
+
+    return [...tiers.lg, ...tiers.md, ...tiers.sm].map((entry, index) => ({
+        entry,
+        index,
+    }));
+}
+
+// Tight disc pack: lg center → md → sm. Fixed tier sizes, no overlap, uniform
+// scale to fill viewport. Tiles keep their tier proportions — never stretched
+// into each other.
+function layoutHomeVideoDisc(grid, baseEntries) {
+    const viewportWidth = grid.clientWidth;
+    const viewportHeight = grid.clientHeight;
+    if (!viewportWidth || !viewportHeight || !baseEntries.length) {
+        return;
+    }
+
+    grid.style.minWidth = '';
+    grid.style.minHeight = '';
+
+    const baseHeight = getHomeDiscBaseHeight(viewportWidth, viewportHeight);
+    const packCenterX = viewportWidth / 2;
+    const packCenterY = viewportHeight / 2;
+    const placedRects = [];
+    const placements = [];
+    const packGap = 3;
+
+    sortHomeDiscEntries(baseEntries).forEach(({ entry, index }) => {
+        const tileDims = getHomeDiscTileSize(index, entry.size, baseHeight);
+        const rect = findHomeDiscTilePosition(
+            tileDims.w,
+            tileDims.h,
+            placedRects,
+            packCenterX,
+            packCenterY,
+            packGap,
+            viewportWidth,
+            viewportHeight
+        );
+        if (!rect) {
+            return;
+        }
+        placedRects.push(rect);
+        placements.push({ entry, rect });
+    });
+
+    if (!placements.length) {
+        return;
+    }
+
+    let minLeft = Infinity;
+    let minTop = Infinity;
+    let maxRight = -Infinity;
+    let maxBottom = -Infinity;
+
+    placedRects.forEach((rect) => {
+        minLeft = Math.min(minLeft, rect.left);
+        minTop = Math.min(minTop, rect.top);
+        maxRight = Math.max(maxRight, rect.right);
+        maxBottom = Math.max(maxBottom, rect.bottom);
+    });
+
+    const clusterWidth = maxRight - minLeft;
+    const clusterHeight = maxBottom - minTop;
+    const clusterCenterX = (minLeft + maxRight) / 2;
+    const clusterCenterY = (minTop + maxBottom) / 2;
+    let fitScale = Math.min(
+        viewportWidth / clusterWidth,
+        viewportHeight / clusterHeight
+    ) * 0.99;
+
+    let scaledPlacements = homeDiscScalePlacements(
+        placements,
+        packCenterX,
+        packCenterY,
+        clusterCenterX,
+        clusterCenterY,
+        fitScale
+    );
+
+    while (
+        homeDiscHasOverlap(scaledPlacements.map(({ rect }) => rect), packGap)
+        && fitScale > 0.75
+    ) {
+        fitScale *= 0.98;
+        scaledPlacements = homeDiscScalePlacements(
+            placements,
+            packCenterX,
+            packCenterY,
+            clusterCenterX,
+            clusterCenterY,
+            fitScale
+        );
+    }
+
+    scaledPlacements.forEach(({ entry, rect }) => {
+        entry.tile.style.left = `${Math.round(rect.left)}px`;
+        entry.tile.style.top = `${Math.round(rect.top)}px`;
+        entry.tile.style.width = `${Math.round(rect.width)}px`;
+        entry.tile.style.height = `${Math.round(rect.height)}px`;
+    });
+}
+
+function createHomeVideoTile(item, index) {
+    const size = item.size || 'sm';
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = `home-video-tile tile-${size}`;
+    tile.setAttribute('aria-label', `Play ${item.title || 'video'}`);
+    tile.dataset.index = String(index);
+
+    const video = document.createElement('video');
+    video.dataset.previewSrc = item.previewSrc || inferHomePreviewSrc(item.src) || '';
+    video.dataset.fullSrc = item.src;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'none';
+    video.disablePictureInPicture = true;
+    video.disableRemotePlayback = true;
+    video.setAttribute('aria-hidden', 'true');
+    video.addEventListener('error', () => {
+        tile.remove();
+    });
+
+    const hint = document.createElement('span');
+    hint.className = 'home-video-tile-hint';
+    hint.innerHTML = '<i class="fas fa-expand" aria-hidden="true"></i>';
+    tile.appendChild(video);
+    tile.appendChild(hint);
+
+    if (item.title) {
+        const label = document.createElement('span');
+        label.className = 'home-video-tile-label';
+        label.textContent = item.title;
+        tile.appendChild(label);
+    }
+
+    tile.addEventListener('click', () => {
+        openVideoLightbox(index, tile.getBoundingClientRect());
+    });
+
+    return { tile, video, size };
+}
+
+function bindHomeGridResize(grid, syncLayout) {
+    if (grid.dataset.resizeBound === 'true') {
+        return;
+    }
+
+    grid.dataset.resizeBound = 'true';
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(syncLayout, 150);
+    });
+}
+
 function renderHomeVideoGrid(grid) {
     grid.innerHTML = '';
 
-    const tileSizePattern = ['tile-sm', 'tile-sm', 'tile-sm', 'tile-md', 'tile-sm', 'tile-lg', 'tile-sm', 'tile-sm'];
     const tileVideos = [];
-
-    homeShowcaseVideos.forEach((item, index) => {
-        const tile = document.createElement('button');
-        tile.type = 'button';
-        tile.className = `home-video-tile ${tileSizePattern[index % tileSizePattern.length]}`;
-        tile.setAttribute('aria-label', `Play ${item.title || 'video'}`);
-        tile.dataset.index = String(index);
-
-        const video = document.createElement('video');
-        video.src = item.src;
-        video.muted = true;
-        video.loop = true;
-        video.playsInline = true;
-        video.preload = 'metadata';
-        video.disablePictureInPicture = true;
-        video.disableRemotePlayback = true;
-        video.setAttribute('aria-hidden', 'true');
-        video.addEventListener('error', () => {
-            tile.remove();
-        });
-
-        const hint = document.createElement('span');
-        hint.className = 'home-video-tile-hint';
-        hint.innerHTML = '<i class="fas fa-expand" aria-hidden="true"></i>';
-        tile.appendChild(video);
-        tile.appendChild(hint);
-
-        if (item.title) {
-            const label = document.createElement('span');
-            label.className = 'home-video-tile-label';
-            label.textContent = item.title;
-            tile.appendChild(label);
-        }
-
-        tile.addEventListener('click', () => {
-            openVideoLightbox(index, tile.getBoundingClientRect());
-        });
-
-        grid.appendChild(tile);
-        tileVideos.push(video);
-    });
+    let observer = null;
 
     if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
+        observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 const video = entry.target;
                 if (entry.isIntersecting) {
-                    video.play().catch(() => {});
+                    const priority = Number(video.dataset.loadPriority || 99);
+                    window.setTimeout(() => {
+                        if (!video.isConnected) {
+                            return;
+                        }
+                        queueHomeTileVideo(video, true);
+                    }, priority * 35);
                 } else {
                     video.pause();
                 }
             });
-        }, { threshold: 0.35 });
-
-        tileVideos.forEach((video) => observer.observe(video));
-    } else {
-        tileVideos.forEach((video) => video.play().catch(() => {}));
+        }, { threshold: 0.35, rootMargin: '0px' });
     }
+
+    function watchVideo(video, loadPriority) {
+        video.dataset.loadPriority = String(loadPriority);
+        tileVideos.push(video);
+        if (observer) {
+            observer.observe(video);
+        } else {
+            queueHomeTileVideo(video, true);
+        }
+    }
+
+    const baseEntries = homeShowcaseVideos.map((item, index) => {
+        const entry = createHomeVideoTile(item, index);
+        grid.appendChild(entry.tile);
+        watchVideo(entry.video, index);
+        return entry;
+    });
+
+    const syncLayout = () => layoutHomeVideoDisc(grid, baseEntries);
+
+    requestAnimationFrame(syncLayout);
+    bindHomeGridResize(grid, syncLayout);
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
@@ -692,7 +1094,7 @@ function renderHomeVideoGrid(grid) {
                 const rect = video.getBoundingClientRect();
                 const inView = rect.bottom > 0 && rect.top < window.innerHeight;
                 if (inView) {
-                    video.play().catch(() => {});
+                    queueHomeTileVideo(video, true);
                 }
             }
         });
@@ -706,7 +1108,7 @@ function renderHomeVideoGrid(grid) {
             const rect = video.getBoundingClientRect();
             const inView = rect.bottom > 0 && rect.top < window.innerHeight;
             if (inView) {
-                video.play().catch(() => {});
+                queueHomeTileVideo(video, true);
             }
         });
     };
