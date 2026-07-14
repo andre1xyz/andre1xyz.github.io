@@ -1409,6 +1409,7 @@ function initToolsImageLightbox() {
         lightboxImg.alt = toolsImg.alt;
         lightbox.setAttribute('aria-hidden', 'false');
         lightbox.classList.add('is-open');
+        document.body.classList.add('tools-lightbox-open');
         document.body.style.overflow = 'hidden';
 
         const showLightbox = () => {
@@ -1429,6 +1430,7 @@ function initToolsImageLightbox() {
     function closeLightbox() {
         lightbox.classList.remove('is-visible');
         lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('tools-lightbox-open');
         document.body.style.overflow = '';
         window.setTimeout(() => {
             if (!lightbox.classList.contains('is-visible')) {
