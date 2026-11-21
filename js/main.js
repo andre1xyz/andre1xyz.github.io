@@ -2001,3 +2001,22 @@ const projects = {
     ],
 };
 
+
+// Deep links: https://andre1xyz.github.io/#tools opens that section
+(function () {
+    const validSections = ['home', 'showreel', 'portfolio', 'tools', 'resume'];
+
+    function openSectionFromHash() {
+        const id = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+        if (id && validSections.includes(id) && document.getElementById(id)) {
+            showSection(id);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', openSectionFromHash);
+    } else {
+        openSectionFromHash();
+    }
+    window.addEventListener('hashchange', openSectionFromHash);
+})();

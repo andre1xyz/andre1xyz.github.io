@@ -1,0 +1,32 @@
+{
+  "name": "KeyBelt",
+  "version": "0.2.0",
+  "released": "2026-11-21",
+  "url": "https://andre1xyz.github.io/keybelt/releases/KeyBelt-0.2.0.zip",
+  "sha256": "d882b8ce5bfe153f932446e83a5ab567bd3f1d1925363b851fc281cea04ef848",
+  "size": 15674182,
+  "maya": [
+    "2023",
+    "2024",
+    "2025",
+    "2026"
+  ],
+  "python_abis": [
+    "cp39",
+    "cp310",
+    "cp311"
+  ],
+  "platforms": [
+    "windows"
+  ],
+  "notes": [
+    "One-step install and automatic updates: drag drag_n_drop.py into Maya and KeyBelt installs itself to Documents/maya/KeyBelt (shared by every Maya version). Settings > General > Updates checks for new versions in the background; nothing is downloaded until you click Download update, and the update is applied the next time Maya starts. KeyBelt now ships as a compiled, protected build under a free-to-use license (EULA.txt).",
+    "Maya preference helpers: asset-centric selection and Maya's cycle check warnings are turned off at every launch (Settings > General > Maya Preferences, on by default). Unticking restores your previous Maya values.",
+    "Time Dragger HUD: hold the Time Dragger key and drag (LMB / MMB) for an endless scrub with a temporary timeline showing the range, keys of the selection and bookmarks. Shift = fine, Ctrl = coarse, wheel = one frame, Esc = cancel. Toggle in Settings > General > Time Dragger (off = Maya's own Time Dragger). Only a key still bound to Maya's Time Dragger is rerouted.",
+    "Settings window reorganised: General / Toolbars / Hotkeys / Radial & Viewport Bar / Documentation. Timeline Tools and Graph Editor are merged into Toolbars (one action-button list with timeline + Graph Editor columns); Quick Access is now Radial & Viewport Bar with one shared tool palette. General uses cards (Toolbar, Keys Sliders, Time Dragger, Startup, Session).",
+    "The Radial Menu tool palette no longer lists the Settings tool itself.",
+    "Graph Editor toolbar sliders now stretch to the free width (48–240 px each) and the toolbar never forces the Graph Editor to stay wide: when it's too narrow, it is cut off at the right edge."
+  ],
+  "docs": "https://andre1xyz.github.io/keybelt/docs/",
+  "changelog": "https://andre1xyz.github.io/keybelt/#changelog"
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download KeyBelt</title>
+<meta http-equiv="refresh" content="2; url=../releases/KeyBelt-latest.zip">
+<link rel="icon" href="../img/keybelt_mark_ivory_64.png" type="image/png">
+<link rel="stylesheet" href="../css/keybelt.css">
+</head>
+<body>
+<main class="kb-placeholder">
+  <h1>Downloading KeyBelt...</h1>
+  <p id="msg">If nothing happens, <a href="../releases/KeyBelt-latest.zip" id="dl">download the latest zip</a> or visit the <a href="../#download">KeyBelt page</a>.</p>
+</main>
+<script>
+(function () {
+  var fallback = "../releases/KeyBelt-latest.zip";
+  fetch("../version.json", { cache: "no-cache" })
+    .then(function (r) { return r.json(); })
+    .then(function (v) {
+      if (!v || !v.url || !v.size) { location.replace("../#download"); return; }
+      document.getElementById("dl").href = v.url;
+      location.replace(v.url);
+    })
+    .catch(function () { location.replace(fallback); });
+})();
+</script>
+</body>
+</html>

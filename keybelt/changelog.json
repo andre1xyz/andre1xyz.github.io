@@ -1,0 +1,43 @@
+[
+  {
+    "version": "0.2.0",
+    "date": "2026-11-21",
+    "items": [
+      "One-step install and automatic updates: drag drag_n_drop.py into Maya and KeyBelt installs itself to Documents/maya/KeyBelt (shared by every Maya version). Settings > General > Updates checks for new versions in the background; nothing is downloaded until you click Download update, and the update is applied the next time Maya starts. KeyBelt now ships as a compiled, protected build under a free-to-use license (EULA.txt).",
+      "Maya preference helpers: asset-centric selection and Maya's cycle check warnings are turned off at every launch (Settings > General > Maya Preferences, on by default). Unticking restores your previous Maya values.",
+      "Time Dragger HUD: hold the Time Dragger key and drag (LMB / MMB) for an endless scrub with a temporary timeline showing the range, keys of the selection and bookmarks. Shift = fine, Ctrl = coarse, wheel = one frame, Esc = cancel. Toggle in Settings > General > Time Dragger (off = Maya's own Time Dragger). Only a key still bound to Maya's Time Dragger is rerouted.",
+      "Settings window reorganised: General / Toolbars / Hotkeys / Radial & Viewport Bar / Documentation. Timeline Tools and Graph Editor are merged into Toolbars (one action-button list with timeline + Graph Editor columns); Quick Access is now Radial & Viewport Bar with one shared tool palette. General uses cards (Toolbar, Keys Sliders, Time Dragger, Startup, Session).",
+      "The Radial Menu tool palette no longer lists the Settings tool itself.",
+      "Graph Editor toolbar sliders now stretch to the free width (48–240 px each) and the toolbar never forces the Graph Editor to stay wide: when it's too narrow, it is cut off at the right edge.",
+      "Keys Editor: the action row no longer overlaps. Bake is now icon-only and uses the Baker icon. The row fits on one line at the default width and wraps when narrower.",
+      "Timeline toolbar: the Delete Flat button shows its icon instead of \"DF\".",
+      "New Selector icon.",
+      "Graph Editor toolbar sliders: middle-click opens the same effect popup as the timeline sliders, with an extra \"Remove this slider\" row.",
+      "Offseter: Undo / Redo no longer offsets the curve again; the restored values become the new baseline.",
+      "Viewport Bar stays visible while Maya is in the background.",
+      "Baker: the current time is always restored after Bake to Circle, even if the bake fails early.",
+      "Keys Editor effect table (names, short codes, colours) now has one source (KeysEditor/keys_effects.py) shared by the Keys Editor, timeline and viewport sliders.",
+      "Maya 2026 / PySide6 compatibility fixes (fontMetrics().width and QApplication.desktop() fallbacks, Viewport Bar timer slots, Keys Editor wave field crash on close).",
+      "Reset Translate / Rotate / Scale no longer need PyMEL (failed on Maya 2026); one undo step, locked channels skipped.",
+      "Settings → Timeline Tools: readable category headers on light colours, visible check boxes, letter icon for tools without one.",
+      "Namespaced as the package keybelt. KeyBelt used generic top-level module names (main, styles, RadialMenu, ViewportBar, ...) that clashed with other toolsets loaded in the same Maya session. The KeyBelt folder is no longer put on sys.path; it is registered explicitly as the package keybelt (independent of the folder name) and every internal import is keybelt.-qualified. The startup/shelf/hotkey/uiScript command strings embed the absolute folder and re-register the package when needed. The old \"purge same-named modules from outside the KeyBelt folder\" step is gone, and the unload scriptJob sweep only matches keybelt callbacks. Maya-global names that could collide (window object names, _tool_id, optionVar, menu and condition names) are now keybelt-prefixed.",
+      "Migration (one time): re-drop drag_n_drop.py (or toggle Settings > General > Startup > Load at Maya startup off and on) to regenerate the shelf button and the userSetup.py block. An old block that still does import keybelt_core keeps working through a compatibility forward, but it also purges same-named modules of other toolsets, so migrate it.",
+      "Added the Graph Editor toolbar (GraphEditorToolbar): KeysEditor effect sliders and action buttons attached to the Graph Editor panel, with a new Settings > Graph Editor tab (enable / disable, button order and visibility). Unload stops it too.",
+      "Added a \"Load at Maya startup\" checkbox (Settings > General > Startup) that adds / removes the KeyBelt block in the versioned userSetup.py (takes effect next launch; keybelt_core.is_startup_enabled() / set_startup_enabled()). The block logic now lives in keybelt_startup.py, shared with the installer; a userSetup.py.bak backup is written before each change.",
+      "Removed the KeyBelt tool-list window. Launching is now headless (timeline toolbar, viewport bar, radial menu hotkey); show_docked() / show_floating() are kept as aliases of show(), and a stale main-window workspace control restored from an old layout is removed automatically.",
+      "Added keybelt_core.unload_all() and an \"Unload KeyBelt\" button (Settings > General > Session) to unload KeyBelt from the running Maya session without restarting.",
+      "All tools now run on both PySide2 (Maya 2022-2024) and PySide6 (Maya 2025+) via the new keybelt_qt.py shim; removed PySide(1)/PyQt4 fallbacks and PySide6-removed APIs (fm.width, QDesktopWidget, globalPos/pos on events, exec_)."
+    ]
+  },
+  {
+    "version": "0.1.0",
+    "date": "",
+    "items": [
+      "First public release of KeyBelt, an animation toolset for Maya.",
+      "Tools: Baker, Keys Editor, Offseter, Reset All, Selector, Motion Trail (BETA).",
+      "Dockable tool window, timeline toolbar with Keys Editor sliders, floating Viewport Bar, radial menu (default Alt+Q) and a Settings window (toolbars, hotkeys, quick access, docs).",
+      "Local HTML documentation (Settings > Documentation).",
+      "Drag and drop installer: KeyBelt shelf tab plus auto-start through userSetup.py; uninstall() helper."
+    ]
+  }
+]

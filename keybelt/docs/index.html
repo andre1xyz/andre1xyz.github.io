@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeyBelt — Documentation</title>
+  <link rel="icon" type="image/png" href="img/keybelt_ui_mark.png" />
+  <link rel="shortcut icon" type="image/png" href="img/keybelt_ui_mark.png" />
+  <link rel="apple-touch-icon" href="img/keybelt_ui_mark.png" />
+  <link rel="stylesheet" href="css/docs.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button type="button" id="menuToggle" class="menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <img class="logo" src="img/keybelt_logo_horizontal_ivory.png" alt="KeyBelt" />
+      <div class="topbar-text">
+        <p>Documentation</p>
+      </div>
+      <input type="search" id="searchInput" class="search" placeholder="Search tools…" autocomplete="off" />
+    </header>
+
+    <div class="body">
+      <aside id="sidebar" class="sidebar">
+        <nav id="nav" class="nav" aria-label="Tools"></nav>
+      </aside>
+      <div id="overlay" class="overlay" hidden></div>
+      <main id="content" class="content" tabindex="-1">
+        <section class="welcome">
+          <h2>Welcome</h2>
+          <p>Pick a tool on the left to learn what it does and how to use it. MotionTrail is in BETA in this release.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/categories.js"></script>
+  <script src="js/content.js"></script>
+  <script src="js/keys-playground.js"></script>
+  <script src="js/ui-mocks.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

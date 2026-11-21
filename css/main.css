@@ -1149,6 +1149,59 @@ canvas {
     letter-spacing: 0.04em;
 }
 
+.tools-pitch {
+    margin: 0;
+    max-width: 640px;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #A5A692;
+}
+
+.tools-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tools-btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 1px solid rgba(165, 166, 146, 0.4);
+    color: #A5A692;
+    text-decoration: none;
+    font-weight: 700;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.tools-btn:hover,
+.tools-btn:focus-visible {
+    border-color: #F2A71B;
+    color: #F2A71B;
+    outline: none;
+}
+
+.tools-btn-primary {
+    background: #F2A71B;
+    border-color: #F2A71B;
+    color: #1a1200;
+}
+
+.tools-btn-primary:hover,
+.tools-btn-primary:focus-visible {
+    background: #ffc04d;
+    color: #1a1200;
+}
+
+.tools-subheading {
+    margin: 12px 0 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #A5A692;
+    letter-spacing: 0.04em;
+}
+
 .tools-image-wrap {
     position: relative;
     display: block;
