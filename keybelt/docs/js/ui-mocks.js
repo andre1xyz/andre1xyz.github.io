@@ -5,7 +5,7 @@ window.UI_MOCKS = {
   Offseter: {
     title: "Offseter",
     oneshot: true,
-    hint: "No window — toggles offset mode from timeline / launch.",
+    hint: "No window. Toggles offset mode from timeline / launch.",
     blocks: [
       { type: "status", text: "Mode: OFF → ON" },
       { type: "btns", items: ["Toggle Offset"] },
@@ -40,7 +40,7 @@ window.UI_MOCKS = {
   Reset_All: {
     title: "Reset All",
     oneshot: true,
-    hint: "No window — resets keyable attrs on selection when launched.",
+    hint: "No window. Resets keyable attrs on selection when launched.",
     blocks: [
       { type: "status", text: "Select controls → launch" },
       { type: "btns", items: ["Reset Keyables"] },
@@ -93,7 +93,7 @@ window.UI_MOCKS = {
   RadialMenu: {
     title: "Radial Menu",
     blocks: [
-      { type: "note", text: "Floating pie — hotkey (default Alt+Q). Not a form window." },
+      { type: "note", text: "Floating pie, opened with the hotkey (default Alt+Q). Not a form window." },
       { type: "radial" },
       { type: "note", text: "Tool list edited in Settings → Radial & Viewport Bar." }
     ]
@@ -252,7 +252,7 @@ window.UiMocks = (function () {
         '<div class="mock-ui-panel"><p class="mock-note">No UI preview for this tool.</p></div>';
       return;
     }
-    var color = accent || "#5f87cd";
+    var color = "#E5484D";
     var html =
       '<div class="mock-ui-panel" style="--mock-accent:' +
       color +

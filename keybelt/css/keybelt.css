@@ -347,7 +347,7 @@ input[type="range"]:focus-visible { outline-offset: 4px; }
 .lic-list .ico { width: 1.15rem; height: 1.15rem; margin-top: .2em; stroke-width: 2.2; }
 .lic-list.yes .ico { color: var(--accent-text); }
 .lic-list.no .ico { color: var(--text-faint); }
-.kb-callout { border-left: 3px solid var(--text-faint); padding: 14px 18px; background: var(--accent-dim); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--text); margin-bottom: 24px; }
+.kb-callout { border-left: 3px solid var(--text-faint); padding: 14px 18px; background: var(--bg-sunken); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--text); margin-bottom: 24px; }
 .kb-callout p { margin: 0; }
 
 /* ---------- CTA band + footer ---------- */

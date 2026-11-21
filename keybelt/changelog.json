@@ -34,7 +34,7 @@
     "date": "",
     "items": [
       "First public release of KeyBelt, an animation toolset for Maya.",
-      "Tools: Baker, Keys Editor, Offseter, Reset All, Selector, Motion Trail (BETA).",
+      "Tools: Baker, Keys Editor, Offseter, Reset All, Selector, Motion Trail.",
       "Dockable tool window, timeline toolbar with Keys Editor sliders, floating Viewport Bar, radial menu (default Alt+Q) and a Settings window (toolbars, hotkeys, quick access, docs).",
       "Local HTML documentation (Settings > Documentation).",
       "Drag and drop installer: KeyBelt shelf tab plus auto-start through userSetup.py; uninstall() helper."

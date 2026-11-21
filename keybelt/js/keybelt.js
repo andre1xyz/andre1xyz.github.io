@@ -1,4 +1,9 @@
 /* KeyBelt site. Vanilla JS, no dependencies. Loaded with defer from every page. */
+
+/* Web3Forms access key for the feedback form. The ONLY place it is set.
+   Empty = the form shows "coming online shortly" and the submit button stays disabled. */
+const WEB3FORMS_KEY = "";
+
 (function () {
   "use strict";
 
@@ -65,7 +70,7 @@
     document.addEventListener("click", function (e) {
       if (nav.classList.contains("open") && !nav.contains(e.target) && !menuBtn.contains(e.target)) { setMenu(false); }
     });
-    window.addEventListener("resize", function () { if (window.innerWidth > 960) { setMenu(false); } });
+    window.addEventListener("resize", function () { if (window.innerWidth > 1060) { setMenu(false); } });
   }
 
   /* ---------- toast + copy ---------- */
@@ -141,10 +146,11 @@
     ["Pages", "page", "Home", "", "Overview, start here", "home"],
     ["Pages", "page", "Features", "features/", "All tools and interface features", "bolt"],
     ["Pages", "page", "Download", "download/", "Get KeyBelt, version, checksum, install", "download"],
-    ["Pages", "page", "Editions and roadmap", "editions/", "Free, Pro, Studio, upcoming tools", "layers"],
+    ["Pages", "page", "Editions and roadmap", "editions/", "Free (beta), Pro (planned), upcoming tools", "layers"],
     ["Pages", "page", "Changelog", "changelog/", "Release notes, what is new", "list"],
     ["Pages", "page", "License", "license/", "EULA summary, free to use, not open source", "shield"],
     ["Pages", "page", "Documentation", "docs/", "Full documentation app", "book"],
+    ["Pages", "page", "Feedback", "feedback/", "Report a bug, suggest an idea, ask a question", "chat"],
     ["Pages", "page", "Tools on the main site", "../tools/", "Andreu Pellisa, tools overview", "external"],
     ["Pages", "page", "Portfolio site", "../", "Andreu Pellisa, 3D animation portfolio", "external"],
     ["Features", "feat", "Keys Editor", "features/#keyseditor", "sliders smooth push pull interpolate ease wave offset cleanup", "keyseditor"],
@@ -152,7 +158,7 @@
     ["Features", "feat", "Offseter", "features/#offseter", "offset animation transform", "offseter"],
     ["Features", "feat", "Reset All", "features/#resetall", "reset channels defaults", "resetall"],
     ["Features", "feat", "Selector", "features/#selector", "selection sets hud colour chips", "selector"],
-    ["Features", "feat", "Motion Trail", "features/#motiontrail", "motion trails viewport beta handles", "motiontrail"],
+    ["Features", "feat", "Motion Trail", "features/#motiontrail", "motion trails viewport handles agora", "motiontrail"],
     ["Features", "feat", "Radial menu", "features/#radialmenu", "wheel alt q marking menu", "radial"],
     ["Features", "feat", "Timeline toolbar", "features/#timelinetoolbarsettings", "toolbar under timeline sliders buttons settings", "timelinetoolbarsettings"],
     ["Features", "feat", "Graph Editor toolbar", "features/#graph-toolbar", "graph editor sliders toolbar", "graph"],
@@ -166,6 +172,7 @@
     ["Docs", "doc", "Docs: Motion Trail", "docs/#motiontrail", "documentation", "motiontrail"],
     ["Docs", "doc", "Docs: Radial Menu", "docs/#radialmenu", "documentation", "radialmenu"],
     ["Docs", "doc", "Docs: Settings", "docs/#timelinetoolbarsettings", "documentation toolbars hotkeys", "timelinetoolbarsettings"],
+    ["Actions", "act", "Send feedback", "feedback/", "bug idea question report beta", "chat"],
     ["Actions", "act", "Buy me a coffee", "https://ko-fi.com/andreupellisa", "support ko-fi", "coffee"],
     ["Actions", "act", "Toggle light / dark theme", "#theme", "theme appearance", "sun"]
   ];
@@ -352,62 +359,104 @@
   }
   function diamond(x, y, r) { return "M" + x + " " + (y - r) + "l" + r + " " + r + " " + (-r) + " " + r + " " + (-r) + " " + (-r) + "z"; }
 
-  /* ---------- hero: animated timeline with keyframe ticks ---------- */
+  /* ---------- hero: Time Slider illustration (ruler, red key ticks, playhead) ---------- */
   var tl = $("#tl");
   if (tl) {
-    var W = 960, H = 200, PAD = 12, PX = 3.9, TOP = 30;
-    var keys = [[0, .2], [18, .72], [42, .38], [66, .86], [96, .3], [120, .64], [150, .22], [174, .7], [204, .4], [236, .8]];
-    var sv = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Animated timeline: a playhead scrubs across a curve and lights up keyframes" }, tl);
-    var defs = svg("defs", {}, sv), clip = svg("clipPath", { id: "tl-clip" }, defs), crect = svg("rect", { x: 0, y: 0, width: 0, height: H }, clip);
-    for (var f = 0; f <= 240; f += 4) {
-      var x = PAD + f * PX, major = f % 24 === 0;
-      svg("line", { "class": "tick" + (major ? " tick-major" : ""), x1: x, x2: x, y1: major ? 4 : 12, y2: 22 }, sv);
-      if (major) { var tx = svg("text", { "class": "tl-label", x: x + 3, y: 12 }, sv); tx.textContent = f; }
+    var W = 960, H = 76, PAD = 18, F0 = 1, F1 = 120, R0 = 1, R1 = 96;
+    var PX = (W - 2 * PAD) / (F1 - F0);
+    var KEYS = [1, 9, 17, 24, 33, 41, 52, 60, 71, 80, 88, 96];
+    var fx = function (f) { return PAD + (f - F0) * PX; };
+    var sv = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Illustration of a Maya Time Slider: frame numbers, red ticks where keys are set, and a playhead moving across frames 1 to 96" }, tl);
+    svg("rect", { "class": "range", x: fx(R0), y: 0, width: fx(R1) - fx(R0), height: H }, sv);
+    for (var f = F0; f <= F1; f++) {
+      var major = f % 10 === 0 || f === 1, mid = f % 5 === 0;
+      svg("line", { "class": "tick" + (major ? " tick-major" : ""), x1: fx(f), x2: fx(f), y1: major ? 20 : (mid ? 24 : 28), y2: 34 }, sv);
+      if (major) { var tx = svg("text", { "class": "tl-label", x: fx(f), y: 14, "text-anchor": "middle" }, sv); tx.textContent = f; }
     }
-    var pts = keys.map(function (k) { return [PAD + k[0] * PX, TOP + 20 + (1 - k[1]) * (H - TOP - 50)]; });
-    var dpath = curvePath(pts);
-    svg("path", { "class": "curve-base", d: dpath }, sv);
-    svg("path", { "class": "curve-live", d: dpath, "clip-path": "url(#tl-clip)" }, sv);
-    var kEls = pts.map(function (p, i) {
-      var k = svg("path", { "class": "key", d: diamond(p[0].toFixed(1), p[1].toFixed(1), 8) }, sv);
-      var rt = svg("line", { "class": "key", x1: p[0], x2: p[0], y1: 3, y2: 22, "stroke-width": 3, "stroke-linecap": "round" }, sv);
-      return [k, rt];
-    });
+    KEYS.forEach(function (k) { svg("line", { "class": "ktick", x1: fx(k), x2: fx(k), y1: 38, y2: H - 6 }, sv); });
     var head = svg("g", { "class": "head" }, sv);
-    svg("line", { x1: 0, x2: 0, y1: 0, y2: H }, head);
-    svg("polygon", { points: "-6,0 6,0 0,10" }, head);
-    var ft = svg("text", { x: 9, y: H - 8 }, head);
-    var lastF = -1;
-    var setT = function (t) {
-      var fr = t * 240, x = PAD + fr * PX;
-      head.setAttribute("transform", "translate(" + x.toFixed(1) + " 0)");
-      crect.setAttribute("width", x.toFixed(1));
-      var n = Math.round(fr);
-      if (n !== lastF) {
-        lastF = n; ft.textContent = "f " + (n < 100 ? (n < 10 ? "00" : "0") : "") + n;
-        keys.forEach(function (k, i) {
-          var on = k[0] <= fr;
-          kEls[i][0].classList.toggle("on", on); kEls[i][1].classList.toggle("on", on);
-        });
-      }
+    svg("line", { x1: 0, x2: 0, y1: 18, y2: H }, head);
+    svg("rect", { x: -16, y: 1, width: 32, height: 17, rx: 3 }, head);
+    var ft = svg("text", { x: 0, y: 13.5 }, head);
+    var setF = function (fr) {
+      var n = Math.max(R0, Math.min(R1, Math.round(fr)));
+      head.setAttribute("transform", "translate(" + fx(n).toFixed(1) + " 0)");
+      ft.textContent = n;
     };
-    var running = false, visible = true, t0 = 0, DUR = 9000, HOLD = 900;
+    var running = false, visible = true, t0 = 0, DUR = 4000, HOLD = 700;
     var frame = function (now) {
       if (!running) { return; }
       if (!t0) { t0 = now; }
       var el_ = (now - t0) % (DUR + HOLD);
-      setT(Math.min(1, el_ / DUR));
+      setF(R0 + Math.min(1, el_ / DUR) * (R1 - R0));
       requestAnimationFrame(frame);
     };
     var sync = function () {
       var want = !reduce.matches && visible && !document.hidden;
       if (want && !running) { running = true; t0 = 0; requestAnimationFrame(frame); }
-      else if (!want) { running = false; if (reduce.matches) { setT(.64); } }
+      else if (!want) { running = false; if (reduce.matches) { setF(41); } }
     };
     if ("IntersectionObserver" in window) { new IntersectionObserver(function (en) { visible = en[0].isIntersecting; sync(); }).observe(tl); }
     document.addEventListener("visibilitychange", sync);
     if (reduce.addEventListener) { reduce.addEventListener("change", sync); }
-    setT(reduce.matches ? .64 : 0); sync();
+    setF(reduce.matches ? 41 : 1); sync();
+  }
+
+  /* ---------- feedback form (Web3Forms) ---------- */
+  var fb = $("#fb-form");
+  if (fb) {
+    var fbSend = $("#fb-send"), fbStatus = $("#fb-status"), fbSoon = $("#fb-soon"), fbFrom = $("#fb-from"), fbVer = $("#fb-kb");
+    var params = new URLSearchParams(location.search), fromApp = params.get("from") === "app";
+    var qv = (params.get("v") || "").trim();
+    var live = !!WEB3FORMS_KEY;
+    if (qv && /^[0-9A-Za-z.+_-]{1,24}$/.test(qv)) { fbVer.value = qv; if (fromApp && fbFrom) { fbFrom.hidden = false; } }
+    else { getVersion().then(function (v) { if (v && v.version && !fbVer.dataset.touched) { fbVer.value = v.version; } }).catch(function () {}); }
+    fbVer.addEventListener("input", function () { fbVer.dataset.touched = "1"; });
+    if (live) { if (fbSoon) { fbSoon.hidden = true; } fbSend.disabled = false; }
+    var say = function (cls, msg) {
+      fbStatus.className = "kb-state" + (cls ? " " + cls : "");
+      fbStatus.textContent = "";
+      if (msg) { fbStatus.appendChild(el("p", "", msg)); }
+    };
+    fb.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      if (!live) { return; }
+      var f = fb.elements;
+      if (f.botcheck && f.botcheck.checked) { say("ok", "Thanks, your message was sent."); fb.reset(); return; }  // honeypot: pretend success
+      if (!fb.checkValidity()) { fb.reportValidity(); return; }
+      var type = f.type.value;
+      var payload = {
+        access_key: WEB3FORMS_KEY,
+        subject: "KeyBelt feedback: " + type,
+        from_name: "KeyBelt site",
+        type: type,
+        message: f.message.value.trim(),
+        maya_version: f.maya_version.value.trim() || "not given",
+        keybelt_version: f.keybelt_version.value.trim() || "not given",
+        source: fromApp ? "in-app link" : "website",
+        page: location.href.split("?")[0]
+      };
+      if (f.name.value.trim()) { payload.name = f.name.value.trim(); }
+      if (f.email.value.trim()) { payload.email = f.email.value.trim(); }
+      fbSend.disabled = true; $(".lbl", fbSend).textContent = "Sending";
+      say("", "Sending your message.");
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          if (res.ok && res.j && res.j.success) {
+            say("ok", "Thanks, your message was sent. If you left an email address, I will reply there.");
+            fb.reset(); fbVer.value = qv || fbVer.value;
+          } else { throw new Error((res.j && res.j.message) || "failed"); }
+        }).catch(function () {
+          say("err", "The message could not be sent. Nothing was lost: it is still in the form. Try again in a moment.");
+        }).then(function () {
+          fbSend.disabled = false; $(".lbl", fbSend).textContent = "Send feedback";
+          fbStatus.focus();
+        });
+    });
   }
 
   /* ---------- interactive Keys Editor slider demo ---------- */

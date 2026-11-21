@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KeyBelt: animation toolset for Maya</title>
-<meta name="description" content="KeyBelt is an animation toolset for Maya: Keys Editor sliders, Baker, Offseter, radial menu, viewport bar and a Time Dragger HUD. Free edition available now.">
+<title>KeyBelt: sliders for your keys in Maya</title>
+<meta name="description" content="KeyBelt is a set of animation tools for Maya: Keys Editor sliders under the timeline, Baker, Offseter, a radial menu on Alt+Q and a Time Dragger HUD. Free to use, public beta.">
 <meta name="theme-color" content="#0D0D0D">
 <link rel="canonical" href="https://andre1xyz.github.io/keybelt/">
 <link rel="icon" type="image/png" sizes="32x32" href="img/brand/keybelt_app_dark_32.png">
@@ -13,28 +13,31 @@
 <link rel="apple-touch-icon" href="img/brand/keybelt_app_dark_256.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KeyBelt">
-<meta property="og:title" content="KeyBelt: animation toolset for Maya">
-<meta property="og:description" content="KeyBelt is an animation toolset for Maya: Keys Editor sliders, Baker, Offseter, radial menu, viewport bar and a Time Dragger HUD. Free edition available now.">
+<meta property="og:title" content="KeyBelt: sliders for your keys in Maya">
+<meta property="og:description" content="KeyBelt is a set of animation tools for Maya: Keys Editor sliders under the timeline, Baker, Offseter, a radial menu on Alt+Q and a Time Dragger HUD. Free to use, public beta.">
 <meta property="og:url" content="https://andre1xyz.github.io/keybelt/">
 <meta property="og:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="KeyBelt: animation toolset for Maya">
-<meta name="twitter:description" content="KeyBelt is an animation toolset for Maya: Keys Editor sliders, Baker, Offseter, radial menu, viewport bar and a Time Dragger HUD. Free edition available now.">
+<meta name="twitter:title" content="KeyBelt: sliders for your keys in Maya">
+<meta name="twitter:description" content="KeyBelt is a set of animation tools for Maya: Keys Editor sliders under the timeline, Baker, Offseter, a radial menu on Alt+Q and a Time Dragger HUD. Free to use, public beta.">
 <meta name="twitter:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
 <script>(function(){var d=document.documentElement,t=null;d.className+=" js";try{t=localStorage.getItem("kb-theme");if(t!=="light"&&t!=="dark")t=null}catch(e){}if(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)t="light";d.setAttribute("data-theme",t||"dark");var m=document.querySelector('meta[name="theme-color"]');if(m&&t==="light")m.setAttribute("content","#F7F7F5")}());</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/keybelt.css?v=3">
-<link rel="stylesheet" href="css/icons.css?v=3">
+<link rel="stylesheet" href="css/keybelt.css?v=4">
+<link rel="stylesheet" href="css/icons.css?v=4">
 </head>
 <body>
 <a class="kb-skip" href="#main">Skip to content</a>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-coffee" viewBox="0 0 24 24"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7M6 10v9h12v-9"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z"/></symbol><symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 4l9 5-9 5-9-5 9-5zM3 14l9 5 9-5"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4zM5 17a3 3 0 0 1 3-3h10"/></symbol><symbol id="i-toolbar" viewBox="0 0 24 24"><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 14v-3M12 14V6M17 14v-5"/></symbol><symbol id="i-graph" viewBox="0 0 24 24"><path d="M4 4v16h16M7 15c3-9 5 3 8-4s3-2 4-4"/></symbol><symbol id="i-radial" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/><path d="M12 3v6.4M12 14.6V21M3 12h6.4M14.6 12H21"/></symbol><symbol id="i-bar" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></symbol><symbol id="i-windows" viewBox="0 0 24 24"><path d="M3 5.5l8-1.2v7H3zM13 4l8-1.2v8.7h-8zM3 12.6h8v7.1l-8-1.2zM13 12.6h8v8.7l-8-1.3z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></symbol><symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4M11 9h2M11 12h2M11 15h2"/></symbol><symbol id="i-hash" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14M10 4L8 20M16 4l-2 16"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></symbol><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol><symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-coffee" viewBox="0 0 24 24"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7M6 10v9h12v-9"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z"/></symbol><symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 4l9 5-9 5-9-5 9-5zM3 14l9 5 9-5"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4zM5 17a3 3 0 0 1 3-3h10"/></symbol><symbol id="i-toolbar" viewBox="0 0 24 24"><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 14v-3M12 14V6M17 14v-5"/></symbol><symbol id="i-graph" viewBox="0 0 24 24"><path d="M4 4v16h16M7 15c3-9 5 3 8-4s3-2 4-4"/></symbol><symbol id="i-radial" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/><path d="M12 3v6.4M12 14.6V21M3 12h6.4M14.6 12H21"/></symbol><symbol id="i-bar" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></symbol><symbol id="i-windows" viewBox="0 0 24 24"><path d="M3 5.5l8-1.2v7H3zM13 4l8-1.2v8.7h-8zM3 12.6h8v7.1l-8-1.2zM13 12.6h8v8.7l-8-1.3z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></symbol><symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4M11 9h2M11 12h2M11 15h2"/></symbol><symbol id="i-hash" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14M10 4L8 20M16 4l-2 16"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></symbol></defs></svg>
 <header class="kb-header"><div class="kb-bar">
-  <a class="kb-brand" href="./" aria-label="KeyBelt home"><span class="logo-mark" aria-hidden="true"></span><span class="logo-word" aria-hidden="true"></span></a>
+  <div class="kb-brandwrap">
+    <a class="kb-brand" href="./" aria-label="KeyBelt home"><span class="logo-mark" aria-hidden="true"></span><span class="logo-word" aria-hidden="true"></span></a>
+    <span class="kb-beta" title="KeyBelt is in public beta">Beta</span>
+  </div>
   <nav id="kb-nav" class="kb-nav" aria-label="Main">
     <a class="kb-nav-ext" href="./" aria-current="page">Home</a>
     <a href="features/">Features</a>
@@ -43,6 +46,7 @@
     <a href="changelog/">Changelog</a>
     <a href="license/">License</a>
     <a href="docs/">Docs</a>
+    <a href="feedback/">Feedback</a>
     <a class="kb-nav-ext" href="../">Main site</a>
   </nav>
   <div class="kb-tools">
@@ -55,42 +59,37 @@
 <main id="main">
 
 <section class="kb-hero">
-  <span class="kb-hero-art" aria-hidden="true"><span class="logo-outline"></span></span>
   <div class="wrap">
-    <span class="kb-eyebrow">Animation toolset for Maya</span>
-    <h1>Keys, under <em>control</em>.</h1>
-    <p class="kb-lead">KeyBelt brings slider-based key editing, baking, a radial menu and an endless scrub HUD into Maya. One drag-and-drop install.</p>
+    <span class="kb-eyebrow">Animation tools for Maya &middot; Public beta</span>
+    <h1>Sliders for your keys, under the timeline.</h1>
+    <p class="kb-lead">KeyBelt is a set of animation tools for Maya. Select some keys, drag a slider, and the curves change as you drag: smooth them, push or pull them, add a wave, offset them down a chain. It also bakes in world or camera space and puts a radial menu on Alt+Q.</p>
     <div class="kb-cta">
-      <a class="kb-btn kb-btn-primary kb-btn-lg" href="download/"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-download"/></svg><span>Download</span></a>
-      <a class="kb-btn kb-btn-coffee" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a>
+      <a class="kb-btn kb-btn-primary kb-btn-lg" href="download/"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-download"/></svg><span>Download 0.2.0</span></a>
+      <a class="kb-btn kb-btn-coffee kb-btn-lg" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a>
       <a class="kb-btn kb-btn-lg" href="docs/">Documentation</a>
     </div>
-    <div class="kb-meta"><span>Free edition</span><span>Windows</span><span>Maya 2023 to 2026</span></div>
+    <p class="kb-meta">Free to use &middot; Windows &middot; Maya 2023 to 2026</p>
+    <p class="kb-betaline"><strong>Public beta:</strong> expect rough edges. <a href="feedback/">Feedback helps.</a></p>
     <div class="tl" id="tl"></div>
-    <div class="tl-caption"><span>Keyframes light up as the playhead passes.</span><span>Decorative animation</span></div>
+    <p class="tl-caption">Maya's Time Slider has frame numbers, a red tick for each key and a playhead. This is an illustration, not a screenshot.</p>
   </div>
 </section>
 
-<section class="kb-section"><div class="wrap">
-  <div class="kb-head reveal"><span class="kb-eyebrow">Editions</span><h2>The Free edition is available now</h2>
-  <p class="kb-lead">KeyBelt is free to use, for personal and commercial work. It is <strong>not open source</strong>, and the Free edition holds the core tools. More advanced tools are planned for a Pro edition.</p></div>
-  <div class="kb-panel reveal">
-    <p class="muted" style="margin-bottom:12px">In the Free edition today:</p>
-    <p><span class="kb-badge kb-badge-plain">Keys Editor</span> <span class="kb-badge kb-badge-plain">Baker</span> <span class="kb-badge kb-badge-plain">Offseter</span> <span class="kb-badge kb-badge-plain">Reset All</span> <span class="kb-badge kb-badge-plain">Selector</span> <span class="kb-badge kb-badge-plain">Motion Trail (beta)</span> <span class="kb-badge kb-badge-plain">Radial menu</span> <span class="kb-badge kb-badge-plain">Toolbars</span> <span class="kb-badge kb-badge-plain">Time Dragger HUD</span> </p>
-    <div class="kb-cta" style="margin-top:8px"><a class="kb-btn" href="editions/">See editions and roadmap <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a><a class="kb-btn" href="license/">License summary</a></div>
+<section class="kb-section kb-why"><div class="wrap">
+  <div class="kb-split-text">
+    <div><span class="kb-eyebrow">Why KeyBelt</span><h2>Made by an animator, for animators</h2></div>
+    <div class="kb-prose">
+      <p>I'm Andreu, an animator. I built KeyBelt to use in Maya on my own shots, and it is tested in production. A tool only stays in if it holds up there.</p>
+      <p>The goal is control over every part of the animation, with as little technical difficulty as I can manage. If a tool makes you think about Maya instead of the shot, I count that as a bug in the tool.</p>
+      <p class="sig">Andreu Pellisa</p>
+    </div>
   </div>
 </div></section>
 
 <section class="kb-section"><div class="wrap">
-  <div class="kb-head reveal"><span class="kb-eyebrow">Highlights</span><h2>Built for the way animators work</h2></div>
-  <div class="kb-grid kb-grid-sm"><a class="kb-card reveal" href="features/#keyseditor" style="text-decoration:none;color:inherit;--d:0ms"><span class="ico-wrap"><span class="ico ico-keyseditor " aria-hidden="true"></span></span><h3>Keys Editor</h3><p>Sliders that sculpt your curves live: smooth, push / pull, ease, wave and more.</p><span class="more">Details <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></a><a class="kb-card reveal" href="features/#baker" style="text-decoration:none;color:inherit;--d:60ms"><span class="ico-wrap"><span class="ico ico-baker " aria-hidden="true"></span></span><h3>Baker</h3><p>Bake in world, object or camera space without leaving your scene.</p><span class="more">Details <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></a><a class="kb-card reveal" href="features/#radialmenu" style="text-decoration:none;color:inherit;--d:120ms"><span class="ico-wrap"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-radial"/></svg></span><h3>Radial menu</h3><p>A wheel on Alt+Q with the tools you reach for most.</p><span class="more">Details <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></a><a class="kb-card reveal" href="features/#time-dragger" style="text-decoration:none;color:inherit;--d:180ms"><span class="ico-wrap"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-clock"/></svg></span><h3>Time Dragger HUD</h3><p>An endless scrub with a temporary timeline, fine and coarse modes.</p><span class="more">Details <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span></a></div>
-  <p style="margin-top:20px" class="reveal"><a class="more" href="features/" style="font-weight:600">All features <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a></p>
-</div></section>
-
-<section class="kb-section"><div class="wrap">
-  <div class="kb-head reveal"><span class="kb-eyebrow">Try it</span><h2>Feel the Keys Editor slider</h2>
-  <p class="kb-lead">Drag the slider and watch the curve ease into its new shape. A simplified preview: in Maya, the same idea works on your own selected keys.</p></div>
-  <div class="demo reveal" id="demo">
+  <div class="kb-head"><span class="kb-eyebrow">The Keys Editor</span><h2>What a slider does to your keys</h2>
+  <p class="kb-lead">In Maya the slider works on the keys you have selected. Here it works on eight made-up keys, so you can see each mode. Smooth averages each key with its neighbours. Push / Pull moves keys away from, or toward, the line between the first and last key. Wave adds a sine offset.</p></div>
+  <div class="demo" id="demo">
     <div class="ctl">
       <div class="seg" id="demo-modes" role="group" aria-label="Effect">
         <button type="button" data-mode="smooth" aria-pressed="true">Smooth</button>
@@ -99,14 +98,35 @@
       </div>
       <div class="slider-row"><label for="demo-slider"><span id="demo-name">Smooth</span><output id="demo-out" for="demo-slider">0</output></label>
       <input id="demo-slider" type="range" min="0" max="100" step="1" value="0"></div>
-      <p class="kb-note">Double-click the slider to reset it, just like in the tool.</p>
+      <p class="kb-note">Double-click the slider to reset it, as in the tool. The dashed line is the original curve.</p>
     </div>
     <div class="demo-stage" id="demo-stage"></div>
   </div>
-  
 </div></section>
-<section class="kb-section"><div class="wrap"><div class="kb-band reveal">
-  <h2>Get KeyBelt</h2><p>Free to use. One drag-and-drop install, Windows, Maya 2023 to 2026.</p>
+
+<section class="kb-section"><div class="wrap">
+  <div class="kb-head"><span class="kb-eyebrow">In 0.2.0</span><h2>What is in it today</h2></div>
+  <ul class="kb-rows"><li class="kb-row"><h3><span class="ico ico-keyseditor " aria-hidden="true"></span><a href="features/#keyseditor">Keys Editor</a></h3><p>Sliders on the selected keys: smooth, push / pull, interpolate, ease, wave, offset. Buttons delete flat or redundant keys, and bake.</p></li><li class="kb-row"><h3><span class="ico ico-baker " aria-hidden="true"></span><a href="features/#baker">Baker</a></h3><p>Bakes to every frame in world space, in another object&#x27;s space or in a camera&#x27;s.</p></li><li class="kb-row"><h3><span class="ico ico-offseter " aria-hidden="true"></span><a href="features/#offseter">Offseter</a></h3><p>Move the object and the whole animation follows.</p></li><li class="kb-row"><h3><span class="ico ico-resetall " aria-hidden="true"></span><a href="features/#resetall">Reset All</a></h3><p>Every keyable channel back to its default, in one undo step.</p></li><li class="kb-row"><h3><span class="ico ico-selector " aria-hidden="true"></span><a href="features/#selector">Selector</a></h3><p>An always-on-top HUD for selection sets.</p></li><li class="kb-row"><h3><span class="ico ico-motiontrail " aria-hidden="true"></span><a href="features/#motiontrail">Motion Trail</a></h3><p>Object paths in the viewport, world or camera relative.</p></li><li class="kb-row"><h3><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-radial"/></svg><a href="features/#radialmenu">Radial menu</a></h3><p>A wheel at the cursor on Alt+Q.</p></li><li class="kb-row"><h3><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-clock"/></svg><a href="features/#time-dragger">Time Dragger HUD</a></h3><p>Endless scrub with a temporary timeline.</p></li></ul>
+  <p class="kb-after"><a href="features/">Details for each tool, with links to the docs <svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a></p>
+</div></section>
+
+<section class="kb-section"><div class="wrap">
+  <div class="kb-split-text">
+    <div><span class="kb-eyebrow">Public beta</span><h2>All of it is beta</h2></div>
+    <div class="kb-prose">
+      <p>KeyBelt 0.2.0 is a public beta. That includes every tool, not only the newest ones.</p>
+      <ul class="kb-list">
+        <li>Things can break or change between versions. Save your scene before you try something new.</li>
+        <li>Your settings are kept when you update.</li>
+        <li>Windows only, Maya 2023 to 2026. No macOS or Linux build yet.</li>
+        <li>It is free to use and not open source. A Pro edition with more tools is planned. There is no date and no price.</li>
+      </ul>
+      <p>If something breaks, or a tool is missing a feature you need, <a href="feedback/">tell me on the feedback page</a>.</p>
+    </div>
+  </div>
+</div></section>
+<section class="kb-section"><div class="wrap"><div class="kb-band">
+  <div><h2>Try it</h2><p>Free to use. Windows, Maya 2023 to 2026. Install by dragging one file into Maya.</p></div>
   <div class="kb-cta"><a class="kb-btn kb-btn-primary kb-btn-lg" href="download/"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-download"/></svg><span>Download</span></a><a class="kb-btn kb-btn-coffee" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a></div>
 </div></div></section>
 
@@ -115,15 +135,15 @@
   <div class="kb-foot">
     <div>
       <span class="logo-word" role="img" aria-label="KeyBelt"></span>
-      <p class="about">Animation tools for Maya. Free to use, not open source.</p>
+      <p class="about">Animation tools for Maya. Free to use, not open source. Public beta.</p>
       <a class="kb-btn kb-btn-coffee" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a>
     </div>
     <div><h4>Product</h4><ul>
       <li><a href="features/">Features</a></li><li><a href="download/">Download</a></li>
       <li><a href="editions/">Editions and roadmap</a></li><li><a href="changelog/">Changelog</a></li></ul></div>
     <div><h4>Resources</h4><ul>
-      <li><a href="docs/">Documentation</a></li><li><a href="license/">License</a></li>
-      <li><a href="version.json">version.json</a></li></ul></div>
+      <li><a href="docs/">Documentation</a></li><li><a href="feedback/">Feedback</a></li>
+      <li><a href="license/">License</a></li><li><a href="version.json">version.json</a></li></ul></div>
     <div><h4>Andreu Pellisa</h4><ul>
       <li><a href="../">Portfolio</a></li><li><a href="../tools/">Tools</a></li>
       <li><a href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener">Ko-fi</a></li></ul></div>
@@ -131,6 +151,6 @@
   <div class="kb-legal"><span>&copy; 2026 Andreu Pellisa. KeyBelt is licensed, not sold. See the <a href="license/">license summary</a>.</span>
   <span>Autodesk and Maya are trademarks of Autodesk, Inc. KeyBelt is not affiliated with Autodesk.</span></div>
 </div></footer>
-<script src="js/keybelt.js?v=3" defer></script>
+<script src="js/keybelt.js?v=4" defer></script>
 </body>
 </html>

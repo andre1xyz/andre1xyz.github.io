@@ -1,8 +1,8 @@
-/* Hand-written animator docs — not TOOL_INFO dumps */
+/* Hand-written animator docs, not TOOL_INFO dumps */
 window.TOOL_DOCS = {
 
   KeysEditor: {
-    what: "Sculpt and clean animation curves on selected controls. Drag a slider while keys (or a range) are selected — the effect applies live. Double-click any slider to reset it to zero. Optional timeline toolbar sliders drive the same effects from the timeline.",
+    what: "Sculpt and clean animation curves on selected controls. Drag a slider while keys (or a range) are selected and the effect applies live. Double-click any slider to reset it to zero. Optional timeline toolbar sliders drive the same effects from the timeline.",
     when: [
       "Curves look noisy or stepped after blocking",
       "Need ease-in/out, wave/noise, or peak shaping on a range",
@@ -171,23 +171,23 @@ window.TOOL_DOCS = {
     ],
     scheme:
       '<svg viewBox="0 0 520 90" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="12" fill="#e8e8e8">' +
-      '<rect x="8" y="28" width="100" height="36" rx="6" fill="#3a3a3a" stroke="#569CD6"/>' +
+      '<rect x="8" y="28" width="100" height="36" rx="6" fill="#3a3a3a" stroke="#E5484D"/>' +
       '<text x="58" y="50" text-anchor="middle">Select keys</text>' +
       '<path d="M118 46h28" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<rect x="156" y="28" width="110" height="36" rx="6" fill="#3a3a3a" stroke="#569CD6"/>' +
+      '<rect x="156" y="28" width="110" height="36" rx="6" fill="#3a3a3a" stroke="#E5484D"/>' +
       '<text x="211" y="50" text-anchor="middle">Drag slider</text>' +
       '<path d="M276 46h28" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<rect x="314" y="28" width="90" height="36" rx="6" fill="#3a3a3a" stroke="#569CD6"/>' +
+      '<rect x="314" y="28" width="90" height="36" rx="6" fill="#3a3a3a" stroke="#E5484D"/>' +
       '<text x="359" y="50" text-anchor="middle">Shape OK</text>' +
       '<path d="M414 46h28" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<rect x="452" y="28" width="60" height="36" rx="6" fill="#569CD6"/>' +
+      '<rect x="452" y="28" width="60" height="36" rx="6" fill="#E5484D"/>' +
       '<text x="482" y="50" text-anchor="middle" fill="#1a1a1a" font-weight="700">Bake?</text>' +
       "</svg>",
     schemeCaption: "Select → drag slider → release → optional bake / cleanup",
     tips: [
       "Double-click any slider → reset to zero.",
       "All sliders are interactive now (DE, BD, SE, UE, DF, INF, WX too).",
-      "Buttons mutate the graph — try matching presets: Stepped→Del Flat, Redundant→Del Redundant, Off-frame→SNP, Sparse→Bake.",
+      "Buttons change the graph. Try matching presets: Stepped→Del Flat, Redundant→Del Redundant, Off-frame→SNP, Sparse→Bake.",
       "Click Demo cards on the left to drive sliders or fire buttons.",
       "Hierarchy presets needed for HOF / HPP."
     ]
@@ -204,7 +204,7 @@ window.TOOL_DOCS = {
     how: [
       "Enable Offseter (timeline button toggles active state).",
       "Select keys or leave selection empty to affect full curves.",
-      "Transform in the viewport — deltas apply to keys.",
+      "Transform in the viewport. The deltas apply to keys.",
       "Disable when done so normal editing returns."
     ],
     controls: [
@@ -213,7 +213,7 @@ window.TOOL_DOCS = {
       "Falls back to full curve if nothing selected",
       "Tracks translate / rotate / scale"
     ],
-    tips: ["Leave it off when not offsetting — avoids surprise curve edits."]
+    tips: ["Leave it off when not offsetting. It avoids surprise curve edits."]
   },
 
   Baker: {
@@ -237,19 +237,19 @@ window.TOOL_DOCS = {
     ],
     scheme:
       '<svg viewBox="0 0 520 90" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" fill="#e8e8e8">' +
-      '<rect x="6" y="28" width="88" height="36" rx="6" fill="#3a3a3a" stroke="#FFFF00"/>' +
+      '<rect x="6" y="28" width="88" height="36" rx="6" fill="#3a3a3a" stroke="#E5484D"/>' +
       '<text x="50" y="50" text-anchor="middle">Originals</text>' +
       '<path d="M100 46h24" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<rect x="130" y="28" width="88" height="36" rx="6" fill="#3a3a3a" stroke="#FFFF00"/>' +
+      '<rect x="130" y="28" width="88" height="36" rx="6" fill="#3a3a3a" stroke="#E5484D"/>' +
       '<text x="174" y="50" text-anchor="middle">Space</text>' +
       '<path d="M224 46h24" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<circle cx="290" cy="46" r="22" fill="#3a3a3a" stroke="#FFFF00" stroke-width="2"/>' +
+      '<circle cx="290" cy="46" r="22" fill="#3a3a3a" stroke="#E5484D" stroke-width="2"/>' +
       '<text x="290" y="50" text-anchor="middle">Circles</text>' +
       '<path d="M318 46h24" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<rect x="348" y="28" width="70" height="36" rx="6" fill="#3a3a3a" stroke="#FFFF00"/>' +
+      '<rect x="348" y="28" width="70" height="36" rx="6" fill="#3a3a3a" stroke="#E5484D"/>' +
       '<text x="383" y="50" text-anchor="middle">Polish</text>' +
       '<path d="M424 46h20" stroke="#a0a0a0" stroke-width="2"/>' +
-      '<rect x="450" y="28" width="64" height="36" rx="6" fill="#FFFF00"/>' +
+      '<rect x="450" y="28" width="64" height="36" rx="6" fill="#E5484D"/>' +
       '<text x="482" y="50" text-anchor="middle" fill="#1a1a1a" font-weight="700">Bake↓</text>' +
       "</svg>",
     schemeCaption: "Originals → space → circles → polish → bake down"
@@ -264,7 +264,7 @@ window.TOOL_DOCS = {
 
 
   Reset_All: {
-    what: "One-click reset of all keyable attributes on the selection back to defaults. No UI — runs when launched.",
+    what: "One-click reset of all keyable attributes on the selection back to defaults. No UI, it runs when launched.",
     when: [
       "Controls drifted from default pose",
       "Need a clean zero before starting a new beat"
@@ -277,7 +277,7 @@ window.TOOL_DOCS = {
     controls: [
       "TRS + other keyable channels",
       "Skips locked / unsettable",
-      "No dialog — immediate action"
+      "No dialog, it acts immediately"
     ],
     tips: ["Undo once if you fired it by mistake."]
   },
@@ -292,7 +292,8 @@ window.TOOL_DOCS = {
 
 
   MotionTrail: {
-    what: "BETA — visual motion path for tracking how an object travels over time. World or camera-relative trails with fade, color, and optional mesh rivets.",
+    what: "A visual motion path that shows how an object travels over time. World or camera-relative trails with fade, color, and optional mesh rivets.",
+    credit: "Built on the Agora Community motion trail, used as the base and then modified and improved for KeyBelt. It is not an Agora product and is not endorsed by Agora.",
     when: [
       "Checking arc quality in the viewport",
       "Camera-relative path needed for screen-space motion"
@@ -311,8 +312,8 @@ window.TOOL_DOCS = {
     ],
     scheme:
       '<svg viewBox="0 0 420 90" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" fill="#e8e8e8">' +
-      '<path d="M30 60 C80 20 140 20 180 45 S280 85 360 30" fill="none" stroke="#C586C0" stroke-width="3" opacity="0.9"/>' +
-      '<circle cx="360" cy="30" r="8" fill="#C586C0"/>' +
+      '<path d="M30 60 C80 20 140 20 180 45 S280 85 360 30" fill="none" stroke="#E5484D" stroke-width="3" opacity="0.9"/>' +
+      '<circle cx="360" cy="30" r="8" fill="#E5484D"/>' +
       '<text x="210" y="82" text-anchor="middle" fill="#a0a0a0">Object path over time</text>' +
       "</svg>",
     schemeCaption: "Trail draws the motion arc through the shot"
@@ -358,7 +359,7 @@ window.TOOL_DOCS = {
     ],
     how: [
       "Hold/press the radial hotkey near the cursor.",
-      "Move toward a wedge — label appears.",
+      "Move toward a wedge and its label appears.",
       "Click to launch. Release/cancel to dismiss.",
       "Edit the tool list under Settings → Radial & Viewport Bar."
     ],
@@ -370,7 +371,7 @@ window.TOOL_DOCS = {
     ],
     scheme:
       '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="10" fill="#e8e8e8">' +
-      '<circle cx="100" cy="100" r="70" fill="#333" stroke="#D16969" stroke-width="2"/>' +
+      '<circle cx="100" cy="100" r="70" fill="#333" stroke="#E5484D" stroke-width="2"/>' +
       '<circle cx="100" cy="100" r="22" fill="#2b2b2b" stroke="#505050"/>' +
       '<line x1="100" y1="30" x2="100" y2="78" stroke="#505050"/>' +
       '<line x1="100" y1="122" x2="100" y2="170" stroke="#505050"/>' +
@@ -401,6 +402,22 @@ window.TOOL_DOCS = {
       "Time Dragger HUD (General, on by default): hold the Time Dragger key (Hotkeys tab, Maya default K) anywhere in Maya. A thin line-only timeline shows above the cursor: playback range (solid) vs outside it (dashed), keys of the selection (red, breakdowns green), time slider bookmarks, and the current frame (amber + offset when outside the range).",
       "While holding the key: LMB / MMB drag = scrub, endless (the cursor wraps at the screen edge). Shift = fine, Ctrl = coarse, wheel = one frame, Esc = back to the start frame. Off = Maya's own Time Dragger.",
       "Maya Preferences (General, on by default): turns off asset-centric selection (select objects inside containers) and Maya's cycle check warnings. Reapplied every time KeyBelt launches; unticking restores your previous Maya values."
+    ],
+    sections: [
+      {
+        title: "Window controls",
+        text: "Every KeyBelt window, including this one, can be moved and resized from anywhere on the window, not only from the title bar.",
+        items: [
+          "Move: hold the middle mouse button (MMB) and drag.",
+          "Resize: hold the right mouse button (RMB) and drag.",
+          "An RMB click without dragging still opens the context menu as usual.",
+          "Keys Editor sliders use MMB for their own shortcut popup, so start the window drag from somewhere else."
+        ]
+      },
+      {
+        title: "Feedback",
+        text: "General > Updates has a Send feedback button. It opens the KeyBelt feedback page in your browser."
+      }
     ],
     controls: [
       "General: alignment, keys sliders, Time Dragger HUD",

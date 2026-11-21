@@ -62,9 +62,7 @@ window.DOCS_LABELS = {
 };
 
 /** Tools shipped as BETA (mirrors the BETA marker file in the tool folder) */
-window.DOCS_BETA = {
-  MotionTrail: true
-};
+window.DOCS_BETA = {};
 
 window.DOCS_FALLBACK_ICON = "icons/keybelt_ui_mark.png";
 
