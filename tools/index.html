@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" href="../icon/logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools - Andreu Pellisa</title>
+    <meta name="description" content="Tools by Andreu Pellisa. KeyBelt: a free animation toolset for Maya.">
+    <link rel="canonical" href="https://andre1xyz.github.io/tools/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Tools - Andreu Pellisa">
+    <meta property="og:description" content="KeyBelt: a free animation toolset for Maya.">
+    <meta property="og:url" content="https://andre1xyz.github.io/tools/">
+    <meta property="og:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .tools-logo { width: min(320px, 80%); height: auto; }
+        .tools-layout { gap: 24px; }
+    </style>
+</head>
+<body>
+    <div class="stardust" id="stardust1"></div>
+    <div class="stardust" id="stardust2"></div>
+    <div class="stardust" id="stardust3"></div>
+    <div class="stardust" id="stardust4"></div>
+    <div class="stardust" id="stardust5"></div>
+
+    <nav style="z-index: 100;">
+        <a href="/" class="nav-link" data-section="home"><img src="https://img.icons8.com/ios-filled/50/A5A692/home.png" alt="Home" style="width: 20px; height: 20px;"></a>
+        <a href="/#showreel" class="nav-link" data-section="showreel">Showreel</a>
+        <a href="/#portfolio" class="nav-link" data-section="portfolio">Portfolio</a>
+        <a href="/tools/" class="nav-link active" data-section="tools" aria-current="page">Tools</a>
+        <a href="/#resume" class="nav-link" data-section="resume">Resume</a>
+    </nav>
+
+    <main id="tools" class="section section-visible">
+        <div class="tools-layout">
+            <img class="tools-logo" src="../keybelt/img/brand/keybelt_logo_horizontal_ivory.png" alt="KeyBelt" width="1850" height="580">
+            <h1 class="tools-heading">KeyBelt</h1>
+            <p class="tools-pitch">A free animation toolset for Maya: Keys Editor sliders, Baker, Offseter, a radial menu, viewport bar, Graph Editor toolbar and a Time Dragger HUD.</p>
+            <div class="tools-actions">
+                <a class="tools-btn tools-btn-primary" href="/keybelt/">KeyBelt page</a>
+                <a class="tools-btn" href="/keybelt/docs/">Docs</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    (function () {
+        var layers = [1, 2, 3, 4, 5].map(function (i) { return document.getElementById('stardust' + i); });
+        var scales = [1.4, 1.3, 1.2, 1.1, 1], strengths = [10, 20, 30, 40, 50];
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var mobile = window.matchMedia('(max-width: 768px)');
+        document.addEventListener('mousemove', function (e) {
+            if (reduce.matches || mobile.matches) return;
+            var x = (e.clientX / innerWidth - 0.5) * 2, y = (e.clientY / innerHeight - 0.5) * 2;
+            layers.forEach(function (l, i) {
+                l.style.transform = 'translate3d(' + (x * -strengths[i]) + 'px,' + (y * -strengths[i]) + 'px,0) scale(' + scales[i] + ')';
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

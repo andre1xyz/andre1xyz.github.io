@@ -40,14 +40,14 @@ window.DOCS_CATEGORIES = [
 
 /** Relative icon paths from Documentation/ */
 window.DOCS_ICONS = {
-  Baker: "../Baker/baker.png",
-  KeysEditor: "../KeysEditor/keysEditor.png",
-  MotionTrail: "../MotionTrail/motionTrail.png",
-  Offseter: "../Offseter/offseter.png",
-  RadialMenu: "img/keybelt_ui_mark.png",
-  Reset_All: "../Reset_All/Reset_All.png",
-  Selector: "../Selector/selector.png",
-  TimelineToolbarSettings: "../TimelineToolbarSettings/timelineToolbarSettings.png"
+  Baker: "icons/baker.png",
+  KeysEditor: "icons/keysEditor.png",
+  MotionTrail: "icons/motionTrail.png",
+  Offseter: "icons/offseter.png",
+  RadialMenu: "icons/keybelt_ui_mark.png",
+  Reset_All: "icons/Reset_All.png",
+  Selector: "icons/selector.png",
+  TimelineToolbarSettings: "icons/timelineToolbarSettings.png"
 };
 
 window.DOCS_LABELS = {
@@ -66,7 +66,7 @@ window.DOCS_BETA = {
   MotionTrail: true
 };
 
-window.DOCS_FALLBACK_ICON = "img/keybelt_ui_mark.png";
+window.DOCS_FALLBACK_ICON = "icons/keybelt_ui_mark.png";
 
 window.docsSlug = function (id) {
   return String(id || "").toLowerCase().replace(/_/g, "");

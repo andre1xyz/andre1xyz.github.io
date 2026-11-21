@@ -28,5 +28,5 @@
     "Graph Editor toolbar sliders now stretch to the free width (48–240 px each) and the toolbar never forces the Graph Editor to stay wide: when it's too narrow, it is cut off at the right edge."
   ],
   "docs": "https://andre1xyz.github.io/keybelt/docs/",
-  "changelog": "https://andre1xyz.github.io/keybelt/#changelog"
+  "changelog": "https://andre1xyz.github.io/keybelt/changelog/"
 }

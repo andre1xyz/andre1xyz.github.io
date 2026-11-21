@@ -1,94 +1,478 @@
+/* KeyBelt site. Vanilla JS, no dependencies. Loaded with defer from every page. */
 (function () {
   "use strict";
 
-  function $(id) { return document.getElementById(id); }
-  function fmtSize(bytes) {
-    if (!bytes) { return "–"; }
-    var mb = bytes / (1024 * 1024);
-    return mb >= 1 ? mb.toFixed(1) + " MB" : Math.round(bytes / 1024) + " KB";
+  var SCRIPT = document.currentScript || document.querySelector('script[src*="keybelt.js"]');
+  var BASE = new URL("../", SCRIPT.src).href;               // .../keybelt/
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var SVGNS = "http://www.w3.org/2000/svg";
+
+  function svg(tag, attrs, parent) {
+    var el = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) { el.setAttribute(k, attrs[k]); }
+    if (parent) { parent.appendChild(el); }
+    return el;
   }
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) { e.className = cls; }
+    if (text != null) { e.textContent = text; }
+    return e;
   }
-  function getJSON(url) {
-    return fetch(url, { cache: "no-cache" }).then(function (r) {
-      if (!r.ok) { throw new Error(url + " " + r.status); }
-      return r.json();
-    });
+  function icon(name, cls) {
+    var s = svg("svg", { "class": "ico " + (cls || ""), "aria-hidden": "true", viewBox: "0 0 24 24" });
+    svg("use", { href: "#i-" + name }, s);
+    return s;
   }
 
-  // Mobile menu
-  var menuBtn = document.querySelector(".kb-menu-btn");
-  var links = $("kb-links");
-  if (menuBtn && links) {
-    menuBtn.addEventListener("click", function () {
-      var open = links.classList.toggle("open");
-      menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    links.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") {
-        links.classList.remove("open");
-        menuBtn.setAttribute("aria-expanded", "false");
-      }
-    });
+  /* ---------- old single-page anchors (#changelog etc.) -> new pages ---------- */
+  (function () {
+    var map = { "#changelog": "changelog/", "#download": "download/", "#install": "download/", "#features": "features/", "#roadmap": "editions/", "#toolbox": "editions/" };
+    var go = map[location.hash];
+    if (go && /\/keybelt\/(index\.html)?$/.test(location.pathname)) { location.replace(BASE + go); }
+  })();
+
+  /* ---------- theme toggle (initial theme is applied by the inline head script) ---------- */
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") ||
+      (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
   }
-
-  function markComingSoon(btn, note) {
-    btn.textContent = "Coming soon";
-    btn.removeAttribute("href");
-    btn.removeAttribute("download");
-    btn.setAttribute("aria-disabled", "true");
-    btn.classList.add("kb-disabled");
-    note.textContent = "The first release is not published yet. Check back soon.";
+  function setTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    try { localStorage.setItem("kb-theme", t); } catch (e) { /* storage blocked */ }
+    var m = $('meta[name="theme-color"]');
+    if (m) { m.setAttribute("content", t === "light" ? "#F7F7F5" : "#0D0D0D"); }
+    $$(".kb-theme-btn").forEach(function (b) { b.setAttribute("aria-pressed", t === "light" ? "true" : "false"); });
   }
-
-  // Download button, driven by version.json
-  getJSON("version.json").then(function (v) {
-    $("kb-version").textContent = v.version || "";
-    $("kb-released").textContent = v.released || "–";
-    if (v.maya && v.maya.length) {
-      $("kb-maya").textContent = v.maya[0] + " – " + v.maya[v.maya.length - 1];
-    }
-    $("kb-size").textContent = fmtSize(v.size);
-
-    var btn = $("kb-dl-btn");
-    var note = $("kb-dl-note");
-    if (v.url && v.size > 0 && v.sha256) {
-      btn.href = v.url;
-      btn.textContent = "Download KeyBelt " + v.version;
-      note.textContent = "SHA-256: " + v.sha256;
-    } else {
-      markComingSoon(btn, note);
-    }
-  }).catch(function () {
-    markComingSoon($("kb-dl-btn"), $("kb-dl-note"));
+  function toggleTheme() { setTheme(currentTheme() === "light" ? "dark" : "light"); }
+  $$(".kb-theme-btn").forEach(function (b) {
+    b.setAttribute("aria-pressed", currentTheme() === "light" ? "true" : "false");
+    b.addEventListener("click", toggleTheme);
   });
 
-  // Changelog, rendered from changelog.json (static fallback stays on failure)
-  getJSON("changelog.json").then(function (list) {
-    if (!Array.isArray(list) || !list.length) { return; }
-    // Short by default: the newest release shows its first few items, the rest
-    // (and older releases) sit behind "Show all" so the page stays compact.
-    var SHOWN = 5;
-    $("kb-changelog").innerHTML = list.map(function (r, idx) {
-      var all = (r.items || []).map(function (i) { return "<li>" + esc(i) + "</li>"; });
-      var date = r.date ? ' <span class="kb-date">' + esc(r.date) + "</span>" : "";
-      var head = esc(r.version) + date;
-      if (idx > 0) {
-        return '<details class="kb-release"><summary><h3>' + head + "</h3></summary><ul>" + all.join("") + "</ul></details>";
-      }
-      var more = all.length > SHOWN
-        ? '<details class="kb-more"><summary>Show all ' + all.length + " changes</summary><ul>" + all.slice(SHOWN).join("") + "</ul></details>"
-        : "";
-      return '<article class="kb-release"><h3>' + head + "</h3><ul>" + all.slice(0, SHOWN).join("") + "</ul>" + more + "</article>";
-    }).join("");
-    // The changelog loads after the browser jumped to a deep link (#roadmap ...):
-    // jump again now that the layout above the target has its final height.
-    if (location.hash && location.hash !== "#changelog") {
-      var target = document.getElementById(location.hash.slice(1));
-      if (target) { target.scrollIntoView(); }
+  /* ---------- mobile drawer ---------- */
+  var menuBtn = $(".kb-menu-btn"), nav = $("#kb-nav");
+  function setMenu(open) {
+    if (!menuBtn || !nav) { return; }
+    nav.classList.toggle("open", open);
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  if (menuBtn && nav) {
+    menuBtn.addEventListener("click", function () { setMenu(!nav.classList.contains("open")); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") { setMenu(false); } });
+    document.addEventListener("click", function (e) {
+      if (nav.classList.contains("open") && !nav.contains(e.target) && !menuBtn.contains(e.target)) { setMenu(false); }
+    });
+    window.addEventListener("resize", function () { if (window.innerWidth > 960) { setMenu(false); } });
+  }
+
+  /* ---------- toast + copy ---------- */
+  var toast;
+  function showToast(msg) {
+    if (!toast) {
+      toast = el("div", "kb-toast");
+      toast.setAttribute("role", "status");
+      document.body.appendChild(toast);
     }
-  }).catch(function () { /* keep static fallback */ });
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast.t);
+    showToast.t = setTimeout(function () { toast.classList.remove("show"); }, 1800);
+  }
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) { return navigator.clipboard.writeText(text); }
+    return new Promise(function (resolve, reject) {
+      var ta = el("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;opacity:0;top:0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy") ? resolve() : reject(); } catch (e) { reject(e); }
+      document.body.removeChild(ta);
+    });
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-copy]");
+    if (!b) { return; }
+    var target = document.getElementById(b.getAttribute("data-copy"));
+    var text = target ? target.textContent.trim() : "";
+    if (!text || text === "-") { return; }
+    copyText(text).then(function () {
+      showToast("Copied to clipboard");
+      var lbl = $(".lbl", b), old = lbl && lbl.textContent;
+      if (lbl) { lbl.textContent = "Copied"; setTimeout(function () { lbl.textContent = old; }, 1600); }
+    }, function () { showToast("Copy failed. Select the text and copy it."); });
+  });
+
+  /* ---------- live version badge ---------- */
+  var versionPromise = null;
+  function getVersion() {
+    if (!versionPromise) {
+      versionPromise = fetch(BASE + "version.json", { cache: "no-cache" })
+        .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); });
+    }
+    return versionPromise;
+  }
+  var badge = $(".kb-version");
+  if (badge) {
+    getVersion().then(function (v) {
+      if (v && v.version) { badge.textContent = "v" + v.version; badge.setAttribute("aria-label", "Latest version " + v.version); }
+    }).catch(function () { /* keep the static value */ });
+  }
+
+  /* ---------- scroll reveal ---------- */
+  (function () {
+    var items = $$(".reveal");
+    if (!items.length) { return; }
+    if (reduce.matches || !("IntersectionObserver" in window)) {
+      items.forEach(function (i) { i.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    items.forEach(function (i) { io.observe(i); });
+  })();
+
+  /* ---------- command palette (Ctrl/Cmd+K) ---------- */
+  var ITEMS = [
+    ["Pages", "page", "Home", "", "Overview, start here", "home"],
+    ["Pages", "page", "Features", "features/", "All tools and interface features", "bolt"],
+    ["Pages", "page", "Download", "download/", "Get KeyBelt, version, checksum, install", "download"],
+    ["Pages", "page", "Editions and roadmap", "editions/", "Free, Pro, Studio, upcoming tools", "layers"],
+    ["Pages", "page", "Changelog", "changelog/", "Release notes, what is new", "list"],
+    ["Pages", "page", "License", "license/", "EULA summary, free to use, not open source", "shield"],
+    ["Pages", "page", "Documentation", "docs/", "Full documentation app", "book"],
+    ["Pages", "page", "Tools on the main site", "../tools/", "Andreu Pellisa, tools overview", "external"],
+    ["Pages", "page", "Portfolio site", "../", "Andreu Pellisa, 3D animation portfolio", "external"],
+    ["Features", "feat", "Keys Editor", "features/#keyseditor", "sliders smooth push pull interpolate ease wave offset cleanup", "keyseditor"],
+    ["Features", "feat", "Baker", "features/#baker", "bake world space camera object space", "baker"],
+    ["Features", "feat", "Offseter", "features/#offseter", "offset animation transform", "offseter"],
+    ["Features", "feat", "Reset All", "features/#resetall", "reset channels defaults", "resetall"],
+    ["Features", "feat", "Selector", "features/#selector", "selection sets hud colour chips", "selector"],
+    ["Features", "feat", "Motion Trail", "features/#motiontrail", "motion trails viewport beta handles", "motiontrail"],
+    ["Features", "feat", "Radial menu", "features/#radialmenu", "wheel alt q marking menu", "radial"],
+    ["Features", "feat", "Timeline toolbar", "features/#timelinetoolbarsettings", "toolbar under timeline sliders buttons settings", "timelinetoolbarsettings"],
+    ["Features", "feat", "Graph Editor toolbar", "features/#graph-toolbar", "graph editor sliders toolbar", "graph"],
+    ["Features", "feat", "Viewport bar", "features/#viewport-bar", "floating bar favorite tools", "bar"],
+    ["Features", "feat", "Time Dragger HUD", "features/#time-dragger", "scrub endless timeline hud", "clock"],
+    ["Docs", "doc", "Docs: Keys Editor", "docs/#keyseditor", "documentation", "keyseditor"],
+    ["Docs", "doc", "Docs: Baker", "docs/#baker", "documentation", "baker"],
+    ["Docs", "doc", "Docs: Offseter", "docs/#offseter", "documentation", "offseter"],
+    ["Docs", "doc", "Docs: Reset All", "docs/#resetall", "documentation", "resetall"],
+    ["Docs", "doc", "Docs: Selector", "docs/#selector", "documentation", "selector"],
+    ["Docs", "doc", "Docs: Motion Trail", "docs/#motiontrail", "documentation", "motiontrail"],
+    ["Docs", "doc", "Docs: Radial Menu", "docs/#radialmenu", "documentation", "radialmenu"],
+    ["Docs", "doc", "Docs: Settings", "docs/#timelinetoolbarsettings", "documentation toolbars hotkeys", "timelinetoolbarsettings"],
+    ["Actions", "act", "Buy me a coffee", "https://ko-fi.com/andreupellisa", "support ko-fi", "coffee"],
+    ["Actions", "act", "Toggle light / dark theme", "#theme", "theme appearance", "sun"]
+  ];
+  var MASK_ICONS = { keyseditor: 1, baker: 1, offseter: 1, resetall: 1, selector: 1, motiontrail: 1, timelinetoolbarsettings: 1 };
+
+  var dlg, input, list, sel = 0, shown = [];
+  function buildPalette() {
+    dlg = el("dialog", "kb-pal");
+    dlg.setAttribute("aria-label", "Quick search");
+    var row = el("div", "pal-input");
+    row.appendChild(icon("search"));
+    input = el("input");
+    input.type = "text"; input.placeholder = "Search pages, features, docs";
+    input.setAttribute("aria-label", "Search"); input.setAttribute("autocomplete", "off"); input.setAttribute("spellcheck", "false");
+    input.setAttribute("role", "combobox"); input.setAttribute("aria-expanded", "true"); input.setAttribute("aria-controls", "pal-list");
+    row.appendChild(input);
+    var esc = el("kbd", "", "Esc"); row.appendChild(esc);
+    list = el("ul", "pal-list"); list.id = "pal-list"; list.setAttribute("role", "listbox");
+    var foot = el("div", "pal-foot");
+    foot.innerHTML = "<span><kbd>↑</kbd> <kbd>↓</kbd> move</span><span><kbd>Enter</kbd> open</span>";
+    dlg.appendChild(row); dlg.appendChild(list); dlg.appendChild(foot);
+    document.body.appendChild(dlg);
+    input.addEventListener("input", function () { sel = 0; render(); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+      else if (e.key === "Enter") { e.preventDefault(); go(shown[sel]); }
+    });
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) { dlg.close(); } });
+    list.addEventListener("click", function (e) {
+      var a = e.target.closest("a"); if (!a) { return; }
+      e.preventDefault(); go(shown[+a.getAttribute("data-i")]);
+    });
+  }
+  function resolve(path) {
+    return /^(https?:)?\/\//.test(path) ? path : new URL(path, BASE).href;
+  }
+  function go(item) {
+    if (!item) { return; }
+    var path = item[3];
+    dlg.close();
+    if (path === "#theme") { toggleTheme(); return; }
+    var url = resolve(path);
+    if (/^https?:\/\/ko-fi/.test(url)) { window.open(url, "_blank", "noopener"); return; }
+    location.href = url;
+  }
+  function move(d) {
+    sel = (sel + d + shown.length) % shown.length;
+    $$(".pal-item", list).forEach(function (li, i) { li.classList.toggle("sel", i === sel); li.setAttribute("aria-selected", i === sel ? "true" : "false"); });
+    var cur = $$(".pal-item", list)[sel]; if (cur) { cur.scrollIntoView({ block: "nearest" }); }
+  }
+  function render() {
+    var q = input.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    shown = ITEMS.map(function (it) {
+      var hay = (it[2] + " " + it[4]).toLowerCase(), label = it[2].toLowerCase(), score = 0;
+      for (var i = 0; i < q.length; i++) {
+        if (hay.indexOf(q[i]) < 0) { return null; }
+        score += label.indexOf(q[i]) === 0 ? 3 : (label.indexOf(q[i]) >= 0 ? 2 : 1);
+      }
+      return { it: it, score: score };
+    }).filter(Boolean);
+    if (q.length) { shown.sort(function (a, b) { return b.score - a.score; }); }
+    shown = shown.map(function (s) { return s.it; });
+    list.textContent = "";
+    if (!shown.length) { list.appendChild(el("li", "pal-empty", "No results")); return; }
+    var group = "";
+    shown.forEach(function (it, i) {
+      if (!q.length && it[0] !== group) { group = it[0]; var g = el("li", "pal-group", group); g.setAttribute("role", "presentation"); list.appendChild(g); }
+      var li = el("li", "pal-item" + (i === sel ? " sel" : "")); li.setAttribute("role", "option"); li.setAttribute("aria-selected", i === sel ? "true" : "false");
+      var a = el("a"); a.href = resolve(it[3] === "#theme" ? "" : it[3]); a.setAttribute("data-i", i);
+      var ic = it[5];
+      if (MASK_ICONS[ic]) { var s = el("span", "ico ico-" + ic); s.setAttribute("aria-hidden", "true"); a.appendChild(s); } else { a.appendChild(icon(ic)); }
+      a.appendChild(el("span", "", it[2]));
+      a.appendChild(el("small", "", q.length ? it[0] : ""));
+      li.appendChild(a); list.appendChild(li);
+    });
+  }
+  function openPalette() {
+    if (!dlg) { buildPalette(); }
+    if (dlg.open) { return; }
+    input.value = ""; sel = 0; render();
+    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute("open", ""); }
+    input.focus();
+  }
+  document.addEventListener("keydown", function (e) {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); }
+  });
+  $$(".kb-search-btn").forEach(function (b) { b.addEventListener("click", openPalette); });
+
+  /* ---------- download page ---------- */
+  var dl = $("#dl-root");
+  if (dl) {
+    getVersion().then(function (v) {
+      var soon = !v || !v.size || !v.sha256;
+      dl.classList.toggle("is-soon", soon);
+      var set = function (id, txt) { var n = document.getElementById(id); if (n && txt) { n.textContent = txt; } };
+      set("dl-ver", v.version ? "KeyBelt " + v.version : "");
+      if (v.released) {
+        var d = new Date(v.released + "T00:00:00Z");
+        set("dl-date", isNaN(d) ? v.released : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }));
+      }
+      set("dl-size", v.size ? (v.size / 1048576).toFixed(1) + " MB (zip)" : "Not published yet");
+      set("dl-sha", v.sha256 || "-");
+      if (v.maya && v.maya.length) { set("dl-maya", "Maya " + v.maya[0] + " to " + v.maya[v.maya.length - 1]); }
+      var btn = document.getElementById("dl-btn");
+      if (btn) {
+        if (soon) { btn.setAttribute("aria-disabled", "true"); btn.removeAttribute("href"); btn.removeAttribute("download"); $(".lbl", btn).textContent = "Coming soon"; }
+        else { btn.removeAttribute("aria-disabled"); btn.setAttribute("href", BASE + "releases/KeyBelt-latest.zip"); }
+      }
+    }).catch(function () {
+      dl.classList.add("is-soon");
+      var s = document.getElementById("dl-soon"); if (s) { s.textContent = "Could not load the version info. Try again in a moment."; }
+    });
+  }
+
+  /* ---------- changelog page ---------- */
+  var cl = $("#cl-root");
+  if (cl) {
+    fetch(BASE + "changelog.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); })
+      .then(function (rels) {
+        cl.textContent = "";
+        if (!rels || !rels.length) { cl.appendChild(el("p", "muted", "No releases yet.")); return; }
+        var fmt = function (s) {
+          var d = new Date(s + "T00:00:00Z");
+          return isNaN(d) ? s : d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+        };
+        var fill = function (ul, items, limit) {
+          items.forEach(function (txt, i) {
+            var li = el("li"), m = /^([^:.]{3,48}):\s+([\s\S]*)$/.exec(txt);
+            if (m) { li.appendChild(el("b", "", m[1] + ": ")); li.appendChild(document.createTextNode(m[2])); } else { li.textContent = txt; }
+            if (limit && i >= limit) { li.hidden = true; li.className = "extra"; }
+            ul.appendChild(li);
+          });
+        };
+        rels.forEach(function (r, idx) {
+          var items = r.items || [];
+          if (idx === 0) {
+            var art = el("article", "rel reveal in"), head = el("header");
+            head.appendChild(el("h3", "", r.version)); head.appendChild(el("span", "kb-badge", "Latest"));
+            var t = el("time", "", fmt(r.date)); t.setAttribute("datetime", r.date); head.appendChild(t);
+            art.appendChild(head);
+            var ul = el("ul"); fill(ul, items, 5); art.appendChild(ul);
+            if (items.length > 5) {
+              var more = el("button", "kb-btn rel-more", "Show all " + items.length + " changes");
+              more.type = "button"; more.setAttribute("aria-expanded", "false");
+              more.addEventListener("click", function () {
+                var open = more.getAttribute("aria-expanded") !== "true";
+                $$("li.extra", ul).forEach(function (li) { li.hidden = !open; });
+                more.setAttribute("aria-expanded", open ? "true" : "false");
+                more.textContent = open ? "Show fewer" : "Show all " + items.length + " changes";
+              });
+              art.appendChild(more);
+            }
+            cl.appendChild(art);
+            if (rels.length > 1) { var h = el("h2", "", "Earlier releases"); h.style.cssText = "font-size:1.2rem;margin:36px 0 14px"; cl.appendChild(h); }
+          } else {
+            var a = el("article", "rel"), det = el("details"), sum = el("summary");
+            sum.appendChild(el("h3", "", r.version));
+            var tt = el("time", "", fmt(r.date)); tt.setAttribute("datetime", r.date); sum.appendChild(tt);
+            sum.appendChild(el("span", "kb-badge kb-badge-plain", items.length + (items.length === 1 ? " change" : " changes")));
+            det.appendChild(sum);
+            var u2 = el("ul"); fill(u2, items, 0); det.appendChild(u2);
+            a.appendChild(det); cl.appendChild(a);
+          }
+        });
+      }).catch(function () {
+        cl.textContent = "";
+        var p = el("p", "muted", "Could not load the changelog. ");
+        var a = el("a", "", "Open changelog.json"); a.href = BASE + "changelog.json"; p.appendChild(a); cl.appendChild(p);
+      });
+  }
+
+  /* ---------- curve helper: Catmull-Rom through points -> cubic path ---------- */
+  function curvePath(pts) {
+    if (pts.length < 2) { return ""; }
+    var d = "M" + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += "C" + c1x.toFixed(1) + " " + c1y.toFixed(1) + " " + c2x.toFixed(1) + " " + c2y.toFixed(1) + " " + p2[0].toFixed(1) + " " + p2[1].toFixed(1);
+    }
+    return d;
+  }
+  function diamond(x, y, r) { return "M" + x + " " + (y - r) + "l" + r + " " + r + " " + (-r) + " " + r + " " + (-r) + " " + (-r) + "z"; }
+
+  /* ---------- hero: animated timeline with keyframe ticks ---------- */
+  var tl = $("#tl");
+  if (tl) {
+    var W = 960, H = 200, PAD = 12, PX = 3.9, TOP = 30;
+    var keys = [[0, .2], [18, .72], [42, .38], [66, .86], [96, .3], [120, .64], [150, .22], [174, .7], [204, .4], [236, .8]];
+    var sv = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Animated timeline: a playhead scrubs across a curve and lights up keyframes" }, tl);
+    var defs = svg("defs", {}, sv), clip = svg("clipPath", { id: "tl-clip" }, defs), crect = svg("rect", { x: 0, y: 0, width: 0, height: H }, clip);
+    for (var f = 0; f <= 240; f += 4) {
+      var x = PAD + f * PX, major = f % 24 === 0;
+      svg("line", { "class": "tick" + (major ? " tick-major" : ""), x1: x, x2: x, y1: major ? 4 : 12, y2: 22 }, sv);
+      if (major) { var tx = svg("text", { "class": "tl-label", x: x + 3, y: 12 }, sv); tx.textContent = f; }
+    }
+    var pts = keys.map(function (k) { return [PAD + k[0] * PX, TOP + 20 + (1 - k[1]) * (H - TOP - 50)]; });
+    var dpath = curvePath(pts);
+    svg("path", { "class": "curve-base", d: dpath }, sv);
+    svg("path", { "class": "curve-live", d: dpath, "clip-path": "url(#tl-clip)" }, sv);
+    var kEls = pts.map(function (p, i) {
+      var k = svg("path", { "class": "key", d: diamond(p[0].toFixed(1), p[1].toFixed(1), 8) }, sv);
+      var rt = svg("line", { "class": "key", x1: p[0], x2: p[0], y1: 3, y2: 22, "stroke-width": 3, "stroke-linecap": "round" }, sv);
+      return [k, rt];
+    });
+    var head = svg("g", { "class": "head" }, sv);
+    svg("line", { x1: 0, x2: 0, y1: 0, y2: H }, head);
+    svg("polygon", { points: "-6,0 6,0 0,10" }, head);
+    var ft = svg("text", { x: 9, y: H - 8 }, head);
+    var lastF = -1;
+    var setT = function (t) {
+      var fr = t * 240, x = PAD + fr * PX;
+      head.setAttribute("transform", "translate(" + x.toFixed(1) + " 0)");
+      crect.setAttribute("width", x.toFixed(1));
+      var n = Math.round(fr);
+      if (n !== lastF) {
+        lastF = n; ft.textContent = "f " + (n < 100 ? (n < 10 ? "00" : "0") : "") + n;
+        keys.forEach(function (k, i) {
+          var on = k[0] <= fr;
+          kEls[i][0].classList.toggle("on", on); kEls[i][1].classList.toggle("on", on);
+        });
+      }
+    };
+    var running = false, visible = true, t0 = 0, DUR = 9000, HOLD = 900;
+    var frame = function (now) {
+      if (!running) { return; }
+      if (!t0) { t0 = now; }
+      var el_ = (now - t0) % (DUR + HOLD);
+      setT(Math.min(1, el_ / DUR));
+      requestAnimationFrame(frame);
+    };
+    var sync = function () {
+      var want = !reduce.matches && visible && !document.hidden;
+      if (want && !running) { running = true; t0 = 0; requestAnimationFrame(frame); }
+      else if (!want) { running = false; if (reduce.matches) { setT(.64); } }
+    };
+    if ("IntersectionObserver" in window) { new IntersectionObserver(function (en) { visible = en[0].isIntersecting; sync(); }).observe(tl); }
+    document.addEventListener("visibilitychange", sync);
+    if (reduce.addEventListener) { reduce.addEventListener("change", sync); }
+    setT(reduce.matches ? .64 : 0); sync();
+  }
+
+  /* ---------- interactive Keys Editor slider demo ---------- */
+  var demo = $("#demo");
+  if (demo) {
+    var BASEV = [.18, .78, .34, .88, .3, .66, .2, .55];
+    var DW = 420, DH = 250, DP = 26, N = BASEV.length;
+    var EFFECTS = {
+      smooth: { label: "Smooth", min: 0, max: 100, fn: function (v, a) {
+        var s = v.slice(); for (var it = 0; it < 4; it++) { var n = s.slice(); for (var i = 1; i < N - 1; i++) { n[i] = .25 * s[i - 1] + .5 * s[i] + .25 * s[i + 1]; } s = n; }
+        return v.map(function (x, i) { return x + (s[i] - x) * a / 100; });
+      } },
+      pushpull: { label: "Push / Pull", min: -100, max: 100, fn: function (v, a) {
+        var k = 1 + (a >= 0 ? a / 100 * 1.6 : a / 100);
+        return v.map(function (x, i) { var c = v[0] + (v[N - 1] - v[0]) * i / (N - 1); return c + (x - c) * k; });
+      } },
+      wave: { label: "Wave", min: -100, max: 100, fn: function (v, a) {
+        return v.map(function (x, i) { return x + a / 100 * .2 * Math.sin(i * 1.5 + .4) * Math.sin(Math.PI * i / (N - 1)); });
+      } }
+    };
+    var mode = "smooth", target = 0, cur = 0, raf = 0;
+    var dsv = svg("svg", { viewBox: "0 0 " + DW + " " + DH, role: "img", "aria-label": "Preview of a curve changing as the slider moves" });
+    [0, 1, 2, 3, 4].forEach(function (i) { var y = DP + i * (DH - 2 * DP) / 4; svg("line", { "class": "grid-line", x1: 0, x2: DW, y1: y, y2: y }, dsv); });
+    var ghost = svg("path", { "class": "ghost" }, dsv), live = svg("path", { "class": "live" }, dsv);
+    var dk = BASEV.map(function () { return svg("path", { "class": "dkey" }, dsv); });
+    var lab = svg("text", { "class": "dlabel", x: 8, y: DH - 6 }, dsv); lab.textContent = "ctrl.translateY";
+    $("#demo-stage").appendChild(dsv);
+    var xy = function (v) { return v.map(function (val, i) { return [DP + i * (DW - 2 * DP) / (N - 1), DP + (1 - Math.max(-.1, Math.min(1.1, val))) * (DH - 2 * DP)]; }); };
+    ghost.setAttribute("d", curvePath(xy(BASEV)));
+    var slider = $("#demo-slider"), out = $("#demo-out"), nm = $("#demo-name");
+    var draw = function () {
+      var P = xy(EFFECTS[mode].fn(BASEV, cur));
+      live.setAttribute("d", curvePath(P));
+      P.forEach(function (p, i) { dk[i].setAttribute("d", diamond(p[0].toFixed(1), p[1].toFixed(1), 7)); });
+    };
+    var tick = function () {
+      var diff = target - cur;
+      if (reduce.matches || Math.abs(diff) < .05) { cur = target; raf = 0; } else { cur += diff * .2; raf = requestAnimationFrame(tick); }
+      draw();
+    };
+    var apply = function () {
+      var e = EFFECTS[mode];
+      slider.min = e.min; slider.max = e.max;
+      slider.value = target;
+      out.textContent = Math.round(target);
+      slider.style.setProperty("--fill", ((target - e.min) / (e.max - e.min) * 100) + "%");
+      nm.textContent = e.label;
+      if (!raf) { raf = requestAnimationFrame(tick); }
+    };
+    slider.addEventListener("input", function () { target = +slider.value; apply(); });
+    slider.addEventListener("dblclick", function () { target = 0; apply(); });
+    $$("#demo-modes button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        mode = b.getAttribute("data-mode"); target = 0; cur = 0;
+        $$("#demo-modes button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+        apply();
+      });
+    });
+    apply();
+    // gentle intro: nudge the slider once when it scrolls into view
+    if (!reduce.matches && "IntersectionObserver" in window) {
+      var io2 = new IntersectionObserver(function (en) {
+        if (en[0].isIntersecting) { io2.disconnect(); target = 55; apply(); }
+      }, { threshold: .6 });
+      io2.observe(demo);
+    }
+  }
 })();

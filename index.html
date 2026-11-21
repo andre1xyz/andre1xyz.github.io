@@ -22,7 +22,7 @@
         <a href="#" class="nav-link active" data-section="home" onclick="showSection('home'); return false;"><img src="https://img.icons8.com/ios-filled/50/A5A692/home.png" alt="Home" style="width: 20px; height: 20px;"></a>
         <a href="#" class="nav-link" data-section="showreel" onclick="showSection('showreel'); return false;">Showreel</a>
         <a href="#" class="nav-link" data-section="portfolio" onclick="showSection('portfolio'); return false;">Portfolio</a>
-        <a href="#" class="nav-link" data-section="tools" onclick="showSection('tools'); return false;">Tools</a>
+        <a href="/tools/" class="nav-link" data-section="tools">Tools</a>
         <a href="#" class="nav-link" data-section="resume" onclick="showSection('resume'); return false;">Resume</a>
     </nav>
 
@@ -204,27 +204,6 @@
         </div>
     </div>
 
-    <!-- Tools Section -->
-    <div id="tools" class="section" style="display: none; flex-direction: column;">
-        <div class="tools-layout">
-            <h2 class="tools-heading">KeyBelt</h2>
-            <p class="tools-pitch">A free animation toolset for Maya: Keys Editor sliders, Baker, Offseter, a radial menu, viewport bar, Graph Editor toolbar and a Time Dragger HUD.</p>
-            <div class="tools-actions">
-                <a class="tools-btn tools-btn-primary" href="keybelt/">KeyBelt page</a>
-                <a class="tools-btn" href="keybelt/docs/">Docs</a>
-            </div>
-            <h3 class="tools-subheading">Andreus_Tools (naming WIP)</h3>
-            <button type="button" class="tools-image-wrap" id="tools-image-trigger" aria-label="Zoom in on Andreus Tools screenshot">
-                <img src="images/andreus_tools.png" alt="Andreus Tools screenshot" class="tools-image">
-                <span class="tools-zoom-hint" aria-hidden="true"><i class="fas fa-search-plus"></i></span>
-            </button>
-            <p class="tools-description">
-                The bigger personal toolkit KeyBelt can grow into: keyframe editors, IK helpers, motion trails, pose copy,
-                export utilities, and cleanup tools built to speed up day-to-day animation work.
-            </p>
-        </div>
-    </div>
-
     <div id="home" class="section" style="display: block;">
         <div class="home-content" style="height: 100vh; position: relative;">
             <div class="home-video-grid" id="home-video-grid" aria-hidden="true"></div>
@@ -352,17 +331,6 @@
         </div>
     </div>
 
-
-    <!-- Tools Image Lightbox -->
-    <div class="image-lightbox" id="image-lightbox" aria-hidden="true">
-        <div class="lightbox-backdrop" id="image-lightbox-backdrop"></div>
-        <button type="button" class="lightbox-close" id="image-lightbox-close" aria-label="Close">
-            <i class="fas fa-times" aria-hidden="true"></i>
-        </button>
-        <div class="image-lightbox-content">
-            <img id="image-lightbox-img" class="image-lightbox-img" src="" alt="">
-        </div>
-    </div>
 
     <!-- Project Details Modal -->
     <div id="project-modal" class="modal">

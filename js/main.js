@@ -256,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initStardustParallax(stardust1, stardust2, stardust3, stardust4, stardust5);
     initHomeVideoGrid();
-    initToolsImageLightbox();
 });
 
 function initStardustParallax(...layers) {
@@ -1367,100 +1366,6 @@ window.switchReel = function switchReel(type) {
     }
 };
 
-function initToolsImageLightbox() {
-    const trigger = document.getElementById('tools-image-trigger');
-    const lightbox = document.getElementById('image-lightbox');
-    const backdrop = document.getElementById('image-lightbox-backdrop');
-    const closeButton = document.getElementById('image-lightbox-close');
-    const lightboxImg = document.getElementById('image-lightbox-img');
-    const toolsImg = document.querySelector('.tools-image');
-
-    if (!trigger || !lightbox || !lightboxImg || !toolsImg) {
-        return;
-    }
-
-    const viewportPadding = 24;
-
-    function fitLightboxImage() {
-        const naturalWidth = lightboxImg.naturalWidth;
-        const naturalHeight = lightboxImg.naturalHeight;
-        if (!naturalWidth || !naturalHeight) {
-            return;
-        }
-
-        const maxWidth = window.innerWidth - viewportPadding;
-        const maxHeight = window.innerHeight - viewportPadding;
-        const ratio = naturalWidth / naturalHeight;
-
-        let width = maxWidth;
-        let height = width / ratio;
-
-        if (height > maxHeight) {
-            height = maxHeight;
-            width = height * ratio;
-        }
-
-        lightboxImg.style.width = `${Math.floor(width)}px`;
-        lightboxImg.style.height = `${Math.floor(height)}px`;
-    }
-
-    function openLightbox() {
-        const src = toolsImg.currentSrc || toolsImg.src;
-        lightboxImg.alt = toolsImg.alt;
-        lightbox.setAttribute('aria-hidden', 'false');
-        lightbox.classList.add('is-open');
-        document.body.classList.add('tools-lightbox-open');
-        document.body.style.overflow = 'hidden';
-
-        const showLightbox = () => {
-            fitLightboxImage();
-            requestAnimationFrame(() => {
-                lightbox.classList.add('is-visible');
-            });
-        };
-
-        lightboxImg.onload = showLightbox;
-        lightboxImg.src = src;
-
-        if (lightboxImg.complete) {
-            showLightbox();
-        }
-    }
-
-    function closeLightbox() {
-        lightbox.classList.remove('is-visible');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('tools-lightbox-open');
-        document.body.style.overflow = '';
-        window.setTimeout(() => {
-            if (!lightbox.classList.contains('is-visible')) {
-                lightbox.classList.remove('is-open');
-                lightboxImg.removeAttribute('src');
-                lightboxImg.onload = null;
-                lightboxImg.style.width = '';
-                lightboxImg.style.height = '';
-            }
-        }, 300);
-    }
-
-    trigger.addEventListener('click', openLightbox);
-    backdrop?.addEventListener('click', closeLightbox);
-    closeButton?.addEventListener('click', closeLightbox);
-    lightboxImg.addEventListener('click', closeLightbox);
-
-    window.addEventListener('resize', () => {
-        if (lightbox.classList.contains('is-open')) {
-            fitLightboxImage();
-        }
-    });
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
-            closeLightbox();
-        }
-    });
-}
-
 let activeSectionId = 'home';
 
 function updateNavActive(sectionId) {
@@ -2002,12 +1907,16 @@ const projects = {
 };
 
 
-// Deep links: https://andre1xyz.github.io/#tools opens that section
+// Deep links: https://andre1xyz.github.io/#showreel opens that section (#tools redirects to /tools/)
 (function () {
-    const validSections = ['home', 'showreel', 'portfolio', 'tools', 'resume'];
+    const validSections = ['home', 'showreel', 'portfolio', 'resume'];
 
     function openSectionFromHash() {
         const id = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+        if (id === 'tools') {
+            window.location.replace('/tools/');
+            return;
+        }
         if (id && validSections.includes(id) && document.getElementById(id)) {
             showSection(id);
         }
