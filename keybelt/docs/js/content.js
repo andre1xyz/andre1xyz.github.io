@@ -593,6 +593,10 @@ window.TOOL_DOCS = {
         ]
       },
       {
+        title: "PyMEL",
+        text: "KeyBelt does not need PyMEL, but other tools do. If it is missing, KeyBelt offers a one-click install at start. General > Maya Preferences shows the PyMEL status and an Install PyMEL button."
+      },
+      {
         title: "Feedback",
         text: "General > Updates has a Send feedback button. It opens the KeyBelt feedback page in your browser with your KeyBelt and Maya versions filled in."
       }

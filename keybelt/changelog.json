@@ -1,5 +1,13 @@
 [
   {
+    "version": "0.2.2",
+    "date": "2026-11-22",
+    "items": [
+      "New: KeyBelt checks for PyMEL (other tools need it) and offers a one-click install when it is missing; status and button in Settings > General > Maya Preferences.",
+      "Time Dragger HUD: on a fresh Maya the key is routed even when Maya's hotkeys load late (retries for a few seconds at startup); recognises any spelling of Maya's Time Dragger command; when it can't take over the key, or falls back to Maya's own Time Dragger, the Script Editor says why."
+    ]
+  },
+  {
     "version": "0.2.1",
     "date": "2026-11-22",
     "items": [
