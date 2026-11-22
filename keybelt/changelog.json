@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.2.1",
+    "date": "2026-11-22",
+    "items": [
+      "Public beta: the whole toolset is now labelled beta. The Settings window title, version label and Updates card show \"beta\".",
+      "Motion Trail is no longer flagged beta. It is built on the Agora Community motion trail, used as the base, then modified and improved for KeyBelt.",
+      "Motion Trail moved from Secondary motion to the Baking / curve tools group (yellow) in the timeline toolbar and the docs.",
+      "Settings > General > Updates: new Send feedback button, opens the feedback page in your browser with your KeyBelt and Maya versions filled in.",
+      "Automatic updates: KeyBelt downloads and verifies new versions in the background and installs them the next time Maya starts, with a short \"Updated to x.y.z\" message. On by default (Settings > General > Updates > Update KeyBelt automatically). By hand, one button goes Check for updates → Update to x.y.z → Restart Maya to finish.",
+      "Documentation restyled to match the KeyBelt website (dark / light theme, Inter font bundled for offline use, tool icons in the sidebar) and extended with a mission note and a Working with KeyBelt windows section (MMB drag to move, RMB drag to resize).",
+      "Documentation shows the real tool windows, lists every toolbar button with its icon (separate from the sliders), explains Offseter step by step (timeline range + blend frames, selected keys, whole curve) and has a new Viewport Bar page."
+    ]
+  },
+  {
     "version": "0.2.0",
     "date": "2026-11-21",
     "items": [
