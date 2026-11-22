@@ -587,10 +587,9 @@ window.TOOL_DOCS = {
       {
         title: "Updates",
         items: [
-          "When a new version is out, KeyBelt shows a short message in Maya.",
-          "Open Settings > General > Updates and click Update (the button reads \"Update to x.y.z\").",
-          "Restart Maya. Your settings are kept.",
-          "Check for updates runs a check at any time. Untick \"Tell me when a new version is out\" to stop the startup check."
+          "Updates are automatic: KeyBelt downloads and verifies a new version in the background and installs it the next time Maya starts. A short message tells you when it's done. Your settings are kept.",
+          "Settings > General > Updates: untick \"Update KeyBelt automatically\" to update by hand.",
+          "By hand: click Check for updates, then Update to x.y.z, then restart Maya."
         ]
       },
       {

@@ -76,14 +76,7 @@
         <a id="dl-btn" class="kb-btn kb-btn-primary kb-btn-lg" href="../releases/KeyBelt-latest.zip" download><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-download"/></svg><span class="lbl">Download KeyBelt</span></a>
         <a class="kb-btn kb-btn-coffee" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a>
       </div>
-      <details class="kb-verify">
-        <summary>Check the file (optional)</summary>
-        <p class="kb-note">You don't need to do this. The checksum is the zip's fingerprint: if even one byte were damaged or changed, it would not match. KeyBelt's updater checks it for you automatically.</p>
-        <p class="kb-note" style="margin:12px 0 4px">SHA-256 checksum</p>
-        <div class="kb-hash"><code id="dl-sha">d882b8ce5bfe153f932446e83a5ab567bd3f1d1925363b851fc281cea04ef848</code>
-          <button type="button" class="kb-btn kb-copy" data-copy="dl-sha" aria-label="Copy SHA-256 checksum"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-copy"/></svg><span class="lbl">Copy</span></button></div>
-        <p class="kb-note" style="margin-top:10px">To compare by hand, run this in PowerShell in your Downloads folder: <code>Get-FileHash .\KeyBelt-latest.zip -Algorithm SHA256</code></p>
-      </details>
+      <code id="dl-sha" hidden>d882b8ce5bfe153f932446e83a5ab567bd3f1d1925363b851fc281cea04ef848</code>
     </div>
     <div class="kb-panel">
       <h3>Install</h3>
@@ -93,12 +86,8 @@
         <li><strong>Drag</strong> <code>KeyBelt/drag_n_drop.py</code> into the Maya viewport. KeyBelt installs itself, adds a KeyBelt shelf tab and starts with Maya from then on.</li>
       </ol>
       <h3 style="margin-top:28px">Updates</h3>
-      <ol class="kb-steps">
-        <li>When a new version is out, KeyBelt shows a short message in Maya.</li>
-        <li>Open <strong>KeyBelt Settings</strong> and click <strong>Update</strong>.</li>
-        <li><strong>Restart Maya.</strong> That's it. Your settings are kept.</li>
-      </ol>
-      <p class="kb-note">You can also click <em>Check for updates</em> in Settings at any time.</p>
+      <p class="muted">Updates are automatic. KeyBelt downloads a new version in the background and checks that the file is complete and untouched. It installs the next time you start Maya, and a short message tells you it's done. Your settings are kept.</p>
+      <p class="kb-note">To update by hand instead, untick <em>Update KeyBelt automatically</em> in Settings &gt; General &gt; Updates and use the button there.</p>
     </div>
   </div>
 </div></section>
