@@ -10,19 +10,13 @@ window.DOCS_CATEGORIES = [
     id: "curve_tools",
     label: "Baking / curve tools",
     color: "#FFFF00",
-    tools: ["Baker"]
+    tools: ["Baker", "MotionTrail"]
   },
   {
     id: "execute",
     label: "One-shot utilities",
     color: "#FF8080",
     tools: ["Reset_All"]
-  },
-  {
-    id: "secondary_motion",
-    label: "Secondary motion",
-    color: "#C586C0",
-    tools: ["MotionTrail"]
   },
   {
     id: "management",

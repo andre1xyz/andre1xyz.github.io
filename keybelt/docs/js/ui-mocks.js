@@ -244,36 +244,61 @@ window.UiMocks = (function () {
     return "";
   }
 
-  function mount(root, toolId, accent) {
-    if (!root) return;
-    var mock = window.UI_MOCKS && window.UI_MOCKS[toolId];
-    if (!mock) {
-      root.innerHTML =
-        '<div class="mock-ui-panel"><p class="mock-note">No UI preview for this tool.</p></div>';
-      return;
-    }
-    var color = "#E5484D";
-    var html =
-      '<div class="mock-ui-panel" style="--mock-accent:' +
-      color +
-      '">' +
-      '<div class="mock-titlebar">' +
-      "<strong>" +
-      esc(mock.title || toolId) +
-      "</strong>" +
-      '<span class="mock-tag">' +
-      (mock.oneshot ? "One-shot" : "UI layout") +
-      "</span>" +
-      "</div>";
-    if (mock.hint) {
-      html += '<p class="mock-hint">' + esc(mock.hint) + "</p>";
-    }
+  /* Real Qt screenshots (KeyBelt_dev/tools/capture_ui.py), shown at 1x of the 2x PNG */
+  var SHOTS = {
+    MotionTrail: { w: 380, h: 130, title: "Motion Trail" },
+    Baker: { w: 294, h: 774, title: "Baker" },
+    Selector: { w: 334, h: 36, title: "Selector", hud: true },
+    RadialMenu: { w: 348, h: 376, title: "Radial Menu", hud: true },
+    TimelineToolbarSettings: { w: 680, h: 520, title: "KeyBelt Settings" }
+  };
+
+  function frame(title, tag, bodyHtml, extraClass) {
+    return (
+      '<div class="mock-ui-panel' + (extraClass ? " " + extraClass : "") + '">' +
+      '<div class="mock-titlebar"><strong>' + esc(title) + "</strong>" +
+      '<span class="mock-tag">' + esc(tag) + "</span></div>" + bodyHtml + "</div>"
+    );
+  }
+
+  function blockMock(mock, toolId) {
+    var html = "";
+    if (mock.hint) html += '<p class="mock-hint">' + esc(mock.hint) + "</p>";
     html += '<div class="mock-body">';
     (mock.blocks || []).forEach(function (b) {
       html += renderBlock(b);
     });
-    html += "</div></div>";
-    root.innerHTML = html;
+    html += "</div>";
+    return frame(mock.title || toolId, mock.oneshot ? "One-shot" : "UI layout", html);
+  }
+
+  function mount(root, toolId) {
+    if (!root) return;
+    var mock = window.UI_MOCKS && window.UI_MOCKS[toolId];
+    var shot = SHOTS[toolId];
+    if (shot) {
+      var title = shot.title || (mock && mock.title) || toolId;
+      root.innerHTML = frame(
+        title,
+        "Actual window",
+        '<div class="mock-shot-body' + (shot.hud ? " is-hud" : "") + '">' +
+          '<img class="mock-shot" src="img/ui/' + toolId + '.png" width="' + shot.w +
+          '" height="' + shot.h + '" alt="' + esc(title) + ' window" loading="lazy" decoding="async" />' +
+          "</div>"
+      );
+      var img = root.querySelector("img.mock-shot");
+      if (img && mock) {
+        img.addEventListener("error", function () {
+          root.innerHTML = blockMock(mock, toolId);
+        });
+      }
+      return;
+    }
+    if (!mock) {
+      root.innerHTML = frame(toolId, "", '<div class="mock-body"><p class="mock-note">No UI preview for this tool.</p></div>');
+      return;
+    }
+    root.innerHTML = blockMock(mock, toolId);
   }
 
   return { mount: mount };

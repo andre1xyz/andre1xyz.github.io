@@ -231,6 +231,8 @@ window.TOOL_DOCS = {
     controls: [
       "Create / delete reference spaces",
       "Bake to Circle + Bake Down",
+      "Bake to Camera: bake into the space of a camera",
+      "Baked Circles tabs: All, or one tab per space",
       "Fast Bake Selected",
       "Bake Full Animation Range",
       "Optional override anim layer"
@@ -292,31 +294,39 @@ window.TOOL_DOCS = {
 
 
   MotionTrail: {
-    what: "A visual motion path that shows how an object travels over time. World or camera-relative trails with fade, color, and optional mesh rivets.",
+    what: "Draws the path of an object in the viewport, in world space or relative to a camera. Ticks, frame numbers, spacing heat and a gray past help you read arcs and spacing; path handles let you reshape the arc directly.",
     credit: "Built on the Agora Community motion trail, used as the base and then modified and improved for KeyBelt. It is not an Agora product and is not endorsed by Agora.",
     when: [
-      "Checking arc quality in the viewport",
-      "Camera-relative path needed for screen-space motion"
+      "Checking arcs and spacing in the viewport",
+      "Reading motion as the camera sees it (camera space)",
+      "Reshaping an arc without digging through curves"
     ],
     how: [
-      "Select tracking object(s). Open Motion Trail.",
-      "Choose world or camera-relative mode.",
-      "Process (auto or manual). Tune fade frames and color.",
-      "Optional mesh rivet tracking; trails update on play."
+      "Select an object and click the object chip (or turn on Follow selection).",
+      "Press the power button to switch the trail on.",
+      "Pick World or a camera in Space. Set colour and fade length.",
+      "With Live on, the trail follows your edits. With Live off, press Update."
     ],
     controls: [
-      "World or camera-relative trails",
-      "Auto / manual process; fade frames",
-      "Color; mesh rivet tracking",
-      "Auto-select mode; live updates on play"
+      "Power: trail on / off. Object chip: the tracked object. Magnet: follow selection",
+      "Space: world or any camera. Colour swatch. Fade dots: fade length in frames",
+      "Eye: show / hide the trail. Update / Live: rebuild now or follow edits",
+      "Heat: spacing colours (blue tight, yellow average, red wide). HUD: 1-axis spacing view. Gray past: frames before the current time in gray",
+      "Ticks / Numbers: click to cycle off, keys, every frame",
+      "Handles: add, auto, delete, clear, show / hide and rebuild span on the path"
     ],
     scheme:
-      '<svg viewBox="0 0 420 90" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" fill="#e8e8e8">' +
-      '<path d="M30 60 C80 20 140 20 180 45 S280 85 360 30" fill="none" stroke="#E5484D" stroke-width="3" opacity="0.9"/>' +
-      '<circle cx="360" cy="30" r="8" fill="#E5484D"/>' +
-      '<text x="210" y="82" text-anchor="middle" fill="#a0a0a0">Object path over time</text>' +
+      '<svg viewBox="0 0 420 110" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="10" fill="#e8e8e8">' +
+      '<path d="M24 78 C60 30 110 22 150 40" fill="none" stroke="#7a7a7a" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M150 40 C190 58 210 76 250 70" fill="none" stroke="#5f87cd" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M250 70 C290 64 320 30 352 26" fill="none" stroke="#e8c547" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M352 26 C372 24 386 30 398 40" fill="none" stroke="#E5484D" stroke-width="3" stroke-linecap="round"/>' +
+      '<g fill="#f0f0f0"><circle cx="24" cy="78" r="3"/><circle cx="88" cy="32" r="3"/><circle cx="150" cy="40" r="3"/><circle cx="250" cy="70" r="3"/><circle cx="352" cy="26" r="3"/><circle cx="398" cy="40" r="3"/></g>' +
+      '<g fill="#a0a0a0" text-anchor="middle"><text x="24" y="94">1</text><text x="88" y="22">8</text><text x="150" y="30">14</text><text x="250" y="88">22</text><text x="352" y="16">30</text><text x="398" y="56">34</text></g>' +
+      '<circle cx="150" cy="40" r="7" fill="none" stroke="#f0f0f0" stroke-width="1.5"/>' +
+      '<text x="14" y="106" fill="#7a7a7a">gray past</text><text x="200" y="106" fill="#5f87cd">tight</text><text x="296" y="106" fill="#e8c547">average</text><text x="372" y="106" fill="#E5484D">wide</text>' +
       "</svg>",
-    schemeCaption: "Trail draws the motion arc through the shot"
+    schemeCaption: "Trail with key ticks, frame numbers, gray past and spacing heat"
   },
 
 
@@ -330,7 +340,7 @@ window.TOOL_DOCS = {
 
 
   Selector: {
-    what: "Named colored selection sets with membership editing. Click a set to select members; add or remove from the current selection.",
+    what: "A small always-on-top HUD strip of coloured selection sets. Click a chip to select its members; the colour dots filter which chips you see.",
     when: [
       "Repeat selection of the same control groups",
       "Color-code sets for body parts or props"
@@ -342,8 +352,10 @@ window.TOOL_DOCS = {
       "Rename, delete, or remove members as needed."
     ],
     controls: [
-      "Add set (+ color)",
-      "Click set → select members",
+      "+ : add a set with a colour",
+      "Click a chip → select members",
+      "Colour dots: show only the sets of that colour",
+      "Grip on the left: drag to move the HUD",
       "Add / Remove selection; rename; delete",
       "Membership indicators on selection change"
     ]

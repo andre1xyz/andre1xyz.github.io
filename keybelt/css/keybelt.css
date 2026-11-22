@@ -205,6 +205,8 @@ main { display: block; min-height: 60vh; }
 /* ---------- hero ---------- */
 .kb-hero { padding: clamp(40px, 8vw, 96px) 0 clamp(28px, 5vw, 56px); }
 .kb-hero h1 { max-width: 16ch; text-wrap: balance; }
+.kb-accent { color: var(--accent); }
+.kb-ai { margin-top: clamp(32px, 5vw, 48px); padding-top: clamp(24px, 4vw, 36px); border-top: 1px solid var(--border); }
 .kb-hero .kb-lead { margin-bottom: 28px; }
 .kb-meta { margin: 18px 0 0; color: var(--text-faint); font-size: .9rem; }
 .kb-betaline { margin: 6px 0 0; color: var(--text-dim); font-size: .95rem; }

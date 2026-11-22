@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KeyBelt: sliders for your keys in Maya</title>
-<meta name="description" content="KeyBelt is a set of animation tools for Maya: Keys Editor sliders under the timeline, Baker, Offseter, a radial menu on Alt+Q and a Time Dragger HUD. Free to use, public beta.">
+<title>KeyBelt: the animator&#x27;s tool belt for Maya</title>
+<meta name="description" content="KeyBelt is a set of animation tools for Maya, developed in production to take the technical difficulty out of animating: Keys Editor sliders, Baker, Offseter, Motion Trail, a radial menu and a Time Dragger HUD. Public beta.">
 <meta name="theme-color" content="#0D0D0D">
 <link rel="canonical" href="https://andre1xyz.github.io/keybelt/">
 <link rel="icon" type="image/png" sizes="32x32" href="img/brand/keybelt_app_dark_32.png">
@@ -13,22 +13,22 @@
 <link rel="apple-touch-icon" href="img/brand/keybelt_app_dark_256.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KeyBelt">
-<meta property="og:title" content="KeyBelt: sliders for your keys in Maya">
-<meta property="og:description" content="KeyBelt is a set of animation tools for Maya: Keys Editor sliders under the timeline, Baker, Offseter, a radial menu on Alt+Q and a Time Dragger HUD. Free to use, public beta.">
+<meta property="og:title" content="KeyBelt: the animator&#x27;s tool belt for Maya">
+<meta property="og:description" content="KeyBelt is a set of animation tools for Maya, developed in production to take the technical difficulty out of animating: Keys Editor sliders, Baker, Offseter, Motion Trail, a radial menu and a Time Dragger HUD. Public beta.">
 <meta property="og:url" content="https://andre1xyz.github.io/keybelt/">
 <meta property="og:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="KeyBelt: sliders for your keys in Maya">
-<meta name="twitter:description" content="KeyBelt is a set of animation tools for Maya: Keys Editor sliders under the timeline, Baker, Offseter, a radial menu on Alt+Q and a Time Dragger HUD. Free to use, public beta.">
+<meta name="twitter:title" content="KeyBelt: the animator&#x27;s tool belt for Maya">
+<meta name="twitter:description" content="KeyBelt is a set of animation tools for Maya, developed in production to take the technical difficulty out of animating: Keys Editor sliders, Baker, Offseter, Motion Trail, a radial menu and a Time Dragger HUD. Public beta.">
 <meta name="twitter:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
 <script>(function(){var d=document.documentElement,t=null;d.className+=" js";try{t=localStorage.getItem("kb-theme");if(t!=="light"&&t!=="dark")t=null}catch(e){}if(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)t="light";d.setAttribute("data-theme",t||"dark");var m=document.querySelector('meta[name="theme-color"]');if(m&&t==="light")m.setAttribute("content","#F7F7F5")}());</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/keybelt.css?v=4">
-<link rel="stylesheet" href="css/icons.css?v=4">
+<link rel="stylesheet" href="css/keybelt.css?v=ea33059ac5">
+<link rel="stylesheet" href="css/icons.css?v=ea33059ac5">
 </head>
 <body>
 <a class="kb-skip" href="#main">Skip to content</a>
@@ -61,8 +61,8 @@
 <section class="kb-hero">
   <div class="wrap">
     <span class="kb-eyebrow">Animation tools for Maya &middot; Public beta</span>
-    <h1>Sliders for your keys, under the timeline.</h1>
-    <p class="kb-lead">KeyBelt is a set of animation tools for Maya. Select some keys, drag a slider, and the curves change as you drag: smooth them, push or pull them, add a wave, offset them down a chain. It also bakes in world or camera space and puts a radial menu on Alt+Q.</p>
+    <h1>The animator's <span class="kb-accent">tool belt</span> for Maya.</h1>
+    <p class="kb-lead">KeyBelt is a set of animation tools developed in production. It takes the technical difficulty out of animating in Maya and keeps every tool easy to pick up, so your attention stays on the shot.</p>
     <div class="kb-cta">
       <a class="kb-btn kb-btn-primary kb-btn-lg" href="download/"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-download"/></svg><span>Download 0.2.0</span></a>
       <a class="kb-btn kb-btn-coffee kb-btn-lg" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a>
@@ -71,7 +71,6 @@
     <p class="kb-meta">Free to use &middot; Windows &middot; Maya 2023 to 2026</p>
     <p class="kb-betaline"><strong>Public beta:</strong> expect rough edges. <a href="feedback/">Feedback helps.</a></p>
     <div class="tl" id="tl"></div>
-    <p class="tl-caption">Maya's Time Slider has frame numbers, a red tick for each key and a playhead. This is an illustration, not a screenshot.</p>
   </div>
 </section>
 
@@ -82,6 +81,12 @@
       <p>I'm Andreu, an animator. I built KeyBelt to use in Maya on my own shots, and it is tested in production. A tool only stays in if it holds up there.</p>
       <p>The goal is control over every part of the animation, with as little technical difficulty as I can manage. If a tool makes you think about Maya instead of the shot, I count that as a bug in the tool.</p>
       <p class="sig">Andreu Pellisa</p>
+    </div>
+  </div>
+  <div class="kb-split-text kb-ai">
+    <div><span class="kb-eyebrow">On AI</span><h2>AI-powered, not AI slop</h2></div>
+    <div class="kb-prose">
+      <p>KeyBelt isn't an AI product and it isn't generated by one. AI powers parts of the development. What each tool does, how it feels in the hand and whether it stays in KeyBelt is decided by an animator, on real shots.</p>
     </div>
   </div>
 </div></section>
@@ -151,6 +156,6 @@
   <div class="kb-legal"><span>&copy; 2026 Andreu Pellisa. KeyBelt is licensed, not sold. See the <a href="license/">license summary</a>.</span>
   <span>Autodesk and Maya are trademarks of Autodesk, Inc. KeyBelt is not affiliated with Autodesk.</span></div>
 </div></footer>
-<script src="js/keybelt.js?v=4" defer></script>
+<script src="js/keybelt.js?v=ea33059ac5" defer></script>
 </body>
 </html>
