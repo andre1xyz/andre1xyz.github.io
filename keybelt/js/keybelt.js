@@ -412,6 +412,11 @@ const WEB3FORMS_KEY = "";
     if (qv && /^[0-9A-Za-z.+_-]{1,24}$/.test(qv)) { fbVer.value = qv; if (fromApp && fbFrom) { fbFrom.hidden = false; } }
     else { getVersion().then(function (v) { if (v && v.version && !fbVer.dataset.touched) { fbVer.value = v.version; } }).catch(function () {}); }
     fbVer.addEventListener("input", function () { fbVer.dataset.touched = "1"; });
+    var qm = (params.get("maya") || "").trim(), fbMaya = $("#fb-maya");
+    if (fbMaya && /^20\d\d$/.test(qm)) {
+      var known = Array.prototype.some.call(fbMaya.options, function (o) { return o.value === qm; });
+      fbMaya.value = known ? qm : "other";
+    }
     if (live) { if (fbSoon) { fbSoon.hidden = true; } fbSend.disabled = false; }
     var say = function (cls, msg) {
       fbStatus.className = "kb-state" + (cls ? " " + cls : "");

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download | KeyBelt</title>
-<meta name="description" content="Download KeyBelt 0.2.0 (public beta) for Maya 2023 to 2026 on Windows. Version, release date, size and SHA-256 checksum, plus install steps.">
+<meta name="description" content="Download KeyBelt 0.2.0 (public beta) for Maya 2023 to 2026 on Windows. Version, release date, size, install steps and how updates work.">
 <meta name="theme-color" content="#0D0D0D">
 <link rel="canonical" href="https://andre1xyz.github.io/keybelt/download/">
 <link rel="icon" type="image/png" sizes="32x32" href="../img/brand/keybelt_app_dark_32.png">
@@ -14,21 +14,21 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KeyBelt">
 <meta property="og:title" content="Download | KeyBelt">
-<meta property="og:description" content="Download KeyBelt 0.2.0 (public beta) for Maya 2023 to 2026 on Windows. Version, release date, size and SHA-256 checksum, plus install steps.">
+<meta property="og:description" content="Download KeyBelt 0.2.0 (public beta) for Maya 2023 to 2026 on Windows. Version, release date, size, install steps and how updates work.">
 <meta property="og:url" content="https://andre1xyz.github.io/keybelt/download/">
 <meta property="og:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Download | KeyBelt">
-<meta name="twitter:description" content="Download KeyBelt 0.2.0 (public beta) for Maya 2023 to 2026 on Windows. Version, release date, size and SHA-256 checksum, plus install steps.">
+<meta name="twitter:description" content="Download KeyBelt 0.2.0 (public beta) for Maya 2023 to 2026 on Windows. Version, release date, size, install steps and how updates work.">
 <meta name="twitter:image" content="https://andre1xyz.github.io/keybelt/img/og.png">
 <script>(function(){var d=document.documentElement,t=null;d.className+=" js";try{t=localStorage.getItem("kb-theme");if(t!=="light"&&t!=="dark")t=null}catch(e){}if(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches)t="light";d.setAttribute("data-theme",t||"dark");var m=document.querySelector('meta[name="theme-color"]');if(m&&t==="light")m.setAttribute("content","#F7F7F5")}());</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/keybelt.css?v=ea33059ac5">
-<link rel="stylesheet" href="../css/icons.css?v=ea33059ac5">
+<link rel="stylesheet" href="../css/keybelt.css?v=29dcf68b01">
+<link rel="stylesheet" href="../css/icons.css?v=29dcf68b01">
 </head>
 <body>
 <a class="kb-skip" href="#main">Skip to content</a>
@@ -76,10 +76,14 @@
         <a id="dl-btn" class="kb-btn kb-btn-primary kb-btn-lg" href="../releases/KeyBelt-latest.zip" download><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-download"/></svg><span class="lbl">Download KeyBelt</span></a>
         <a class="kb-btn kb-btn-coffee" href="https://ko-fi.com/andreupellisa" target="_blank" rel="noopener"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-coffee"/></svg><span>Buy me a coffee</span></a>
       </div>
-      <p class="kb-note" style="margin:22px 0 4px">SHA-256 checksum</p>
-      <div class="kb-hash"><code id="dl-sha">d882b8ce5bfe153f932446e83a5ab567bd3f1d1925363b851fc281cea04ef848</code>
-        <button type="button" class="kb-btn kb-copy" data-copy="dl-sha" aria-label="Copy SHA-256 checksum"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-copy"/></svg><span class="lbl">Copy</span></button></div>
-      <p class="kb-note" style="margin-top:10px">To check it in PowerShell: <code>Get-FileHash .\KeyBelt-0.2.0.zip -Algorithm SHA256</code></p>
+      <details class="kb-verify">
+        <summary>Check the file (optional)</summary>
+        <p class="kb-note">You don't need to do this. The checksum is the zip's fingerprint: if even one byte were damaged or changed, it would not match. KeyBelt's updater checks it for you automatically.</p>
+        <p class="kb-note" style="margin:12px 0 4px">SHA-256 checksum</p>
+        <div class="kb-hash"><code id="dl-sha">d882b8ce5bfe153f932446e83a5ab567bd3f1d1925363b851fc281cea04ef848</code>
+          <button type="button" class="kb-btn kb-copy" data-copy="dl-sha" aria-label="Copy SHA-256 checksum"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><use href="#i-copy"/></svg><span class="lbl">Copy</span></button></div>
+        <p class="kb-note" style="margin-top:10px">To compare by hand, run this in PowerShell in your Downloads folder: <code>Get-FileHash .\KeyBelt-latest.zip -Algorithm SHA256</code></p>
+      </details>
     </div>
     <div class="kb-panel">
       <h3>Install</h3>
@@ -89,7 +93,12 @@
         <li><strong>Drag</strong> <code>KeyBelt/drag_n_drop.py</code> into the Maya viewport. KeyBelt installs itself, adds a KeyBelt shelf tab and starts with Maya from then on.</li>
       </ol>
       <h3 style="margin-top:28px">Updates</h3>
-      <p class="muted">KeyBelt checks for new versions in the background. To update, open <strong>Settings &gt; General &gt; Updates</strong> and click <em>Download update</em>. Nothing is downloaded before you click. The update is applied the next time Maya starts, and your settings are kept.</p>
+      <ol class="kb-steps">
+        <li>When a new version is out, KeyBelt shows a short message in Maya.</li>
+        <li>Open <strong>KeyBelt Settings</strong> and click <strong>Update</strong>.</li>
+        <li><strong>Restart Maya.</strong> That's it. Your settings are kept.</li>
+      </ol>
+      <p class="kb-note">You can also click <em>Check for updates</em> in Settings at any time.</p>
     </div>
   </div>
 </div></section>
@@ -128,6 +137,6 @@
   <div class="kb-legal"><span>&copy; 2026 Andreu Pellisa. KeyBelt is licensed, not sold. See the <a href="../license/">license summary</a>.</span>
   <span>Autodesk and Maya are trademarks of Autodesk, Inc. KeyBelt is not affiliated with Autodesk.</span></div>
 </div></footer>
-<script src="../js/keybelt.js?v=ea33059ac5" defer></script>
+<script src="../js/keybelt.js?v=29dcf68b01" defer></script>
 </body>
 </html>

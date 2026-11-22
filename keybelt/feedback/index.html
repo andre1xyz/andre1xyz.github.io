@@ -27,8 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/keybelt.css?v=ea33059ac5">
-<link rel="stylesheet" href="../css/icons.css?v=ea33059ac5">
+<link rel="stylesheet" href="../css/keybelt.css?v=29dcf68b01">
+<link rel="stylesheet" href="../css/icons.css?v=29dcf68b01">
 </head>
 <body>
 <a class="kb-skip" href="#main">Skip to content</a>
@@ -64,7 +64,7 @@
   <div class="fb-layout">
     <div>
       <div id="fb-soon" class="kb-callout" role="status"><p><strong>The feedback form is coming online shortly.</strong> It is not accepting messages yet, so nothing you type here is sent. Please check back soon.</p></div>
-      <p id="fb-from" class="kb-note" hidden>You came here from KeyBelt, so the version is filled in for you.</p>
+      <p id="fb-from" class="kb-note" hidden>You came here from KeyBelt, so your KeyBelt and Maya versions are filled in.</p>
       <form id="fb-form" class="kb-form" aria-describedby="fb-status">
         <div class="f-row">
           <div class="f"><label for="fb-name">Name <span class="opt">optional</span></label><input id="fb-name" name="name" type="text" autocomplete="name" maxlength="80"></div>
@@ -75,7 +75,7 @@
         <div class="f"><label for="fb-message">Message</label>
           <textarea id="fb-message" name="message" rows="7" required minlength="10" maxlength="4000" placeholder="What did you do, what did you expect, what happened?"></textarea></div>
         <div class="f-row">
-          <div class="f"><label for="fb-maya">Maya version <span class="opt">optional</span></label><input id="fb-maya" name="maya_version" type="text" maxlength="24" placeholder="for example 2025.3"></div>
+          <div class="f"><label for="fb-maya">Maya version</label><select id="fb-maya" name="maya_version"><option value="">Not sure</option><option value="2026">Maya 2026</option><option value="2025">Maya 2025</option><option value="2024">Maya 2024</option><option value="2023">Maya 2023</option><option value="other">Other</option></select></div>
           <div class="f"><label for="fb-kb">KeyBelt version</label><input id="fb-kb" name="keybelt_version" type="text" maxlength="24" value="0.2.0"></div>
         </div>
         <div class="hp" aria-hidden="true"><label>Leave this empty <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></label></div>
@@ -118,6 +118,6 @@
   <div class="kb-legal"><span>&copy; 2026 Andreu Pellisa. KeyBelt is licensed, not sold. See the <a href="../license/">license summary</a>.</span>
   <span>Autodesk and Maya are trademarks of Autodesk, Inc. KeyBelt is not affiliated with Autodesk.</span></div>
 </div></footer>
-<script src="../js/keybelt.js?v=ea33059ac5" defer></script>
+<script src="../js/keybelt.js?v=29dcf68b01" defer></script>
 </body>
 </html>

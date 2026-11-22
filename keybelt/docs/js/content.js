@@ -585,8 +585,17 @@ window.TOOL_DOCS = {
         ]
       },
       {
+        title: "Updates",
+        items: [
+          "When a new version is out, KeyBelt shows a short message in Maya.",
+          "Open Settings > General > Updates and click Update (the button reads \"Update to x.y.z\").",
+          "Restart Maya. Your settings are kept.",
+          "Check for updates runs a check at any time. Untick \"Tell me when a new version is out\" to stop the startup check."
+        ]
+      },
+      {
         title: "Feedback",
-        text: "General > Updates has a Send feedback button. It opens the KeyBelt feedback page in your browser."
+        text: "General > Updates has a Send feedback button. It opens the KeyBelt feedback page in your browser with your KeyBelt and Maya versions filled in."
       }
     ],
     controls: [
