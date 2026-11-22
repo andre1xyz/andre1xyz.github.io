@@ -2,7 +2,7 @@
 
 /* Web3Forms access key for the feedback form. The ONLY place it is set.
    Empty = the form shows "coming online shortly" and the submit button stays disabled. */
-const WEB3FORMS_KEY = "";
+const WEB3FORMS_KEY = "cc39fa0c-7976-4183-8eaf-e7579d97efdf";
 
 (function () {
   "use strict";
