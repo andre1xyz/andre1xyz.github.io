@@ -2,7 +2,7 @@
 window.TOOL_DOCS = {
 
   KeysEditor: {
-    what: "Sculpt and clean animation curves on selected controls. Drag a slider while keys (or a range) are selected and the effect applies live. Double-click any slider to reset it to zero. Optional timeline toolbar sliders drive the same effects from the timeline.",
+    what: "Sculpt and clean animation curves on selected controls. Drag a slider while keys (or a range) are selected and the effect applies live. Double-click any slider to reset it to zero. The same effects are available as sliders in the toolbars, next to a set of one-click buttons for cleanup and timing.",
     when: [
       "Curves look noisy or stepped after blocking",
       "Need ease-in/out, wave/noise, or peak shaping on a range",
@@ -12,12 +12,37 @@ window.TOOL_DOCS = {
       "Select controls. Optionally select key ranges in the Graph Editor.",
       "Drag the slider for the effect you want (or use a timeline Keys slider).",
       "Release when the shape looks right. Double-click slider → reset to 0.",
-      "Use top buttons for cleanup: Del Flat, Del Redundant, Bake, SNP, Shift −/+."
+      "Use the buttons for cleanup and timing: Del Flat, Del Redundant, Bake, SNP, Shift. They also exist in the toolbars."
     ],
     playground: true,
+    sectionsBefore: [
+      {
+        title: "In the toolbars",
+        html:
+          '<p>Keys Editor is not only a window. Its sliders <strong>and</strong> its buttons can sit in the toolbars you already use. The screenshot is the timeline toolbar, the strip under Maya\'s Time Slider.</p>' +
+          '<div data-shot="TimelineToolbar" data-w="620" data-marks="6.7:1,87.8:1,19.2:2,31.2:3,45.8:4,65.5:4" data-caption="KeyBelt timeline toolbar (real screenshot). The numbers match the list below."></div>' +
+          '<ol class="fig-legend">' +
+          '<li><span class="fig-n">1</span><div><strong>Tool buttons.</strong> Launch tools: Offseter, Keys Editor, Baker, Reset All, Motion Trail, Selector.</div></li>' +
+          '<li><span class="fig-n">2</span><div><strong>Action buttons.</strong> Coloured one-click buttons: delete redundant, delete flat, bake, smart snap, Euler filter, tangents, invert. See <a href="#" class="jump" data-jump="ke-buttons">Buttons</a>.</div></li>' +
+          '<li><span class="fig-n">3</span><div><strong>Shift and frames.</strong> Arrows to move keys or insert / remove frames, with the frames field (N) between them.</div></li>' +
+          '<li><span class="fig-n">4</span><div><strong>Sliders.</strong> Effect sliders such as Smooth (S) and Wave / Noise (WN). See <a href="#" class="jump" data-jump="ke-sliders">Sliders</a>.</div></li>' +
+          '</ol>' +
+          '<h4>Where they appear</h4>' +
+          '<ul>' +
+          '<li><strong>Timeline toolbar</strong> under Maya\'s Time Slider: sliders and buttons.</li>' +
+          '<li><strong>Graph Editor toolbar:</strong> the buttons. Turn it on in Settings, Toolbars, Graph Editor Toolbar.</li>' +
+          '<li><strong>Viewport Bar</strong> (optional): a floating bar over the 3D view with sliders and buttons. See Viewport Bar.</li>' +
+          '</ul>' +
+          '<p>Which buttons show is set in <strong>Settings, Toolbars, Keys Action Buttons</strong>. It is one list: each row has a <em>Timeline</em> and a <em>Graph Editor</em> toggle, so a button can be on both toolbars, one, or neither. The timeline toolbar shows the buttons together with its Keys sliders. The Viewport Bar has its own list under Radial &amp; Viewport Bar.</p>'
+      }
+    ],
+    slidersIntro: "A slider applies one effect live while you drag. Click a dot on the slider to jump to that preset. The small glyph on each card is the effect icon shown next to the slider in the Keys Editor window.",
+    buttonsIntro: "Buttons are not sliders. One click runs the action on the selected keys or objects. The icons below are the real toolbar buttons. They appear in the Keys Editor window and in the toolbars (see above); the cards underneath drive the playground.",
+    buttonsHtml: KB_FIG.actionButtonsHtml() + KB_FIG.shiftButtonsHtml(),
     controlCards: [
       {
         id: "smooth",
+        icon: "fx_smooth",
         title: "Smooth",
         color: "#5f87cd",
         demo: true,
@@ -25,6 +50,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "push_pull",
+        icon: "fx_push_pull",
         title: "Push / Pull",
         color: "#cd5f5f",
         demo: true,
@@ -32,6 +58,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "interpolate",
+        icon: "fx_interpolate",
         title: "Interpolate",
         color: "#5fcd87",
         demo: true,
@@ -39,6 +66,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "wave_noise",
+        icon: "fx_wave_noise",
         title: "Wave / Noise",
         color: "#cd87cd",
         demo: true,
@@ -46,6 +74,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "ease_linear",
+        icon: "fx_ease_linear",
         title: "Ease Linear",
         color: "#cdcd5f",
         demo: true,
@@ -53,6 +82,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "directional_ease",
+        icon: "fx_directional_ease",
         title: "Directional Ease",
         color: "#87cdcd",
         demo: true,
@@ -60,6 +90,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "blend_direction",
+        icon: "fx_blend_direction",
         title: "Blend Direction",
         color: "#cd875f",
         demo: true,
@@ -67,6 +98,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "scale_from_end",
+        icon: "fx_scale_from_end",
         title: "Scale From End",
         color: "#9acd5f",
         demo: true,
@@ -74,6 +106,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "uniform_to_end",
+        icon: "fx_uniform_to_end",
         title: "Uniform To End",
         color: "#5fcda8",
         demo: true,
@@ -81,6 +114,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "push_to_peak",
+        icon: "fx_push_to_peak",
         title: "Push To Peak",
         color: "#e8a030",
         demo: true,
@@ -88,6 +122,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "blend_default",
+        icon: "fx_blend_default",
         title: "Blend Default",
         color: "#7fcf7f",
         demo: true,
@@ -95,6 +130,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "world_xform_blend",
+        icon: "fx_world_xform_blend",
         title: "World Xform Blend",
         color: "#d58cff",
         demo: true,
@@ -102,6 +138,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "offset",
+        icon: "fx_offset",
         title: "Offset",
         color: "#a87bff",
         demo: true,
@@ -109,6 +146,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "infinity",
+        icon: "fx_infinity",
         title: "Infinity",
         color: "#ff9f6e",
         demo: true,
@@ -116,6 +154,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "hierarchy_offset",
+        icon: "fx_hierarchy_offset",
         title: "Hierarchy Offset",
         color: "#7fb5ff",
         demo: true,
@@ -123,6 +162,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "hierarchy_offset_push_pull",
+        icon: "fx_hierarchy_offset_push_pull",
         title: "Hierarchy Push / Pull",
         color: "#5fcdff",
         demo: true,
@@ -130,6 +170,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "del_flat",
+        icon: "delete_flat",
         title: "Del Flat",
         color: "#a0a0a0",
         kind: "button",
@@ -138,6 +179,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "del_redundant",
+        icon: "delete_redundant",
         title: "Del Redundant",
         color: "#a0a0a0",
         kind: "button",
@@ -146,6 +188,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "bake",
+        icon: "bake",
         title: "Bake",
         color: "#a0a0a0",
         kind: "button",
@@ -154,6 +197,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "snp",
+        icon: "snap",
         title: "SNP (Smart Snap)",
         color: "#a0a0a0",
         kind: "button",
@@ -162,6 +206,7 @@ window.TOOL_DOCS = {
       },
       {
         id: "shift",
+        icon: "shift_left",
         title: "Shift − / +",
         color: "#a0a0a0",
         kind: "button",
@@ -196,24 +241,67 @@ window.TOOL_DOCS = {
 
 
   Offseter: {
-    what: "Live offset tool: move/rotate/scale in the viewport and selected keys (or whole curves) shift by that delta. Toggle from the timeline for fast timing fixes.",
+    what: "Moves keys that already exist while you transform an object. With Offseter on, moving, rotating or scaling in the viewport does not set a new key. It shifts the existing keys by the same amount. There is no window: it is a toggle.",
     when: [
-      "Need to nudge a keyed pose without re-keying by hand",
-      "Graph Editor key selection should move together with viewport edit"
+      "Reposition a keyed section without re-keying it",
+      "Shift a whole curve by a few units and keep every key",
+      "Offset a range and let the change fade out into the rest of the animation"
     ],
     how: [
-      "Enable Offseter (timeline button toggles active state).",
-      "Select keys or leave selection empty to affect full curves.",
-      "Transform in the viewport. The deltas apply to keys.",
-      "Disable when done so normal editing returns."
+      "Click the Offseter button (timeline toolbar, radial menu or Viewport Bar). While it is active the button is green and blinks.",
+      "Choose which keys move: highlight a range on the Time Slider, or select keys, or select nothing. See Which keys move.",
+      "With a range, set the blend frames (MMB on the toolbar button, or the ring in the radial menu).",
+      "Move, rotate or scale the object in the viewport. The keys shift by the same delta.",
+      "Click the button again to switch Offseter off."
     ],
-    controls: [
-      "Toggle on/off from timeline toolbar",
-      "Offsets timeline range or GE key selection",
-      "Falls back to full curve if nothing selected",
-      "Tracks translate / rotate / scale"
+    sections: [
+      {
+        title: "Which keys move",
+        text: "Offseter checks these in order and uses the first one that applies:",
+        html:
+          '<ol>' +
+          '<li><strong>A range on the Time Slider</strong> (Shift+drag on the Time Slider). The range gets the full offset and the offset fades out over the blend frames on each side. This is the only case with a blend.</li>' +
+          '<li><strong>Selected keys</strong> (in the Graph Editor or on the timeline). Only those keys move. No blend.</li>' +
+          '<li><strong>Nothing selected.</strong> The whole curve moves.</li>' +
+          '</ol>' +
+          '<p>Offseter works on the objects you have selected. If you select other objects, they are tracked instead.</p>'
+      },
+      {
+        title: "How each case looks",
+        html:
+          '<p>One channel before (dashed gray) and after (green) a viewport move. Yellow keys are the selected ones.</p>' +
+          KB_FIG.offseterCasesHtml()
+      },
+      {
+        title: "Range and blend on the Time Slider",
+        html:
+          '<p>While Offseter is on and a range exists, a translucent green overlay on the Time Slider shows what will move. The solid part is the plateau: those frames get the full offset. The ramps on each side are the blend: the offset fades to zero over N frames with a smooth (smoothstep) falloff. Thin lines mark the outer edges of the blend. With blend 0 there are no ramps and only the range moves.</p>' +
+          KB_FIG.offseterTimeSliderHtml() +
+          '<ul>' +
+          '<li><strong>Anchor keys.</strong> Offseter adds shape-preserving keys at the start and end of the range and at start minus N and end plus N. It only does this inside the curve\'s existing keys and only where there is no key yet, so animation outside the blend window is not touched.</li>' +
+          '<li><strong>The range is sticky.</strong> It survives Maya clearing the highlight when you select or manipulate something. It is dropped when you scrub the Time Slider. A new highlight replaces it.</li>' +
+          '</ul>'
+      },
+      {
+        title: "Setting the blend frames",
+        html:
+          '<ul>' +
+          '<li><strong>MMB on the Offseter toolbar button.</strong> Opens the Offseter blend (frames) popup, shown in the Tool UI panel. Click a preset (0, 2, 4, 6, 8, 12, 16, 24; the current one is green) or type a number in the field and press Enter.</li>' +
+          '<li><strong>Radial menu.</strong> Hover the Offseter slice. An outer ring shows 0f, 3f, 6f, 10f, 15f. Click one. This also switches Offseter on.</li>' +
+          '</ul>' +
+          '<div data-shot="RadialOffseterBlend" data-caption="Radial menu with the cursor on Offseter: the blend ring (0f, 3f, 6f, 10f, 15f) appears around the slice."></div>' +
+          '<p>The toolbar button\'s tooltip shows the current value: &ldquo;Offseter &mdash; blend 6f (MMB to change)&rdquo;. The value is remembered between sessions. The Viewport Bar button toggles Offseter but has no blend popup.</p>'
+      },
+      {
+        title: "Undo",
+        text: "One drag is one undo step. Undo and redo do not apply the offset a second time."
+      }
     ],
-    tips: ["Leave it off when not offsetting. It avoids surprise curve edits."]
+    tips: [
+      "Switch Offseter off when you are done. While it is on, a viewport move shifts keys instead of setting one.",
+      "For a soft edge, highlight the range first, then set the blend, then move the object.",
+      "Blend only works with a Time Slider range. For selected keys use the Graph Editor to pick exactly which keys move."
+    ]
   },
 
   Baker: {
@@ -397,6 +485,62 @@ window.TOOL_DOCS = {
     schemeCaption: "Pie wedges around cursor → click to launch"
   },
 
+  ViewportBar: {
+    what: "A small floating bar drawn over the 3D view of every model panel. It holds the tools, sliders and buttons you use most, so you can reach them without leaving the viewport.",
+    when: [
+      "Want Offseter, Baker or a few Keys Editor sliders right where you are working",
+      "Do not want to look down at the timeline toolbar while posing in the viewport"
+    ],
+    how: [
+      "Turn it on: Settings, Radial & Viewport Bar, Show viewport bar (the radial menu also has a toggle).",
+      "Drag the grip (the dots on the left edge) to put the bar where you want it. Double-click the grip to reset the position.",
+      "Use it like the toolbar: click tool and action buttons, drag the sliders.",
+      "Change what it holds in Settings, Radial & Viewport Bar, then Save."
+    ],
+    sections: [
+      {
+        title: "What it looks like",
+        html:
+          '<div data-shot="ViewportBar" data-w="640" data-caption="Hover: the bar at full opacity. The real widget, rendered offscreen over a stand-in viewport colour (not a Maya capture)."></div>' +
+          '<div data-shot="ViewportBarIdle" data-w="640" data-caption="Idle: the same bar at the default idle opacity of 0.55."></div>'
+      },
+      {
+        title: "Default items",
+        html:
+          '<ul>' +
+          '<li><strong>Tools:</strong> Baker, Offseter, Reset All. Offseter turns green and blinks while it is active.</li>' +
+          '<li><strong>Sliders:</strong> Interpolate, Push / Pull, World Xform Blend.</li>' +
+          '<li><strong>Buttons:</strong> Bake, Smart snap, Shift (arrows with the frames field), Insert frames, Remove frames.</li>' +
+          '</ul>' +
+          '<p>Tool buttons behave like the ones in the timeline toolbar: a click launches the tool. The Offseter blend popup (MMB) is a timeline toolbar feature and is not on the Viewport Bar. Pick the blend in the radial menu or the toolbar.</p>'
+      },
+      {
+        title: "Behaviour",
+        items: [
+          "Idle opacity is about 0.55. The bar goes to full opacity when the cursor is over it.",
+          "Position is remembered per panel.",
+          "The bar is hidden while Maya is not the active application and when the viewport is very small.",
+          "It never takes keyboard focus, so your hotkeys keep working. The one exception is the frames field while you type in it.",
+          "Sliders and buttons do the same as their toolbar versions."
+        ]
+      },
+      {
+        title: "Settings",
+        text: "Settings, Radial & Viewport Bar has a Viewport Bar section:",
+        items: [
+          "Show viewport bar: on / off.",
+          "The item list: add tools (double-click or drag from the tool palette), add sliders and buttons from the drop-downs, reorder with drag or Up / Down, Remove deletes the selected row.",
+          "Idle opacity and Hover opacity sliders.",
+          "Reset to defaults. Nothing is applied until you press Save."
+        ]
+      }
+    ],
+    tips: [
+      "Keep the bar short: it floats over your picture. Three or four sliders and the buttons you press daily are enough.",
+      "Not on the bar: Invert. Add it to the timeline or Graph Editor toolbar instead."
+    ]
+  },
+
   TimelineToolbarSettings: {
     what: "KeyBelt preferences: timeline and Graph Editor toolbars, the Time Dragger HUD, hotkeys, radial menu and viewport bar contents, and this documentation entry point.",
     when: [
@@ -416,6 +560,20 @@ window.TOOL_DOCS = {
       "Maya Preferences (General, on by default): turns off asset-centric selection (select objects inside containers) and Maya's cycle check warnings. Reapplied every time KeyBelt launches; unticking restores your previous Maya values."
     ],
     sections: [
+      {
+        title: "Toolbars page",
+        text: "Three parts, top to bottom:",
+        items: [
+          "Toolbar Tools: which tools show on the timeline toolbar, their order and their colour category.",
+          "Graph Editor Toolbar: Enable Graph Editor toolbar attaches the KeyBelt toolbar to the Graph Editor.",
+          "Keys Action Buttons: one list of the Keys Editor buttons (delete redundant, delete flat, bake, smart snap, Euler filter, tangents, invert, shift). Each row has a Timeline and a Graph Editor toggle, so a button can be on both toolbars, one, or neither. Drag rows to set the Graph Editor order; the timeline toolbar keeps a fixed order."
+        ],
+        after: "The buttons are described under Keys Editor. The Viewport Bar has its own item list on the Radial & Viewport Bar page."
+      },
+      {
+        title: "Radial & Viewport Bar page",
+        text: "One shared tool palette feeds both. Drag a tool onto a radial wheel slice or into the viewport bar list. The Viewport Bar section has the on / off checkbox, the item list, and idle and hover opacity. Edits are pending until Save."
+      },
       {
         title: "Window controls",
         text: "Every KeyBelt window, including this one, can be moved and resized from anywhere on the window, not only from the title bar.",

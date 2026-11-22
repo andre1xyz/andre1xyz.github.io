@@ -3,13 +3,12 @@ window.UI_MOCKS = {
 
 
   Offseter: {
-    title: "Offseter",
-    oneshot: true,
-    hint: "No window. Toggles offset mode from timeline / launch.",
+    title: "Offseter blend (frames)",
+    hint: "Popup from MMB on the Offseter toolbar button. Offseter itself has no window.",
     blocks: [
-      { type: "status", text: "Mode: OFF → ON" },
-      { type: "btns", items: ["Toggle Offset"] },
-      { type: "note", text: "Viewport deltas shift selected keys or full curves." }
+      { type: "section", label: "Offseter blend (frames)" },
+      { type: "btns", items: ["0", "2", "4", "6", "8", "12", "16", "24"] },
+      { type: "row", items: [{ kind: "field", label: "Custom" }] }
     ]
   },
 
@@ -250,7 +249,14 @@ window.UiMocks = (function () {
     Baker: { w: 294, h: 774, title: "Baker" },
     Selector: { w: 334, h: 36, title: "Selector", hud: true },
     RadialMenu: { w: 348, h: 376, title: "Radial Menu", hud: true },
-    TimelineToolbarSettings: { w: 680, h: 520, title: "KeyBelt Settings" }
+    TimelineToolbarSettings: { w: 680, h: 520, title: "KeyBelt Settings" },
+    /* Offseter has no window: its panel is the blend popup (MMB on the toolbar button) */
+    Offseter: { src: "OffseterBlendPopup", w: 340, h: 61, title: "Offseter blend (frames)", tag: "Popup (MMB on the button)" },
+    /* Figures placed in the page text with <div data-shot="Id">; see mountFigures */
+    TimelineToolbar: { w: 786, h: 52, title: "Timeline toolbar", tag: "Screenshot" },
+    RadialOffseterBlend: { w: 385, h: 380, title: "Radial menu, Offseter blend ring", tag: "Screenshot" },
+    ViewportBar: { w: 778, h: 70, title: "Viewport Bar (hover)", tag: "Rendered widget", bg: "linear-gradient(#5a5a5a,#3c3c3c)" },
+    ViewportBarIdle: { w: 778, h: 70, title: "Viewport Bar (idle)", tag: "Rendered widget", bg: "linear-gradient(#5a5a5a,#3c3c3c)" }
   };
 
   function frame(title, tag, bodyHtml, extraClass) {
@@ -280,9 +286,9 @@ window.UiMocks = (function () {
       var title = shot.title || (mock && mock.title) || toolId;
       root.innerHTML = frame(
         title,
-        "Actual window",
+        shot.tag || "Actual window",
         '<div class="mock-shot-body' + (shot.hud ? " is-hud" : "") + '">' +
-          '<img class="mock-shot" src="img/ui/' + toolId + '.png" width="' + shot.w +
+          '<img class="mock-shot" src="img/ui/' + (shot.src || toolId) + '.png" width="' + shot.w +
           '" height="' + shot.h + '" alt="' + esc(title) + ' window" loading="lazy" decoding="async" />' +
           "</div>"
       );
@@ -301,5 +307,33 @@ window.UiMocks = (function () {
     root.innerHTML = blockMock(mock, toolId);
   }
 
-  return { mount: mount };
+  /* Figures inside the page text: <div data-shot="Id" data-w="minWidth" data-marks="pct:n,..." data-caption="..."> */
+  function mountFigures(root) {
+    var holes = root.querySelectorAll("[data-shot]");
+    for (var i = 0; i < holes.length; i++) {
+      var hole = holes[i];
+      var id = hole.getAttribute("data-shot");
+      var shot = SHOTS[id];
+      if (!shot) continue;
+      var minW = parseInt(hole.getAttribute("data-w") || "0", 10);
+      var marks = (hole.getAttribute("data-marks") || "").split(",").filter(Boolean);
+      var html = '<figure class="fig fig-shot"><div class="fig-scroll"' + (shot.bg ? ' style="background:' + shot.bg + '"' : "") + '><div class="fig-in" style="max-width:' + shot.w + "px" +
+        (minW ? ";min-width:" + minW + "px" : "") + '">';
+      if (marks.length) {
+        html += '<div class="fig-marks" aria-hidden="true">';
+        marks.forEach(function (m) {
+          var p = m.split(":");
+          html += '<span class="fig-mark" style="left:' + esc(p[0]) + '%">' + esc(p[1]) + "</span>";
+        });
+        html += "</div>";
+      }
+      html += '<img src="img/ui/' + (shot.src || id) + '.png" width="' + shot.w + '" height="' + shot.h +
+        '" alt="' + esc(shot.title) + '" loading="lazy" decoding="async" />';
+      html += '</div></div><figcaption><span class="fig-tag">' + esc(shot.tag || "Screenshot") + "</span> " +
+        esc(hole.getAttribute("data-caption") || "") + "</figcaption></figure>";
+      hole.outerHTML = html;
+    }
+  }
+
+  return { mount: mount, mountFigures: mountFigures };
 })();

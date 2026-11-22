@@ -216,39 +216,57 @@
     );
   }
 
-  function controlCardsHtml(cards) {
+  function cardHtml(card) {
+    var kind = card.kind === "button" ? "button" : "slider";
+    var icon = card.icon
+      ? '<img class="ke-card-ico" src="img/ui/icons/' + esc(card.icon) + '.png" alt="" width="22" height="22" loading="lazy" />'
+      : "";
+    return (
+      '<button type="button" class="ke-card' +
+      (card.demo ? " ke-card-demo" : "") +
+      '" data-effect="' + esc(card.id) +
+      '" style="--card-color:' + esc(card.color || "#E5484D") + '">' +
+      '<div class="ke-card-top">' +
+      (icon || '<span class="ke-card-swatch"></span>') +
+      "<strong>" + esc(card.title) + "</strong>" +
+      '<span class="ke-kind">' + kind + "</span>" +
+      (card.demo ? '<span class="ke-badge">Demo</span>' : "") +
+      "</div><p>" + esc(card.body) + "</p></button>"
+    );
+  }
+
+  /* Sliders and Buttons are separate sections: buttons also live in the toolbars */
+  function controlCardsHtml(cards, doc) {
     if (!cards || !cards.length) return "";
-    var html =
-      '<section class="doc-section"><h3>Sliders &amp; buttons</h3>' +
-      '<p class="ke-cards-hint">Cards marked <span class="ke-badge">Demo</span> drive the playground (sliders or buttons).</p>' +
-      '<div class="ke-cards">';
-    cards.forEach(function (card) {
-      var kind = card.kind === "button" ? "button" : "slider";
+    var sliders = cards.filter(function (c) { return c.kind !== "button"; });
+    var buttons = cards.filter(function (c) { return c.kind === "button"; });
+    var hint = '<p class="ke-cards-hint">Cards marked <span class="ke-badge">Demo</span> drive the playground.</p>';
+    var html = "";
+    if (sliders.length) {
       html +=
-        '<button type="button" class="ke-card' +
-        (card.demo ? " ke-card-demo" : "") +
-        '" data-effect="' +
-        esc(card.id) +
-        '" style="--card-color:' +
-        esc(card.color || "#E5484D") +
-        '">' +
-        '<div class="ke-card-top">' +
-        '<span class="ke-card-swatch"></span>' +
-        "<strong>" +
-        esc(card.title) +
-        "</strong>" +
-        '<span class="ke-kind">' +
-        kind +
-        "</span>" +
-        (card.demo ? '<span class="ke-badge">Demo</span>' : "") +
-        "</div>" +
-        "<p>" +
-        esc(card.body) +
-        "</p>" +
-        "</button>";
-    });
-    html += "</div></section>";
+        '<section class="doc-section" id="ke-sliders"><h3>Sliders</h3>' +
+        (doc.slidersIntro ? "<p>" + esc(doc.slidersIntro) + "</p>" : "") +
+        hint + '<div class="ke-cards">' + sliders.map(cardHtml).join("") + "</div></section>";
+    }
+    if (buttons.length) {
+      html +=
+        '<section class="doc-section sec-buttons" id="ke-buttons"><h3>Buttons</h3>' +
+        (doc.buttonsIntro ? "<p>" + esc(doc.buttonsIntro) + "</p>" : "") +
+        (doc.buttonsHtml || "") +
+        '<h4>Playground cards</h4><div class="ke-cards">' + buttons.map(cardHtml).join("") + "</div></section>";
+    }
     return html;
+  }
+
+  function sectionHtml(sec) {
+    return (
+      '<section class="doc-section"><h3>' + esc(sec.title) + "</h3>" +
+      (sec.text ? "<p>" + esc(sec.text) + "</p>" : "") +
+      (sec.html || "") +
+      listHtml(sec.items, false) +
+      (sec.after ? "<p>" + esc(sec.after) + "</p>" : "") +
+      "</section>"
+    );
   }
 
   function renderWelcome() {
@@ -333,8 +351,11 @@
         listHtml(doc.how, true) +
         "</section>";
     }
+    if (doc.sectionsBefore && doc.sectionsBefore.length) {
+      doc.sectionsBefore.forEach(function (sec) { html += sectionHtml(sec); });
+    }
     if (doc.controlCards && doc.controlCards.length) {
-      html += controlCardsHtml(doc.controlCards);
+      html += controlCardsHtml(doc.controlCards, doc);
     } else if (doc.controls && doc.controls.length) {
       html +=
         '<section class="doc-section"><h3>Main controls</h3>' +
@@ -342,14 +363,7 @@
         "</section>";
     }
     if (doc.sections && doc.sections.length) {
-      doc.sections.forEach(function (sec) {
-        html +=
-          '<section class="doc-section"><h3>' + esc(sec.title) + "</h3>" +
-          (sec.text ? "<p>" + esc(sec.text) + "</p>" : "") +
-          listHtml(sec.items, false) +
-          (sec.after ? "<p>" + esc(sec.after) + "</p>" : "") +
-          "</section>";
-      });
+      doc.sections.forEach(function (sec) { html += sectionHtml(sec); });
     }
     if (doc.scheme) {
       html +=
@@ -389,6 +403,16 @@
     contentEl.innerHTML = html;
     setActiveNav(toolId);
     contentEl.focus({ preventScroll: true });
+
+    if (window.UiMocks && UiMocks.mountFigures) UiMocks.mountFigures(contentEl);
+    var jumps = contentEl.querySelectorAll("a.jump");
+    for (var j = 0; j < jumps.length; j++) {
+      jumps[j].addEventListener("click", function (ev) {
+        ev.preventDefault();
+        var target = document.getElementById(ev.currentTarget.getAttribute("data-jump"));
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
 
     var root = document.getElementById("toolUiRoot");
     if (hasPlayground && window.KeysPlayground && root) {

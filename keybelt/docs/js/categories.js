@@ -28,7 +28,7 @@ window.DOCS_CATEGORIES = [
     id: "system",
     label: "System / UI",
     color: "#D16969",
-    tools: ["RadialMenu", "TimelineToolbarSettings"]
+    tools: ["RadialMenu", "ViewportBar", "TimelineToolbarSettings"]
   }
 ];
 
@@ -41,7 +41,8 @@ window.DOCS_ICONS = {
   RadialMenu: "icons/keybelt_ui_mark.png",
   Reset_All: "icons/Reset_All.png",
   Selector: "icons/selector.png",
-  TimelineToolbarSettings: "icons/timelineToolbarSettings.png"
+  TimelineToolbarSettings: "icons/timelineToolbarSettings.png",
+  ViewportBar: "icons/keybelt_ui_mark.png"
 };
 
 window.DOCS_LABELS = {
@@ -52,7 +53,8 @@ window.DOCS_LABELS = {
   RadialMenu: "Radial Menu",
   Reset_All: "Reset All",
   Selector: "Selector",
-  TimelineToolbarSettings: "Settings"
+  TimelineToolbarSettings: "Settings",
+  ViewportBar: "Viewport Bar"
 };
 
 /** Tools shipped as BETA (mirrors the BETA marker file in the tool folder) */
